@@ -15,24 +15,24 @@ class RichTextEditor extends React.Component {
 
     var socket = io.connect("http://localhost:3001", { reconnect: true });
 
-    // var preset = {
-    //   blocks: [
-    //     {
-    //       key: "9bg9u",
-    //       text: "888",
-    //       type: "unstyled",
-    //       depth: 0,
-    //       inlineStyleRanges: [{ offset: 0, length: 3, style: "UNDERLINE" }],
-    //       entityRanges: [],
-    //       data: {},
-    //     },
-    //   ],
-    //   entityMap: {},
-    // };
-    // var initial3 = convertFromRaw(preset);
-    // this.state = { editorState: EditorState.createWithContent(initial3) };
-    this.state = { editorState: EditorState.createEmpty() };
-    console.log(this.state.editorState);
+    var preset = {
+      blocks: [
+        {
+          key: "34dpc",
+          text: "",
+          type: "unstyled",
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: {},
+        },
+      ],
+      entityMap: {},
+    };
+    var initial3 = convertFromRaw(preset);
+    this.state = { editorState: EditorState.createWithContent(initial3) };
+    // this.state = { editorState: EditorState.createEmpty() };
+    console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
       this.setState({ editorState });
@@ -49,14 +49,12 @@ class RichTextEditor extends React.Component {
       var input2 = convertFromRaw(input1);
       console.log(input2);
       const stateWithContent = EditorState.createWithContent(input2);
-      // const currentSelection = this.state.editorState.getSelection();
-      // const stateWithContentAndSelection = EditorState.forceSelection(
-      //   stateWithContent,
-      //   currentSelection
-      // );
-      this.setState({
-        editorState: EditorState.moveFocusToEnd(stateWithContent),
-      });
+      const currentSelection = this.state.editorState.getSelection();
+      const stateWithContentAndSelection = EditorState.forceSelection(
+        stateWithContent,
+        currentSelection
+      );
+      this.setState({ editorState: stateWithContentAndSelection });
     });
 
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
