@@ -13,7 +13,8 @@ class RichTextEditor extends React.Component {
   constructor(props) {
     super(props);
 
-    var socket = io.connect("http://localhost:3001", { reconnect: true });
+    // var socket = io.connect("http://localhost:3001", { reconnect: true });
+    var socket = io.connect("http://192.168.0.103:3001", { reconnect: true });
 
     var preset = {
       blocks: [
@@ -32,29 +33,44 @@ class RichTextEditor extends React.Component {
     var initial3 = convertFromRaw(preset);
     this.state = { editorState: EditorState.createWithContent(initial3) };
     // this.state = { editorState: EditorState.createEmpty() };
-    console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
+    // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
-      this.setState({ editorState });
+      this.setState(function (prevState, props) {
+        return { editorState };
+      });
       var data = convertToRaw(editorState.getCurrentContent());
       var send = JSON.stringify(data);
-      console.log("sending:");
-      console.log(send);
+      // console.log(send);
+      // console.log(
+      //   "me",
+      //   this.state.editorState.getSelection().getAnchorOffset()
+      // );
       socket.emit("newState", send);
     };
 
     socket.on("newState", (msg) => {
-      console.log(msg);
-      var input1 = JSON.parse(msg);
-      var input2 = convertFromRaw(input1);
-      console.log(input2);
-      const stateWithContent = EditorState.createWithContent(input2);
-      const currentSelection = this.state.editorState.getSelection();
-      const stateWithContentAndSelection = EditorState.forceSelection(
-        stateWithContent,
-        currentSelection
-      );
-      this.setState({ editorState: stateWithContentAndSelection });
+      // console.log(msg);
+      this.setState(function (prevState, props) {
+        var input1 = JSON.parse(msg);
+        var input2 = convertFromRaw(input1);
+        // console.log(input2);
+        const stateWithContent = EditorState.createWithContent(input2);
+        const currentSelection = prevState.editorState.getSelection();
+        // console.log("partner", stateWithContent.getSelection());
+        console.log("they", currentSelection.getAnchorOffset());
+        const stateWithContentAndSelection = EditorState.forceSelection(
+          stateWithContent,
+          currentSelection
+        );
+        return {
+          editorState: stateWithContentAndSelection,
+        };
+      });
+      // this.setState({
+      //   editorState: EditorState.moveFocusToEnd(stateWithContent),
+      // });
+      // this.setState({ editorState: stateWithContentAndSelection });
     });
 
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -196,7 +212,6 @@ const BLOCK_TYPES = [
 const BlockStyleControls = (props) => {
   const { editorState } = props;
   const selection = editorState.getSelection();
-  console.log(selection.getStartKey());
   const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
