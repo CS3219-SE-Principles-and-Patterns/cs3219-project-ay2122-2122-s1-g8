@@ -15,28 +15,30 @@ class RichTextEditor extends React.Component {
 
     var socket = io.connect("http://localhost:3001", { reconnect: true });
 
-    var preset = {
-      blocks: [
-        {
-          key: "9bg9u",
-          text: "888",
-          type: "unstyled",
-          depth: 0,
-          inlineStyleRanges: [{ offset: 0, length: 3, style: "UNDERLINE" }],
-          entityRanges: [],
-          data: {},
-        },
-      ],
-      entityMap: {},
-    };
-    var initial3 = convertFromRaw(preset);
-    this.state = { editorState: EditorState.createWithContent(initial3) };
-
+    // var preset = {
+    //   blocks: [
+    //     {
+    //       key: "9bg9u",
+    //       text: "888",
+    //       type: "unstyled",
+    //       depth: 0,
+    //       inlineStyleRanges: [{ offset: 0, length: 3, style: "UNDERLINE" }],
+    //       entityRanges: [],
+    //       data: {},
+    //     },
+    //   ],
+    //   entityMap: {},
+    // };
+    // var initial3 = convertFromRaw(preset);
+    // this.state = { editorState: EditorState.createWithContent(initial3) };
+    this.state = { editorState: EditorState.createEmpty() };
+    console.log(this.state.editorState);
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
       this.setState({ editorState });
       var data = convertToRaw(editorState.getCurrentContent());
       var send = JSON.stringify(data);
+      console.log("sending:");
       console.log(send);
       socket.emit("newState", send);
     };
@@ -46,7 +48,15 @@ class RichTextEditor extends React.Component {
       var input1 = JSON.parse(msg);
       var input2 = convertFromRaw(input1);
       console.log(input2);
-      this.setState({ editorState: EditorState.createWithContent(input2) });
+      const stateWithContent = EditorState.createWithContent(input2);
+      // const currentSelection = this.state.editorState.getSelection();
+      // const stateWithContentAndSelection = EditorState.forceSelection(
+      //   stateWithContent,
+      //   currentSelection
+      // );
+      this.setState({
+        editorState: EditorState.moveFocusToEnd(stateWithContent),
+      });
     });
 
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -188,6 +198,7 @@ const BLOCK_TYPES = [
 const BlockStyleControls = (props) => {
   const { editorState } = props;
   const selection = editorState.getSelection();
+  console.log(selection.getStartKey());
   const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
