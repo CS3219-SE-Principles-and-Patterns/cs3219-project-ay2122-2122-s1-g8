@@ -14,7 +14,8 @@ class RichTextEditor extends React.Component {
     super(props);
 
     // var socket = io.connect("http://localhost:3001", { reconnect: true });
-    var socket = io.connect("http://192.168.0.103:3001", { reconnect: true });
+    // var socket = io.connect("http://192.168.0.103:3001", { reconnect: true });
+    var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
 
     var preset = {
       blocks: [
@@ -31,14 +32,26 @@ class RichTextEditor extends React.Component {
       entityMap: {},
     };
     var initial3 = convertFromRaw(preset);
-    this.state = { editorState: EditorState.createWithContent(initial3) };
+    this.state = {
+      editorState: EditorState.createWithContent(initial3),
+      allowUpdate: true,
+    };
     // this.state = { editorState: EditorState.createEmpty() };
     // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
-      this.setState(function (prevState, props) {
-        return { editorState };
-      });
+      if (this.state.allowUpdate) {
+        // this.state.allowUpdate = false;
+        this.setState(
+          function (prevState, props) {
+            return { editorState };
+          }
+          // () => {
+          //   this.state.allowUpdate = true;
+          // }
+        );
+      }
+
       var data = convertToRaw(editorState.getCurrentContent());
       var send = JSON.stringify(data);
       // console.log(send);
@@ -51,22 +64,41 @@ class RichTextEditor extends React.Component {
 
     socket.on("newState", (msg) => {
       // console.log(msg);
-      this.setState(function (prevState, props) {
-        var input1 = JSON.parse(msg);
-        var input2 = convertFromRaw(input1);
-        // console.log(input2);
-        const stateWithContent = EditorState.createWithContent(input2);
-        const currentSelection = prevState.editorState.getSelection();
-        // console.log("partner", stateWithContent.getSelection());
-        console.log("they", currentSelection.getAnchorOffset());
-        const stateWithContentAndSelection = EditorState.forceSelection(
-          stateWithContent,
-          currentSelection
+      console.log(this.state.allowUpdate);
+      if (this.state.allowUpdate) {
+        this.setState(
+          function (prevState, props) {
+            this.state.allowUpdate = false;
+            var input1 = JSON.parse(msg);
+            var input2 = convertFromRaw(input1);
+            // console.log(input2);
+            const stateWithContent = EditorState.createWithContent(input2);
+            const currentSelection = prevState.editorState.getSelection();
+            var stateWithContentAndSelection = null;
+            console.log(currentSelection.getAnchorOffset());
+            // if (currentSelection.getAnchorOffset() == 0) {
+            //   stateWithContentAndSelection =
+            //     EditorState.moveSelectionToEnd(stateWithContent);
+            //   console.log("I'm called");
+            // } else {
+            stateWithContentAndSelection = EditorState.forceSelection(
+              stateWithContent,
+              currentSelection
+            );
+            // }
+            // console.log(stateWithContent.getCurrentContent());
+            // console.log("they", currentSelection.getAnchorOffset());
+
+            return {
+              editorState: stateWithContentAndSelection,
+            };
+          },
+          () => {
+            this.state.allowUpdate = true;
+          }
         );
-        return {
-          editorState: stateWithContentAndSelection,
-        };
-      });
+      }
+
       // this.setState({
       //   editorState: EditorState.moveFocusToEnd(stateWithContent),
       // });
