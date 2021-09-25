@@ -14,61 +14,50 @@ class RichTextEditor extends React.Component {
     super(props);
 
     // var socket = io.connect("http://localhost:3001", { reconnect: true });
-    // var socket = io.connect("http://192.168.0.103:3001", { reconnect: true });
-    var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
-
-    var preset = {
-      blocks: [
-        {
-          key: "34dpc",
-          text: "",
-          type: "unstyled",
-          depth: 0,
-          inlineStyleRanges: [],
-          entityRanges: [],
-          data: {},
-        },
-      ],
-      entityMap: {},
-    };
-    var initial3 = convertFromRaw(preset);
+    var socket = io.connect("http://192.168.0.103:3011", { reconnect: true });
+    // var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
     this.state = {
-      editorState: EditorState.createWithContent(initial3),
+      editorState: EditorState.createEmpty(),
       allowUpdate: true,
+      cursor: 0,
     };
+    socket.on("initialize", (msg) => {
+      var input1 = JSON.parse(msg);
+      var input2 = convertFromRaw(input1);
+      console.log(input2);
+      const stateWithContent = EditorState.createWithContent(input2);
+      this.setState({ editorState: stateWithContent });
+    });
     // this.state = { editorState: EditorState.createEmpty() };
     // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
       if (this.state.allowUpdate) {
-        // this.state.allowUpdate = false;
+        this.setState({ allowUpdate: false });
         this.setState(
           function (prevState, props) {
-            return { editorState };
+            return { editorState: editorState };
+          },
+          () => {
+            this.setState({ allowUpdate: true });
           }
-          // () => {
-          //   this.state.allowUpdate = true;
-          // }
         );
+        var data = convertToRaw(editorState.getCurrentContent());
+        var send = JSON.stringify(data);
+        socket.emit("newState", send);
+      } else {
+        console.log("race condition!");
       }
-
-      var data = convertToRaw(editorState.getCurrentContent());
-      var send = JSON.stringify(data);
-      // console.log(send);
-      // console.log(
-      //   "me",
-      //   this.state.editorState.getSelection().getAnchorOffset()
-      // );
-      socket.emit("newState", send);
     };
 
     socket.on("newState", (msg) => {
       // console.log(msg);
-      console.log(this.state.allowUpdate);
+      // console.log(this.state.allowUpdate);
       if (this.state.allowUpdate) {
         this.setState(
           function (prevState, props) {
             this.state.allowUpdate = false;
+            console.log("123123", this.state.allowUpdate);
             var input1 = JSON.parse(msg);
             var input2 = convertFromRaw(input1);
             // console.log(input2);
@@ -97,6 +86,8 @@ class RichTextEditor extends React.Component {
             this.state.allowUpdate = true;
           }
         );
+      } else {
+        console.log("race condition!");
       }
 
       // this.setState({
