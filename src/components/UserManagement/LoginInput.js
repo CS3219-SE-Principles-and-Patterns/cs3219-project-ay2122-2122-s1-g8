@@ -4,15 +4,26 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import "./LoginPage.css";
-
+import axios from "axios"
+const api = axios.create({
+  baseURL: 'http://localhost:3030/api'
+})
 
 function LoginInput() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () =>
-  alert("email: " + email + " password: " + password)
+  const handleLogin = () =>{
+    api.post('/login', {
+      username: email,
+      password: password
+    }).then(function (response) {
+      alert(response.data.message)
+    }).catch(function (error) {
+      console.log(error);
+    })
+  }
 
   const handleEmail = ({target}) => {
     const { value } = target;
