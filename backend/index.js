@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const db = require('./db')
-const AuthRouter = require('../components/UserManagement/auth')
+const AuthRouter = require('./routers/auth')
 
 const app = express()
 const apiPort = 3030

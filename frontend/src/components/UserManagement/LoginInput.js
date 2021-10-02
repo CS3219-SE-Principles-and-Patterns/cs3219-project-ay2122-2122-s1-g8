@@ -1,27 +1,28 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import "./LoginPage.css";
-import axios from "axios"
-const api = axios.create({
-  baseURL: 'http://localhost:3030/api'
-})
+import apis from '../../api/api'
 
 function LoginInput() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
-  const handleLogin = () =>{
-    api.post('/login', {
-      username: email,
+  const handleLogin = async () => {
+    const data = {
+      email: email,
       password: password
-    }).then(function (response) {
-      alert(response.data.message)
-    }).catch(function (error) {
-      console.log(error);
+    }
+    await apis.loginAccount(data).then((res) => {
+      console.log(res.data.message);
+      history.push('/');
+    }).catch(err=> {
+      console.log(err);
     })
   }
 

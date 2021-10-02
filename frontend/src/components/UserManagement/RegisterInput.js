@@ -1,13 +1,11 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import "./LoginPage.css";
-import axios from "axios"
-const api = axios.create({
-  baseURL: 'http://localhost:3030/api'
-})
+import apis from '../../api/api'
 
 function RegisterInput() {
 
@@ -15,20 +13,23 @@ function RegisterInput() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const history = useHistory();
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (password != confirmPassword){
       alert("Please enter password correctly!");
       return;
     }
-    api.post('/register', {
+    const data = {
       username: username,
       email: email,
       password: password
-    }).then(function (response) {
-      alert(response.data.message);
-    }).catch(function (error) {
-      alert("Register unsuccessfully!");
+    }
+    await apis.registerAccount(data).then((res) => {
+      console.log(res.data.message);
+      history.push('login')
+    }).catch(err => {
+      console.log(err);
     })
   }
 
@@ -83,7 +84,7 @@ function RegisterInput() {
           <TextField
             fullWidth 
             label="Confirm password"
-            type="Confirm password"
+            type="password"
             variant="outlined"
             value={confirmPassword || ''}
             onChange = {handleConfirmPassword}
