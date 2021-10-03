@@ -6,6 +6,8 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
+import DifficultyImage from '../../images/rsz_test.png'
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -21,37 +23,49 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  button : {
+    vertical: 'top',
+    horizontal: 'right',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 });
 
-export default function SimpleCard() {
+export default function DifficultyCard(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+
+
+  const difficulty = props.difficulty;
+  const description = {
+      "Easy": "easy description asdljsadlkshadl ksadjlsadkldsajk lasdfafsasdaasd",
+      "Medium": "medium description asdljsadlkshadl ksadjlsadkldsajk lasdfafsasdaasd",
+      "Hard": "hard description asdljsadlkshadl ksadjlsadkldsajk lasdfafsasdaasd"
+  }
+  const desc = description[difficulty];
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} style={{textAlign: "center", maxWidth: 5}}>
       <CardContent>
         <Typography
           className={classes.title}
-          color="textSecondary"
+          color="textPrimary"
           gutterBottom
         >
-          Word of the Day
+          {difficulty}
         </Typography>
-        <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
+        <img src={DifficultyImage} />
         <Typography variant="body2" component="p">
-          well meaning and kindly.
+          {desc}
           <br />
-          {'"a benevolent smile"'}
+          <br />
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
+      <CardActions style = {{justifyContent: "center"}}>
+        <div>
+          <Button variant="outlined" color="secondary">Let's go!</Button>
+        </div>
       </CardActions>
+      <br />
     </Card>
   );
 }
