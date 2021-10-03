@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import RichTextEditor from "./RichTextEditor";
 import io from "socket.io-client";
 import "./editorpage.css";
+import Question from "./question";
 import Chat from "./chat";
 
 class EditorPage extends React.Component {
@@ -16,11 +17,18 @@ class EditorPage extends React.Component {
   render() {
     return (
       <div>
-        <div className="editor-component">
-          <RichTextEditor socket={this.state.socket} />
+        <div className="split left">
+          <div className="question">
+            <Question />
+          </div>
+          <div className="chat">
+            <Chat socket={this.state.socket} />
+          </div>
         </div>
-        <div className="chat">
-          <Chat socket={this.state.socket} />
+        <div className="split right">
+          <div className="editor-component">
+            <RichTextEditor socket={this.state.socket} />
+          </div>
         </div>
       </div>
     );

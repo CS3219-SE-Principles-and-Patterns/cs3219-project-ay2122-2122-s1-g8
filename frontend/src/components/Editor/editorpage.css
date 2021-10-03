@@ -3,12 +3,44 @@
   /*display: flex; 
     justify-content: center; 
     align-items: center;*/
-  width: 100%;
-  height: 100vh;
+  width: 95%;
+  height: 100%;
   position: relative;
+  /* border: 5px solid green; */
 }
 
 .chat {
-  float: left;
   max-width: 30vw;
+  margin-right: 5%;
+}
+
+.question {
+  float: left;
+  height: 65%;
+  margin-left: 15px;
+  margin-bottom: 20px;
+  /* border: 5px solid red; */
+}
+.split {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding: 5px;
+}
+
+.left {
+  left: 0;
+  width: 30vw;
+  height: 95vh;
+  /* border: 5px solid red; */
+}
+
+.right {
+  width: 65vw;
+  height: 95vh;
+  /* border: 5px solid blue; */
+  right: 0;
 }

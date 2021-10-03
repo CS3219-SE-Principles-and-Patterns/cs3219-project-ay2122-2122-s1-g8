@@ -8,7 +8,8 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 275,
+    width: "100%",
+    height: "100%",
   },
   bullet: {
     display: "inline-block",
@@ -16,42 +17,31 @@ const useStyles = makeStyles({
     transform: "scale(0.8)",
   },
   title: {
-    fontSize: 14,
+    fontSize: 35,
+    marginBottom: 20,
   },
   pos: {
     marginBottom: 12,
   },
 });
 
-export default function SimpleCard() {
+export default function Question() {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
-
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
+        <Typography className={classes.title} variant="h1" color="textPrimary">
           Word of the Day
         </Typography>
-        <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
         <Typography variant="body2" component="p">
-          well meaning and kindly.
+          This text is styled with some of the text formatting properties. The
+          heading uses the text-align, text-transform, and color properties. The
+          paragraph is indented, aligned, and the space between characters is
+          specified. The underline is removed from this colored "Try it
+          Yourself" link.
           <br />
-          {'"a benevolent smile"'}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 }
