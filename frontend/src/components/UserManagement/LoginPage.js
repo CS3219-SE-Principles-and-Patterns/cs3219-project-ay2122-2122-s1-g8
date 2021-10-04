@@ -21,7 +21,7 @@ function LoginPage() {
         <h4>Don't have an account? Register here!</h4>
         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
           <Link to='/register'>
-            <Button color="primary" variant="contained">Create an account</Button>
+            <Button variant="outlined">Create an account</Button>
           </Link>
         </div>
       </div>

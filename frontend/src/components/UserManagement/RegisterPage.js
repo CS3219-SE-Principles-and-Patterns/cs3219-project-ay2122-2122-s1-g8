@@ -23,7 +23,7 @@ function RegisterPage() {
         <h4>Already have an account? Login here!</h4>
         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
           <Link to='/login'>
-            <Button color="primary" variant="contained">Login</Button>
+            <Button variant="outlined">Login</Button>
           </Link>
         </div>
       </div>
