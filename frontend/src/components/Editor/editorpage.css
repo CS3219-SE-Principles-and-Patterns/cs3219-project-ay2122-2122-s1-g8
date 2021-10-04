@@ -17,6 +17,7 @@
 .question {
   float: left;
   height: 65%;
+  width: 30vw;
   margin-left: 15px;
   margin-bottom: 20px;
   /* border: 5px solid red; */
