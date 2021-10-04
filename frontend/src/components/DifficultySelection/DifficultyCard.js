@@ -7,6 +7,9 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 import DifficultyImage from '../../images/rsz_test.png'
+import EasyImage from "../../images/easy.png";
+import MediumImage from "../../images/medium.png";
+import HardImage from "../../images/hard.png";
 
 const useStyles = makeStyles({
   root: {
@@ -18,7 +21,10 @@ const useStyles = makeStyles({
     transform: "scale(0.8)",
   },
   title: {
-    fontSize: 14,
+    fontSize: 30,
+    fontFamily: "Gabriola",
+    color: "#158f32",
+    fontWeight: "Bold"
   },
   pos: {
     marginBottom: 12,
@@ -43,8 +49,15 @@ export default function DifficultyCard(props) {
   }
   const desc = description[difficulty];
 
+  const handleDiffSelect = () => {
+    alert(difficulty);
+    const data = {
+      difficulty: difficulty
+    }
+  }
+
   return (
-    <Card className={classes.root} style={{textAlign: "center", maxWidth: 5}}>
+    <Card className={classes.root} style={{textAlign: "center", maxWidth: 5}} raised = "true" >
       <CardContent>
         <Typography
           className={classes.title}
@@ -53,7 +66,15 @@ export default function DifficultyCard(props) {
         >
           {difficulty}
         </Typography>
-        <img src={DifficultyImage} />
+        {difficulty === "Easy" &&
+          <img src={EasyImage} />
+        }
+        {difficulty === "Medium" &&
+          <img src={MediumImage} />
+        }
+        {difficulty === "Hard" &&
+          <img src={HardImage} />
+        }
         <Typography variant="body2" component="p">
           {desc}
           <br />
@@ -62,7 +83,7 @@ export default function DifficultyCard(props) {
       </CardContent>
       <CardActions style = {{justifyContent: "center"}}>
         <div>
-          <Button variant="outlined" color="secondary">Let's go!</Button>
+          <Button variant="outlined" color="secondary" onClick = {handleDiffSelect}>Let's go!</Button>
         </div>
       </CardActions>
       <br />

@@ -13,13 +13,13 @@ function HomePage() {
       <br/><br/>
         <div>
           <div >
-            <h1 style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '5vh'}}>
+            <h1 style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '5vh', fontWeight: "Bold", fontFamily: "Gabriola", color: "GrayText"}}>
               Choose your difficulty level
             </h1>
-            <h3 style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '5vh', textAlign: "center"}}>
+            <h2 style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '5vh', textAlign: "center", fontFamily: "Gabriola"}}>
               Based on your difficulty level, you will be assigned a question of the selected difficulty, <br/>
               and you'll be matched with another user who has selected the same difficulty level!
-            </h3>
+            </h2>
           </div>
           <br/><br/>
           <div>   

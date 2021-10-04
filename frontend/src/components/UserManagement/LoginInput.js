@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import "./LoginPage.css";
 import apis from '../../api/api'
+
+const buttonTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#5b6efc'
+    }
+  }
+});
 
 function LoginInput() {
 
@@ -68,7 +77,9 @@ function LoginInput() {
         <br></br>
         <br></br>
         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-          <Button color="primary" variant="contained" onClick={handleLogin}>Login</Button>
+          <MuiThemeProvider theme={buttonTheme}>
+            <Button color="primary" variant="contained"  size = "large" onClick={handleLogin}>Login</Button>
+          </MuiThemeProvider>
         </div>
       </div>
     </div>
