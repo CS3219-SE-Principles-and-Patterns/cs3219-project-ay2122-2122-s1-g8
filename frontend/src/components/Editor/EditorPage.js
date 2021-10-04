@@ -3,8 +3,9 @@ import RichTextEditor from "./RichTextEditor";
 import io from "socket.io-client";
 import "./editorpage.css";
 import Question from "./question";
+import Button from "@material-ui/core/Button";
 import Chat from "./chat";
-
+import { withRouter } from "react-router-dom";
 class EditorPage extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +14,12 @@ class EditorPage extends React.Component {
       socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
     };
     console.log(this.state.socket);
+    this.handlefinish = this.handlefinish.bind(this);
+  }
+  handlefinish() {
+    this.props.history.push({
+      pathname: "/",
+    });
   }
   render() {
     return (
@@ -28,6 +35,15 @@ class EditorPage extends React.Component {
         <div className="split right">
           <div className="editor-component">
             <RichTextEditor socket={this.state.socket} />
+          </div>
+          <div className="finish">
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={this.handlefinish}
+            >
+              Finish
+            </Button>
           </div>
         </div>
       </div>

@@ -31,6 +31,7 @@ const useStyles = makeStyles({
     width: 30,
     height: 20,
     padding: "0 30px",
+    marginBottom: 12,
   },
   pos: {
     marginBottom: 12,
