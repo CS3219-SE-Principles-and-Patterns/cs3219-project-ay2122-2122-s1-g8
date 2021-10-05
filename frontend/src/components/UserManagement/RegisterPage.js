@@ -14,7 +14,7 @@ function RegisterPage() {
       </div>
       <div className="login-right">
         <div style={{textAlign: 'center'}}>
-          <h1>Sign up for an account on PeerPrep!</h1> {/*todo*/}
+          <h1>Sign up for an account on PeerPrep!</h1>
         </div>
         <br/>
         <RegisterInput />

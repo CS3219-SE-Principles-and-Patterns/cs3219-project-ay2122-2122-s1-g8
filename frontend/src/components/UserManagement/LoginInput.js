@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -20,19 +20,54 @@ function LoginInput() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [ isEmailError, setisEmailError ] = useState(false)
+  const [ isPasswordError, setisPasswordError ] = useState(false)
+
+  const [ emailHelperText, setEmailHelperText ] = useState("")
+  const [ passwordHelperText, setPasswordHelperText ] = useState("")
+
+  const [ invalidEmailPassword, setInvalidEmailPassword ] = useState(false)
+
   const history = useHistory();
 
   const handleLogin = async () => {
+    if (!validateForm()) {
+      return;
+    }
     const data = {
       email: email,
       password: password
     }
     await apis.loginAccount(data).then((res) => {
-      console.log(res.data.message);
+      console.log(res.data);
       history.push('/');
     }).catch(err=> {
       console.log(err);
+      setInvalidEmailPassword(true);
     })
+  }
+
+  function validateForm() {
+    setisEmailError(false)
+    setEmailHelperText("")
+    setisPasswordError(false)
+    setPasswordHelperText("")
+    setInvalidEmailPassword(false)
+
+    var validatedSuccess = true
+
+    if (email === "" ) {
+      setisEmailError(true)
+      setEmailHelperText("Invalid email.")
+      validatedSuccess = false
+    }
+    if (password === "" ) {
+      setisPasswordError(true)
+      setPasswordHelperText("Password cannot be empty.")
+      validatedSuccess = false
+    }
+    return validatedSuccess
   }
 
   const handleEmail = ({target}) => {
@@ -44,6 +79,14 @@ function LoginInput() {
     const { value } = target;
     setPassword(value);
   }
+
+  useEffect(() => {
+    if(invalidEmailPassword) {
+      setisEmailError(true)
+      setisPasswordError(true)
+      setPasswordHelperText("Invalid email or password.")
+    }
+  }, [invalidEmailPassword])
 
   return (
     <div style={{minWidth:"60%"}}>
@@ -58,6 +101,8 @@ function LoginInput() {
             padding="50"
             value={email || ''}
             onChange = {handleEmail}
+            error={ isEmailError }
+            helperText={ emailHelperText }
           />
           </div>
           <br />
@@ -69,6 +114,8 @@ function LoginInput() {
             variant="outlined"
             value={password || ''}
             onChange = {handlePassword}
+            error={ isPasswordError }
+            helperText={ passwordHelperText }
           />
           </div>
           <br></br>

@@ -22,11 +22,19 @@ function RegisterInput() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [ isUsernameError, setisUsernameError ] = useState(false)
+  const [ isPasswordError, setisPasswordError ] = useState(false)
+  const [ isEmailError, setisEmailError ] = useState(false)
+
+  const [ usernameHelperText, setUsernameHelperText ] = useState("")
+  const [ passwordHelperText, setPasswordHelperText ] = useState("")
+  const [ emailHelperText, setEmailHelperText ] = useState("")
+
   const history = useHistory();
 
   const handleRegister = async () => {
-    if (password != confirmPassword){
-      alert("Please enter password correctly!");
+    if (!validateForm()){
       return;
     }
     const data = {
@@ -35,11 +43,51 @@ function RegisterInput() {
       password: password
     }
     await apis.registerAccount(data).then((res) => {
-      console.log(res.data.message);
+      console.log(res);
       history.push('login')
     }).catch(err => {
-      console.log(err);
+      if(false) {
+        setisUsernameError(true)
+        setUsernameHelperText("Username is already taken.")
+      }
+      if(false) {
+        setisEmailError(true)
+        setEmailHelperText("Email is already taken.")
+      }
     })
+  }
+
+  function validateForm() {
+    setisUsernameError(false)
+    setUsernameHelperText("")
+    setisPasswordError(false)
+    setPasswordHelperText("")
+    setisEmailError(false)
+    setEmailHelperText("")
+    
+    var validatedSuccess = true
+    
+    if (username === "") {
+      setisUsernameError(true)
+      validatedSuccess = false
+      setUsernameHelperText("Username cannot be empty.")
+    }
+    if (password === "") {
+      setisPasswordError(true)
+      validatedSuccess = false
+      setPasswordHelperText("Password cannot be empty.")
+    }
+    if (password != confirmPassword) {
+      setisPasswordError(true)
+      validatedSuccess = false
+      setPasswordHelperText("The passwords do not match.")
+    }
+    if (email === "") {
+      setisEmailError(true)
+      validatedSuccess = false
+      setEmailHelperText("Email cannot be empty.")
+    }
+    return validatedSuccess
   }
 
   const handleEmail = ({target}) => {
@@ -65,7 +113,20 @@ function RegisterInput() {
   return (
     <div style={{minWidth:"60%"}}>
       <div style={{textAlign:"center"}}>
-        <FormControl noValidate autoComplete="off" justify='center' alignItems='center' fullWidth>
+        <FormControl noValidate autoComplete="off" justify='center' alignItems='center' fullWidth>          
+          <div>
+          <TextField
+            fullWidth 
+            label="Username"
+            type="Username"
+            variant="outlined"
+            value={username || ''}
+            onChange = {handleUsername}
+            error={ isUsernameError }
+            helperText={ usernameHelperText }
+          />
+          </div>
+          <br />
           <div>
           <TextField
             fullWidth 
@@ -75,6 +136,8 @@ function RegisterInput() {
             padding="50"
             value={email || ''}
             onChange = {handleEmail}
+            error={ isEmailError }
+            helperText={ emailHelperText }
           />
           </div>
           <br />
@@ -86,6 +149,8 @@ function RegisterInput() {
             variant="outlined"
             value={password || ''}
             onChange = {handlePassword}
+            error={ isPasswordError }
+            helperText={ passwordHelperText }
           />
           </div>
           <br />
@@ -97,17 +162,8 @@ function RegisterInput() {
             variant="outlined"
             value={confirmPassword || ''}
             onChange = {handleConfirmPassword}
-          />
-          </div>
-          <br />
-          <div>
-          <TextField
-            fullWidth 
-            label="Username"
-            type="Username"
-            variant="outlined"
-            value={username || ''}
-            onChange = {handleUsername}
+            error={ isPasswordError }
+            helperText={ passwordHelperText }
           />
           </div>
           <br></br>
