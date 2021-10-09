@@ -1,0 +1,54 @@
+.editor-component {
+  margin: 0;
+  /*display: flex; 
+    justify-content: center; 
+    align-items: center;*/
+  width: 95%;
+  height: 90%;
+  position: relative;
+  /* border: 5px solid green; */
+}
+
+.chat {
+  max-width: 29vw;
+}
+
+.question {
+  height: 65%;
+  width: 29vw;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  border: 1px solid silver;
+}
+.split {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding: 5px;
+}
+
+.left {
+  left: 0;
+  width: 30vw;
+  height: 95vh;
+  /* border: 5px solid red; */
+}
+
+.right {
+  width: 65vw;
+  height: 95vh;
+  /* border: 5px solid blue; */
+  right: 0;
+}
+
+.finish {
+  position: absolute;
+  margin-right: 30px;
+  bottom: 0;
+  right: 0;
+  padding: 0%;
+  /* border: 5px solid gold; */
+}
