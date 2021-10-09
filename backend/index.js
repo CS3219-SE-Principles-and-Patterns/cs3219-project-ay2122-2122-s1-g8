@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.get('/', (req, res) => {
-    res.send('Server is running!')
+    res.send('Server is running successfully!')
 })
 app.use('/api', AuthRouter)
 app.use('/api/question', QuestionRouter);
