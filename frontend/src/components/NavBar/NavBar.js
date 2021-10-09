@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
+import LocalStorageService from "../../auth/services/LocalStorageService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,6 +44,7 @@ export default function NavBar() {
 
   const handleLogout = () => {
     setAnchorEl(null);
+    //LocalStorageService.clearToken();
     history.push("login")
   };
 

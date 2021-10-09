@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 
 import "./LoginPage.css";
 import apis from '../../api/api'
+import LocalStorageService from "../../auth/services/LocalStorageService";
 
 const buttonTheme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function LoginInput() {
     }
     await apis.loginAccount(data).then((res) => {
       console.log(res.data);
+      LocalStorageService.setToken("TODO")
       history.push('/');
     }).catch(err=> {
       console.log(err);
