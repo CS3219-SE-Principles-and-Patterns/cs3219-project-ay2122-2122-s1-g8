@@ -1,23 +1,37 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 import RichTextEditor from "./components/RichTextEditor";
 import HomePage from "./components/HomePage";
 import LoginPage from "./components/UserManagement/LoginPage";
 import RegisterPage from "./components/UserManagement/RegisterPage";
-
-import "./App.css";
 import EditorPage from "./components/Editor/EditorPage";
 
+import ProtectedRoutes from './auth/router/ProtectedRoutes';
+import LocalStorageService from './auth/services/LocalStorageService';
+import "./App.css";
+
+
 function App() {
+
+  const [isAuth, setisAuth] = useState(false)
+
+  useEffect(() => {
+    if (LocalStorageService.isAuth()) {
+      setisAuth(true)
+    } else {
+      setisAuth(false)
+    }
+  }, [])
+
   return (
     <div>
       <Router>
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/editor-page" component={EditorPage} />
+          <ProtectedRoutes exact path="/" component={HomePage} />
+          <ProtectedRoutes exact path="/editor-page" component={EditorPage} />
+          <Route exact path="/register" render={() => !isAuth ? <RegisterPage /> : <Redirect to="/" />} />
+          <Route exact path="/login" render={() => !isAuth ? <LoginPage /> : <Redirect to="/" />} />
         </Switch>
       </Router>
     </div>

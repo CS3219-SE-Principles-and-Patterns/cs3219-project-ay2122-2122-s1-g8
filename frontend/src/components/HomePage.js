@@ -5,6 +5,8 @@ import Typography from "@material-ui/core/Typography";
 import NavBar from "./NavBar/NavBar";
 import DifficultyCard from "./DifficultySelection/DifficultyCard";
 
+import LoadingDialog from "./DifficultySelection/LoadingDialog"
+
 function HomePage() {
 
   return (
@@ -30,6 +32,7 @@ function HomePage() {
           </div> 
         </div>
       </div>
+      <LoadingDialog />
     </div>
   );
 }
