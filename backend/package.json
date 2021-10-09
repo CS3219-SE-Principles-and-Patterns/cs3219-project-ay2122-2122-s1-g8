@@ -21,7 +21,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "build": "node index.js",
     "test": "mocha ./test --exit",
     "dev": "nodemon index.js",
     "eject": "react-scripts eject"
