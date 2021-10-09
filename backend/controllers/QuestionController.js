@@ -1,50 +1,57 @@
 const Question = require('../models/question')
+const STATUS_CODE_OK = 200;
+const STATUS_CODE_BAD_REQUEST = 500;
+const STATUS_CODE_PARTIAL_CONTENT = 206;
+const STATUS_CODE_NOT_FOUND = 404;
 
 const question_post_create = (req, res) => {
     const question = new Question(req.body)
     question.save()
         .then((result) => {
-            res.json({
+            res.status(STATUS_CODE_OK).json({
                 message: 'Question successfully created',
                 questionId: question._id
             })
         })
         .catch(err => {
-            res.json({
-                error: err
-            })
+            res.status(STATUS_CODE_PARTIAL_CONTENT).send(err);
         })
 }
 
-const question_post_update = (req, res) => {
+const question_put_update = (req, res) => {
     let id = req.params.id;
     let questionUpdates = req.body.content;
-    Question.findOneAndUpdate(id, questionUpdates, {returnOriginal: false})
+    Question.findById(id)
         .then(result => {
-            res.json({
-                message: "Question successfully updated",
-                question: result.toJSON()
+            Object.assign(result, req.body.content).save()
+                .then(question => {
+                    res.status(STATUS_CODE_OK).json({
+                        message: "Question updated",
+                        question: question.toJSON()
+                    })
+                })
+                .catch(err => {
+                    res.status(STATUS_CODE_BAD_REQUEST).send(err);
+                })
             })
-        })
-        .catch((err) => {
-            res.json({
-                message: "Question not updated",
-                error: err
+        .catch(err => {
+            res.status(STATUS_CODE_NOT_FOUND).json({
+                message: "Question not found"
             })
-        })
+        });
 };
 
 const question_get_details = (req, res) => {
     let id = req.params.id;
     Question.findById(id)
         .then(result => {
-            res.json({
+            res.status(STATUS_CODE_OK).json({
                 message: "Question found",
                 question: result.toJSON()
             })
         })
         .catch(err => {
-            res.json({
+            res.status(STATUS_CODE_NOT_FOUND).json({
                 message: "Question not found",
                 question: ""
             })
@@ -55,13 +62,13 @@ const question_delete = (req, res) => {
     const id = req.params.id;
     Question.findByIdAndDelete(id)
         .then(result => {
-            res.json({
+            res.status(STATUS_CODE_OK).json({
                 message: "Question deleted"
             })
         })
         .catch(err => {
-            res.json({
-                message: "Error when deleting question",
+            res.status(STATUS_CODE_NOT_FOUND).json({
+                message: "Question not found",
                 error: err
             })
         })
@@ -69,7 +76,7 @@ const question_delete = (req, res) => {
 
 module.exports = {
     question_post_create,
-    question_post_update,
+    question_put_update,
     question_get_details,
     question_delete,
 }

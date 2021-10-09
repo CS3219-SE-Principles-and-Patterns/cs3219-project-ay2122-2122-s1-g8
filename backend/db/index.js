@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost:27017/peerprep', //"mongodb+srv://dbLong:cs3219@cluster0.o794u.mongodb.net/peer-help?retryWrites=true&w=majority", 
-mongoose.connect("mongodb+srv://dbLong:cs3219@cluster0.o794u.mongodb.net/peer-help?retryWrites=true&w=majority", 
+const config = require('config')
+
+mongoose.connect(config.DBHost, 
 (error)=>{
     if(!error){
         console.log("DB has been started successfully");
