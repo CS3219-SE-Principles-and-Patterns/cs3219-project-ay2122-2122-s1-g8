@@ -1,0 +1,50 @@
+{
+  "name": "peer-help",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.4",
+    "bcrypt": "^5.0.1",
+    "body-parser": "1.19.0",
+    "chai": "^4.3.4",
+    "config": "^3.3.6",
+    "cors": "^2.8.5",
+    "draft-js": "^0.11.7",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.1.2",
+    "mongoose": "^6.0.8",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.13",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "build": "node index.js",
+    "test": "mocha ./test --exit",
+    "dev": "nodemon index.js",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "chai-http": "^4.3.0"
+  }
+}
