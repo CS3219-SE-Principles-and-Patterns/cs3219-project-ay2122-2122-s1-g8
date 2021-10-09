@@ -6,6 +6,8 @@
     "axios": "^0.21.4",
     "bcrypt": "^5.0.1",
     "body-parser": "1.19.0",
+    "chai": "^4.3.4",
+    "config": "^3.3.6",
     "cors": "^2.8.5",
     "draft-js": "^0.11.7",
     "express": "^4.17.1",
@@ -18,7 +20,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": " set PORT=3006 && react-scripts start && node server/index.js",
+    "start": "node index.js",
     "build": "node index.js",
     "test": "mocha ./test --exit",
     "dev": "nodemon index.js",
@@ -41,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "chai-http": "^4.3.0"
   }
 }
