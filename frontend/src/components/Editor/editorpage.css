@@ -10,17 +10,15 @@
 }
 
 .chat {
-  max-width: 30vw;
-  margin-right: 5%;
+  max-width: 29vw;
 }
 
 .question {
-  float: left;
   height: 65%;
-  width: 30vw;
-  margin-left: 15px;
+  width: 29vw;
+  margin-left: 10px;
   margin-bottom: 20px;
-  /* border: 5px solid red; */
+  border: 1px solid silver;
 }
 .split {
   height: 100%;
@@ -51,5 +49,6 @@
   margin-right: 30px;
   bottom: 0;
   right: 0;
+  padding: 0%;
   /* border: 5px solid gold; */
 }

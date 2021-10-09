@@ -8,17 +8,17 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       background: "#F9F3DF",
-      width: "30vw",
+      width: "29vw",
       height: "30vh",
       display: "flex",
       alignItems: "center",
       flexDirection: "column",
       position: "relative",
-      border: "1px solid #f4d19b;",
+      border: "1px solid silver",
     },
     paper2: {
       background: "#F9F3DF",
-      width: "30vw",
+      width: "29vw",
       display: "flex",
       alignItems: "center",
       flexDirection: "column",
@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "absolute",
       //   border: "3px solid red",
       bottom: 20,
-      left: 20,
-      width: "30vw",
+      left: 15,
+      width: "29vw",
     },
     messagesBody: {
       width: "calc( 100% - 20px )",
