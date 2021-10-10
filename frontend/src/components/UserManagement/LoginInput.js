@@ -44,7 +44,7 @@ function LoginInput() {
     await apis.loginAccount(data).then((res) => {
       console.log(res.data);
       if (res.data.message == 'Login successfully!'){
-        LocalStorageService.setToken("TODO")
+        LocalStorageService.setToken(res.data.token);
         history.push('/');
       }else if(res.data.message == 'Wrong password!') {
         setPasswordHelperText(res.data.message);

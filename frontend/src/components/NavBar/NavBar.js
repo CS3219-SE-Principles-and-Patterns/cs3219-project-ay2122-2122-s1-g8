@@ -44,7 +44,8 @@ export default function NavBar() {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    //LocalStorageService.clearToken();
+    LocalStorageService.clearToken();
+    console.log(LocalStorageService.getAccessToken);
     history.push("login")
   };
 
