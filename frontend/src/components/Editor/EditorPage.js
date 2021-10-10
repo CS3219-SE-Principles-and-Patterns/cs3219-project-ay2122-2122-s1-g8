@@ -6,6 +6,7 @@ import Question from "./question";
 import Button from "@material-ui/core/Button";
 import Chat from "./chat";
 import { withRouter } from "react-router-dom";
+import NavBar from "./../NavBar/NavBar";
 class EditorPage extends React.Component {
   constructor(props) {
     super(props);
@@ -23,27 +24,32 @@ class EditorPage extends React.Component {
   }
   render() {
     return (
-      <div>
-        <div className="split left">
-          <div className="question">
-            <Question />
-          </div>
-          <div className="chat">
-            <Chat socket={this.state.socket} />
-          </div>
+      <div className="container">
+        <div className="top">
+          <NavBar />
         </div>
-        <div className="split right">
-          <div className="editor-component">
-            <RichTextEditor socket={this.state.socket} />
+        <div className="bottom">
+          <div className="split left">
+            <div className="question">
+              <Question />
+            </div>
+            <div className="chat">
+              <Chat socket={this.state.socket} />
+            </div>
           </div>
-          <div className="finish">
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={this.handlefinish}
-            >
-              Finish
-            </Button>
+          <div className="split right">
+            <div className="editor-component">
+              <RichTextEditor socket={this.state.socket} />
+            </div>
+            <div className="finish">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.handlefinish}
+              >
+                Finish
+              </Button>
+            </div>
           </div>
         </div>
       </div>

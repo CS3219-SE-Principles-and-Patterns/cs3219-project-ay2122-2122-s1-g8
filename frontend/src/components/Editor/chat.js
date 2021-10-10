@@ -3,7 +3,7 @@ import { colors, Paper } from "@material-ui/core";
 import { TextInput } from "./TextInput.js";
 import { MessageLeft, MessageRight } from "./message";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-
+import LocalStorageService from "../../auth/services/LocalStorageService";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       position: "absolute",
       //   border: "3px solid red",
-      bottom: 20,
-      left: 15,
       width: "29vw",
     },
     messagesBody: {
