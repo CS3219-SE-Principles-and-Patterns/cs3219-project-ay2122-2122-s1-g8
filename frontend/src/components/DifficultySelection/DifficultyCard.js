@@ -10,6 +10,7 @@ import DifficultyImage from '../../images/rsz_test.png'
 import EasyImage from "../../images/easy.png";
 import MediumImage from "../../images/medium.png";
 import HardImage from "../../images/hard.png";
+import apis from '../../api/api'
 
 const useStyles = makeStyles({
   root: {
@@ -49,11 +50,17 @@ export default function DifficultyCard(props) {
   }
   const desc = description[difficulty];
 
-  const handleDiffSelect = () => {
+  const handleDiffSelect = async () => {
     alert(difficulty);
     const data = {
-      difficulty: difficulty
+      username: localStorage['user_name'],
+      questionDifficulty: difficulty
     }
+    await apis.updateQuestionType(data).then((res) => {
+      console.log(res)
+    }).catch(err=> {
+      console.log(err);
+    })
   }
 
   return (

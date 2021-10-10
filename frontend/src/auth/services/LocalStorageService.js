@@ -10,7 +10,23 @@ const LocalStorageService = () => {
     }
 
     function _setToken(tokenObj) {
-        localStorage.setItem('access_token', tokenObj)
+        localStorage.setItem('access_token', tokenObj.token)
+    }
+
+    function _setUserID(tokenObj) {
+        localStorage.setItem('user_id', tokenObj.username)
+    }
+
+    function _getUserID(tokenObj) {
+        localStorage.getItem('user_id')
+    }
+
+    function _clearUserID() {
+        try {
+            localStorage.removeItem('user_id');
+        } catch (error) {
+            console.error(error);
+        }          
     }
 
     function _getAccessToken() {
@@ -18,7 +34,11 @@ const LocalStorageService = () => {
     }
 
     function _clearToken() {
-        localStorage.removeItem('access_token');
+        try {
+            localStorage.removeItem('access_token');
+        } catch (error) {
+            console.error(error);
+        }          
     }
 
     function _isAuth() {
@@ -29,7 +49,10 @@ const LocalStorageService = () => {
         setToken : _setToken,
         getAccessToken : _getAccessToken,
         clearToken : _clearToken,
-        isAuth: _isAuth
+        isAuth: _isAuth,
+        setUserID: _setUserID,
+        getUserID: _getUserID,
+        clearUserID: _clearUserID
     }
 }
 

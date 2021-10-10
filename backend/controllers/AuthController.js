@@ -63,9 +63,16 @@ const login = (req, res, next) => {
                 }
                 if(result){
                     let token = jwt.sign({username: user.username}, 'verySecreteValue', {expiresIn: '3h'})
+                    var myquery = {$or: [{email: username}, {username: username}]};
+                    var newvalues = { $set: {status: "Active"} };
+                    var userID =  user.username;
+                    User.updateOne(myquery, newvalues, function(err, _) {
+                        if (err) throw err;
+                    })
                     res.json({
                         message: 'Login successfully!',
-                        token: token
+                        token: token, 
+                        username: userID
                     })
                 }else{
                     res.json({

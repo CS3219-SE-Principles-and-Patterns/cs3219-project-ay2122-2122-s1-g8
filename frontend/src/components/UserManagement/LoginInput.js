@@ -40,11 +40,12 @@ function LoginInput() {
       username: email,
       password: password
     }
+    console.log(localStorage);
     console.log(email);
     await apis.loginAccount(data).then((res) => {
-      console.log(res.data);
       if (res.data.message == 'Login successfully!'){
-        LocalStorageService.setToken(res.data.token);
+        LocalStorageService.setToken(res.data);
+        LocalStorageService.setUserID(res.data);
         history.push('/');
       }else if(res.data.message == 'Wrong password!') {
         setPasswordHelperText(res.data.message);

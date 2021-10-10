@@ -7,6 +7,7 @@ const config = require('config')
 const db = require("./db");
 const AuthRouter = require("./routers/auth");
 const QuestionRouter = require("./routers/questionRoutes");
+const Usr = require("./routers/user");
 
 const app = express()
 const apiPort = process.env.PORT || 3030
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
     res.send('Server is running successfully!')
 })
 app.use('/api', AuthRouter)
+app.use('/api', Usr)
 app.use('/api/question', QuestionRouter);
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
