@@ -37,13 +37,22 @@ function LoginInput() {
       return;
     }
     const data = {
-      email: email,
+      username: email,
       password: password
     }
+    console.log(email);
     await apis.loginAccount(data).then((res) => {
       console.log(res.data);
-      LocalStorageService.setToken("TODO")
-      history.push('/');
+      if (res.data.message == 'Login successfully!'){
+        LocalStorageService.setToken("TODO")
+        history.push('/');
+      }else if(res.data.message == 'Wrong password!') {
+        setPasswordHelperText(res.data.message);
+        setisPasswordError(true)
+      }else{
+        setEmailHelperText(res.data.message);
+        setisEmailError(true)
+      }
     }).catch(err=> {
       console.log(err);
       setInvalidEmailPassword(true);
