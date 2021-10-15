@@ -5,17 +5,20 @@ import "./editorpage.css";
 import Question from "./question";
 import Button from "@material-ui/core/Button";
 import Chat from "./chat";
-import { withRouter } from "react-router-dom";
 import NavBar from "./../NavBar/NavBar";
+import LocalStorageService from "../../auth/services/LocalStorageService";
 class EditorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
       socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
+      user_id: LocalStorageService.getUserID(),
     };
     console.log(this.state.socket);
     this.handlefinish = this.handlefinish.bind(this);
+    // var user_id = LocalStorageService.getUserID();
+    console.log("user_id : ", this.state.user_id);
   }
   handlefinish() {
     this.props.history.push({
@@ -34,7 +37,7 @@ class EditorPage extends React.Component {
               <Question />
             </div>
             <div className="chat">
-              <Chat socket={this.state.socket} />
+              <Chat socket={this.state.socket} user_id={this.state.user_id} />
             </div>
           </div>
           <div className="split right">

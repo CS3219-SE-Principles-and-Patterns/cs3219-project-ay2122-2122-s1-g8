@@ -13,7 +13,7 @@
  */
 
 .RichEditor-root {
-  background: #fdfce5;
+  /* background: #fdfce5; */
   font-family: "Georgia", serif;
   font-size: 14px;
   padding: 15px;
@@ -23,7 +23,8 @@
   top: 0px;
   left: 0px;
   height: 95%;
-  border: 1px solid #f4d19b;
+  /* border: 1px solid #f4d19b; */
+  border: 1px solid silver;
 }
 
 .RichEditor-editor {

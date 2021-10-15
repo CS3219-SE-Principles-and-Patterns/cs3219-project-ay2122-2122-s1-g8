@@ -7,7 +7,7 @@ import LocalStorageService from "../../auth/services/LocalStorageService";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      background: "#F9F3DF",
+      // background: "#F9F3DF",
       width: "29vw",
       height: "30vh",
       display: "flex",
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       border: "1px solid silver",
     },
     paper2: {
-      background: "#F9F3DF",
+      // background: "#F9F3DF",
       width: "29vw",
       display: "flex",
       alignItems: "center",
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 10,
       overflowY: "scroll",
       height: "calc( 100% - 80px )",
-      background: "#FDF6F0",
+      // background: "#FDF6F0",
     },
   })
 );
@@ -44,7 +44,8 @@ function Chat(props) {
   const classes = useStyles();
   var socket = props.socket;
   const [messages, setMessages] = useState([]);
-  const [ID, setID] = useState(0);
+  const [ID, setID] = useState(props.user_id);
+  console.log("in chat user_id", ID);
   const listMessages = messages.map((message1) => {
     if (message1.id != ID) {
       return <MessageLeft message={message1.text} displayName={message1.id} />;
