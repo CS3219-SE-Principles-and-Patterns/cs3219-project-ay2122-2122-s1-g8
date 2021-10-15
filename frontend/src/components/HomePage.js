@@ -32,7 +32,6 @@ function HomePage() {
           </div> 
         </div>
       </div>
-      <LoadingDialog />
     </div>
   );
 }

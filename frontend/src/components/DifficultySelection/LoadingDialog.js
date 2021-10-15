@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,17 +8,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import LoadingBar from "./LoadingBar";
+import apis from '../../api/api'
 
-export default function AlertDialog() {
+export default function LoadingDialog(props) {
 
-  const timer = 10;
+  const timer = 5;
   const [open, setOpen] = useState(false);
   const [seconds, setSeconds] = useState(timer);
   const [isTimeout, setIsTimeout] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [isDecreasing, setIsDecreasing] = useState(false);
+  const history = useHistory();
 
   const handleClose = () => {
     setOpen(false);
@@ -25,22 +25,42 @@ export default function AlertDialog() {
 
   const handleAgree = () => {
     setOpen(false);
-    setSeconds(timer);
+    //setSeconds(timer);
     setIsTimeout(false);
+    setIsDecreasing(false);
+  }
+
+  const handleDiffSelect = async () => {
+    setIsTimeout(false);
+    setOpen(true);
+    setIsDecreasing(true);
+    setSeconds(timer);
+    const data = {
+      username: localStorage['user_id'],
+      questionDifficulty: props.difficulty
+    }
+
+    await apis.updateQuestionType(data).then((res) => {
+      console.log(res)
+      //history.push("editor-page")
+    }).catch(err=> {
+      console.log(err);
+    })
   }
 
   useEffect(() => {
-    if (seconds > 0) {
+    if (seconds > 0 && isDecreasing) {
       setTimeout(() => setSeconds(seconds - 1), 1000);
     } else {
       setIsTimeout(true);
+      setIsDecreasing(false);
     }
-  }, [open, seconds]);
+  }, [isDecreasing, seconds]);
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
+      <Button variant="outlined" color="secondary" onClick={handleDiffSelect}>
+        Let's go!
       </Button>
 
       {!isTimeout && (
@@ -49,7 +69,7 @@ export default function AlertDialog() {
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          //onBackdropClick="false"
+          onBackdropClick="false"
         >
           <DialogTitle id="alert-dialog-title">
             {"Give us a moment while we search for another online user!"}
@@ -68,7 +88,7 @@ export default function AlertDialog() {
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          //onBackdropClick="false"
+          onBackdropClick="false"
         >
           <DialogTitle id="alert-dialog-title">
             {"No online users"}
