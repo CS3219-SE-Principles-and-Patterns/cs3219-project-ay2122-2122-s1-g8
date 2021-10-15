@@ -44,16 +44,18 @@ function RegisterInput() {
     }
     await apis.registerAccount(data).then((res) => {
       console.log(res);
-      history.push('login')
-    }).catch(err => {
-      if(false) {
+      if (res.data.message == "Successful registration!"){
+        history.push('login')
+      }else if(res.data.message == "Email exists!"){
+        setisEmailError(true)
+        setEmailHelperText("Email is already taken.")
+      }else{
         setisUsernameError(true)
         setUsernameHelperText("Username is already taken.")
       }
-      if(false) {
-        setisEmailError(true)
-        setEmailHelperText("Email is already taken.")
-      }
+    }).catch(err => {
+      console.log(err);
+      setisEmailError(true);
     })
   }
 

@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-
+import apis from '../../api/api'
 import LocalStorageService from "../../auth/services/LocalStorageService";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +29,6 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const history = useHistory();
-
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
@@ -42,9 +41,17 @@ export default function NavBar() {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setAnchorEl(null);
-    //LocalStorageService.clearToken();
+    LocalStorageService.clearToken();
+    var data = {
+      username: localStorage['user_name'],
+    }
+    await apis.updateUserStatus(data).then((res) => {
+      console.log(res)
+    }).catch(err=> {
+      console.log(err);
+    })
     history.push("login")
   };
 
