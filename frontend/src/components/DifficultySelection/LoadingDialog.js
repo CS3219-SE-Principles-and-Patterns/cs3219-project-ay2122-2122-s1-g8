@@ -40,6 +40,8 @@ export default function LoadingDialog(props) {
       questionDifficulty: props.difficulty
     }
 
+    console.log(data)
+
     await apis.updateQuestionType(data).then((res) => {
       console.log(res)
       //history.push("editor-page")
