@@ -18,8 +18,7 @@ const LocalStorageService = () => {
   }
 
   function _getUserID() {
-    var user_id = localStorage.getItem("user_id");
-    return user_id;
+    return localStorage.getItem("user_id");
   }
 
   function _clearUserID() {
