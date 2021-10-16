@@ -42,6 +42,7 @@ function LoginInput() {
     }
     await apis.loginAccount(data).then((res) => {
       if (res.data.message == 'Login successfully!'){
+        console.log(res.data)
         LocalStorageService.setToken(res.data);
         LocalStorageService.setUserID(res.data);
         history.push('/');

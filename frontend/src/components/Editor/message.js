@@ -2,7 +2,7 @@ import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { deepOrange } from "@material-ui/core/colors";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     messageRow: {
       display: "flex",
@@ -120,23 +120,21 @@ export const MessageLeft = (props) => {
   const displayName = props.displayName ? props.displayName : "anon";
   const classes = useStyles();
   return (
-    <>
-      <div className={classes.messageRow}>
-        <div>
-          <div className={classes.displayName}>{displayName}</div>
-          <div className={classes.messageBlue}>
-            <div>
-              <p
-                style={{ whiteSpace: "pre-line" }}
-                className={classes.messageContent}
-              >
-                {message}
-              </p>
-            </div>
+    <div className={classes.messageRow}>
+      <div>
+        <div className={classes.displayName}>{displayName}</div>
+        <div className={classes.messageBlue}>
+          <div>
+            <p
+              style={{ whiteSpace: "pre-line" }}
+              className={classes.messageContent}
+            >
+              {message}
+            </p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 //avatarが右にあるメッセージ（自分）
