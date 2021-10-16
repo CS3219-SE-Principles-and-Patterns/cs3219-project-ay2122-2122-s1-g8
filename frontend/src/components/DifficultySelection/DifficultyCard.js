@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
+import LoadingDialog from "./LoadingDialog"
 import DifficultyImage from '../../images/rsz_test.png'
 import EasyImage from "../../images/easy.png";
 import MediumImage from "../../images/medium.png";
@@ -44,24 +45,11 @@ export default function DifficultyCard(props) {
 
   const difficulty = props.difficulty;
   const description = {
-      "Easy": "easy description asdljsadlkshadl ksadjlsadkldsajk lasdfafsasdaasd",
-      "Medium": "medium description asdljsadlkshadl ksadjlsadkldsajk lasdfafsasdaasd",
-      "Hard": "hard description asdljsadlkshadl ksadjlsadkldsajk lasdfafsasdaasd"
+      "Easy": "Choose this option if you have just started practising for technical interviews and are not yet comfortable solving questions!",
+      "Medium": "Choose this option if you have some experience solving technical problems for interviews but would still like more practice!",
+      "Hard": "Choose this option if you are used to technical questions and want to challenge yourself with harder questions!"
   }
   const desc = description[difficulty];
-
-  const handleDiffSelect = async () => {
-    alert(difficulty);
-    const data = {
-      username: localStorage['user_name'],
-      questionDifficulty: difficulty
-    }
-    await apis.updateQuestionType(data).then((res) => {
-      console.log(res)
-    }).catch(err=> {
-      console.log(err);
-    })
-  }
 
   return (
     <Card className={classes.root} style={{textAlign: "center", maxWidth: 5}} raised = "true" >
@@ -82,7 +70,7 @@ export default function DifficultyCard(props) {
         {difficulty === "Hard" &&
           <img src={HardImage} />
         }
-        <Typography variant="body2" component="p">
+        <Typography variant="body2" component="p" style={{padding: 10, textAlign: "center"}} >
           {desc}
           <br />
           <br />
@@ -90,7 +78,8 @@ export default function DifficultyCard(props) {
       </CardContent>
       <CardActions style = {{justifyContent: "center"}}>
         <div>
-          <Button variant="outlined" color="secondary" onClick = {handleDiffSelect}>Let's go!</Button>
+          {/*<Button variant="outlined" color="secondary" onClick = {handleDiffSelect}>Let's go!</Button>*/}
+          <LoadingDialog difficulty = {difficulty}/>
         </div>
       </CardActions>
       <br />

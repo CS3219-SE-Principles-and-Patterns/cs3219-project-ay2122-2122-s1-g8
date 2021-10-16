@@ -40,19 +40,25 @@ function LoginInput() {
       username: email,
       password: password
     }
-    console.log(localStorage);
-    console.log(email);
     await apis.loginAccount(data).then((res) => {
       if (res.data.message == 'Login successfully!'){
         LocalStorageService.setToken(res.data);
         LocalStorageService.setUserID(res.data);
         history.push('/');
       }else if(res.data.message == 'Wrong password!') {
-        setPasswordHelperText(res.data.message);
-        setisPasswordError(true)
-      }else{
-        setEmailHelperText(res.data.message);
         setisEmailError(true)
+        setisPasswordError(true)
+        setPasswordHelperText("Invalid email or password.")
+        setEmailHelperText("Invalid email or password.")
+        //setPasswordHelperText(res.data.message);
+        //setisPasswordError(true)
+      }else{
+        //setEmailHelperText(res.data.message);
+        //setisEmailError(true)
+        setisEmailError(true)
+        setisPasswordError(true)
+        setPasswordHelperText("Invalid email or password.")
+        setEmailHelperText("Invalid email or password.")
       }
     }).catch(err=> {
       console.log(err);
