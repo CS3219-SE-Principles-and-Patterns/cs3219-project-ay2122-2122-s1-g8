@@ -17,7 +17,7 @@ class RichTextEditor extends React.Component {
     // var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
     this.state = {
       editorState: EditorState.createEmpty(),
-      typingTimeout: 0,
+      // typingTimeout: 0,
       socket,
     };
     var socket = this.props.socket;
@@ -38,13 +38,14 @@ class RichTextEditor extends React.Component {
       this.setState(function (prevState, props) {
         return {
           editorState: editorState,
-          typingTimeout: setTimeout(function () {
-            var data = convertToRaw(editorState.getCurrentContent());
-            var send = JSON.stringify(data);
-            socket.emit("newState", send);
-          }, 1000),
+          // typingTimeout: setTimeout(function () {
+
+          // }, 1000),
         };
       });
+      var data = convertToRaw(editorState.getCurrentContent());
+      var send = JSON.stringify(data);
+      socket.emit("newState", send);
       // var data = convertToRaw(editorState.getCurrentContent());
       // var send = JSON.stringify(data);
       // socket.emit("newState", send);
