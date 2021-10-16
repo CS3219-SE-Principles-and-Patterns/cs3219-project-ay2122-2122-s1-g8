@@ -1,6 +1,6 @@
 const Question = require('../models/question')
 const STATUS_CODE_OK = 200;
-const STATUS_CODE_BAD_REQUEST = 500;
+const STATUS_CODE_BAD_REQUEST = 400;
 const STATUS_CODE_PARTIAL_CONTENT = 206;
 const STATUS_CODE_NOT_FOUND = 404;
 

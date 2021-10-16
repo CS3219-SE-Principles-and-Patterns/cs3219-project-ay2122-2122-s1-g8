@@ -1,0 +1,25 @@
+### currently if username does not exist, logic doesn't know
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "a",
+    "difficulty": "Hard"
+}
+
+### fails: difficulty not found
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "user",
+    "difficulty": "no_difficulty"
+}
+
+### fails: no difficulty
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "user"
+}
