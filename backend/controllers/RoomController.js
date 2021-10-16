@@ -20,7 +20,7 @@ const match = (req, res) => {
     var userid = null;
 
     // check if difficulty level exists
-    if(typeof difficultyLevel !== 'undefined' && !difficultyLevel.includes(req.body.difficulty)){
+    if(typeof difficultyLevel === 'undefined' || !difficultyLevel.includes(req.body.difficulty)){
         return res.status(STATUS_CODE_BAD_REQUEST).json({ message: "no such difficulty"})
     }
 
@@ -32,8 +32,10 @@ const match = (req, res) => {
                     if(err) return res.status(STATUS_CODE_SERVER_ERROR).json({ message: "Error occurred"});
                     peerMatch(req.body.username, req.body.difficulty).then(result => {
                         User.findOne({"username": req.body.username}).then(doc => {
+                            var roomId = extractRoomId(doc.status);
+                            if(roomId === null) roomId = result.roomId
                             return res.status(STATUS_CODE_OK).json({
-                                roomId: extractRoomId(doc.status)
+                                roomId: roomId
                             })
                         })
                     }).catch(err => {
@@ -46,7 +48,6 @@ const match = (req, res) => {
                 return res.status(STATUS_CODE_BAD_REQUEST).json({ message: "no such username"})
             }
         })
-        
 
     function peerMatch(username, difficulty){
         return new Promise((resolve, reject) => {
@@ -55,76 +56,63 @@ const match = (req, res) => {
                 clearInterval(checkDatabase)
                 User.findOneAndUpdate({"username": username}, {"status": "Active"}, function(err, doc){
                     if(err) console.log(err);
-                })
-                reject(result)
+                });
+                reject(result);
             }, timeLimit)
             
-
+    
             const checkDatabase = setInterval(() => {
-                User.findOne({"username": username}).then(res => {
-                    const status = extractRoomId(res.status);
-                    if(status !== null){
-                        result = {
-                            roomId: status
-                        }
+                result = User.find({ 
+                    $and: [
+                        {"status": { $eq: "Matching"}},
+                        {"questionDifficulty": { $eq: difficulty }},
+                        {"username": { $ne: username }}
+                    ]
+                }).then(async res => {
+                    if(res.length > 0){
                         clearTimeout(timeout)
                         clearInterval(checkDatabase)
+    
+                        let randomIndex = Math.floor(Math.random()*res.length)
+                        peer = res[randomIndex]
+                        const roomId = await createRoom(userid, peer._id)
+                        
+                        result = {
+                            roomId: roomId
+                        }
                         resolve(result)
                     }
-                    else{
-                        result = User.find({ 
-                            $and: [
-                                {"status": { $eq: "Matching"}},
-                                {"questionDifficulty": { $eq: difficulty }},
-                                {"username": { $ne: username }}
-                            ]
-                        }).then(res => {
-                            // console.log("polling db")
-                            if(res.length > 0){
-                                // console.log("inside ")
-                                let randomIndex = Math.floor(Math.random()*res.length)
-                                peer = res[randomIndex]
-                                const roomId = createRoom(userid, peer._id)
-        
-                                result = {
-                                    roomId: roomId
-                                }
-                                clearTimeout(timeout)
-                                clearInterval(checkDatabase)
-                                resolve(result)
-                            }
-                        })
-                    }
-                }).catch(err => {
-                    console.log(err)
                 })
-
-
+    
                 
             }, 500)
-
-                // if system has found a match, but this occurs on the peer's end first
-                
-
-                // else continue searching
             
         });
     }
-
-    
 }
 
-const createRoom = (userid_own, userid_peer) => {
-    const roomId = crypto.randomBytes(10).toString('hex')
-    User.findByIdAndUpdate(userid_peer, {"status": "Matched:" + roomId}, function(err, doc){
-        if(err) console.log(err);
-    });
-    User.findByIdAndUpdate(userid_own, {"status": "Matched:" + roomId}, function(err, doc){
-        if(err) console.log(err);
-    });
-    console.log("created room")
 
-    return roomId;
+
+const createRoom = async (userid_own, userid_peer) => {
+    console.log("in createRoom")
+    return new Promise((resolve, reject) => {
+        
+        User.findById(userid_own).then(res => {
+            var roomId = extractRoomId(res.status);
+            if(roomId !== null) resolve(roomId);
+    
+            roomId = crypto.randomBytes(10).toString('hex')
+            User.findByIdAndUpdate(userid_peer, {"status": "Matched:" + roomId}, function(err, doc){
+                if(err) reject(err);
+                else{
+                    User.findByIdAndUpdate(userid_own, {"status": "Matched:" + roomId}, function(err, doc){
+                        if(err) reject(err);
+                        else resolve(roomId);
+                    });
+                }
+            });
+        })
+    })
 }
 
 const chat = (req, res) => {
