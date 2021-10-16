@@ -6,7 +6,7 @@ const register = (req, res, next) => {
     console.log("Register server running!");
     bcrypt.hash(req.body.password, 10, function(error, hashPassword){
         if(error){
-            res.json({
+            res.status(400).json({
                 error: error
             })
         }
@@ -15,11 +15,11 @@ const register = (req, res, next) => {
             if(user){
                 console.log(user);
                 if (user.email == req.body.email){
-                    res.json({
+                    res.status(200).json({
                         message: "Email exists!"
                     })
                 }else{
-                    res.json({
+                    res.status(200).json({
                         message: "User exists!"
                     })
                 }
@@ -31,12 +31,12 @@ const register = (req, res, next) => {
                 })
                 user.save()
                 .then(user => {
-                    res.json({
+                    res.status(201).json({
                         message: "Successful registration!"
                     })
                 })
                 .catch(error => {
-                    res.json({
+                    res.status(500).json({
                         message: "Registration unsuccessful!"
                     })
                 })
@@ -69,13 +69,13 @@ const login = (req, res, next) => {
                     User.updateOne(myquery, newvalues, function(err, _) {
                         if (err) throw err;
                     })
-                    res.json({
+                    res.status(201).json({
                         message: 'Login successfully!',
                         token: token, 
                         username: userID
                     })
                 }else{
-                    res.json({
+                    res.status(401).json({
                         message: 'Wrong password!'
                     })
                 }
