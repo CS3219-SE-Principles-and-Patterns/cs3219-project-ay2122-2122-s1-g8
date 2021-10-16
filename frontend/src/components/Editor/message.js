@@ -120,23 +120,21 @@ export const MessageLeft = (props) => {
   const displayName = props.displayName ? props.displayName : "anon";
   const classes = useStyles();
   return (
-    <>
-      <div className={classes.messageRow}>
-        <div>
-          <div className={classes.displayName}>{displayName}</div>
-          <div className={classes.messageBlue}>
-            <div>
-              <p
-                style={{ whiteSpace: "pre-line" }}
-                className={classes.messageContent}
-              >
-                {message}
-              </p>
-            </div>
+    <div className={classes.messageRow}>
+      <div>
+        <div className={classes.displayName}>{displayName}</div>
+        <div className={classes.messageBlue}>
+          <div>
+            <p
+              style={{ whiteSpace: "pre-line" }}
+              className={classes.messageContent}
+            >
+              {message}
+            </p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 //avatarが右にあるメッセージ（自分）

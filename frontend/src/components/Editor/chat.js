@@ -65,7 +65,7 @@ function Chat(props) {
     });
     socket.on("initialize chat", (msg) => {
       console.log("User ID", msg);
-      setID(msg);
+      // setID(msg);
     });
   }, []);
   function addMessage(data) {
