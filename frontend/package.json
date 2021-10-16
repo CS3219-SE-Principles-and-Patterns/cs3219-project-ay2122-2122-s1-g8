@@ -35,7 +35,7 @@
   "scripts": {
     "start": " set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "./node_modules/.bin/mocha --timeout 10000 --require @babel/register --require ignore-styles ./src/test/HomePage.test.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
