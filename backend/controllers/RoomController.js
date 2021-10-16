@@ -3,16 +3,19 @@ const crypto = require('crypto')
 const User = require('../models/user')
 
 const STATUS_CODE_OK = 200;
-const STATUS_CODE_NO_CONTENT = 204;
 const STATUS_CODE_BAD_REQUEST = 400;
 const STATUS_CODE_SERVER_ERROR = 500;
-const STATUS_CODE_PARTIAL_CONTENT = 206;
-const STATUS_CODE_NOT_FOUND = 404;
 const difficultyLevel = ['Easy', 'Medium', 'Hard']
-const statusLevel = ['Active', 'Offline', 'In Progress']
+
+function extractRoomId(rawStatusString){
+    var patternStatus = new RegExp(/^Matched:(.*)/);
+    const status = rawStatusString.match(patternStatus);
+    if(status !== null) return status[1]
+    else return null
+}
 
 const match = (req, res) => {
-    const timeLimit = 60000
+    const timeLimit = 10000
     // check if the username exists
     var userid = null;
 
@@ -25,13 +28,17 @@ const match = (req, res) => {
         .then(user => {
             if(user){
                 userid = user._id;
-                User.findByIdAndUpdate(userid, {"$set": {"questionDifficulty": req.body.difficulty}}, function(err, _){
+                User.findByIdAndUpdate(userid, {"$set": {"questionDifficulty": req.body.difficulty, "status": "Matching"}}, function(err, _){
                     if(err) return res.status(STATUS_CODE_SERVER_ERROR).json({ message: "Error occurred"});
                     peerMatch(req.body.username, req.body.difficulty).then(result => {
-                        return res.status(STATUS_CODE_OK).json(result)
+                        User.findOne({"username": req.body.username}).then(doc => {
+                            return res.status(STATUS_CODE_OK).json({
+                                roomId: extractRoomId(doc.status)
+                            })
+                        })
                     }).catch(err => {
-                        console.log(err)
-                        return res.status(STATUS_CODE_OK).json({ message: "no match"})
+                        console.log("err is " + err)
+                        return res.status(STATUS_CODE_OK).json({ roomId: ""})
                     })
                 })
             }
@@ -45,44 +52,61 @@ const match = (req, res) => {
         return new Promise((resolve, reject) => {
             var result = null;
             var timeout = setTimeout(() => {
+                clearInterval(checkDatabase)
+                User.findOneAndUpdate({"username": username}, {"status": "Active"}, function(err, doc){
+                    if(err) console.log(err);
+                })
                 reject(result)
             }, timeLimit)
             
-            while(result === null){
-                // if system has found a match, but this occurs on the peer's end first
+
+            const checkDatabase = setInterval(() => {
                 User.findOne({"username": username}).then(res => {
-                    if(!statusLevel.includes(res.status)){
-                        // still need to find peerName from Room object, but not yet
+                    const status = extractRoomId(res.status);
+                    if(status !== null){
                         result = {
-                            roomId: res.status
+                            roomId: status
                         }
                         clearTimeout(timeout)
+                        clearInterval(checkDatabase)
                         resolve(result)
                     }
+                    else{
+                        result = User.find({ 
+                            $and: [
+                                {"status": { $eq: "Matching"}},
+                                {"questionDifficulty": { $eq: difficulty }},
+                                {"username": { $ne: username }}
+                            ]
+                        }).then(res => {
+                            // console.log("polling db")
+                            if(res.length > 0){
+                                // console.log("inside ")
+                                let randomIndex = Math.floor(Math.random()*res.length)
+                                peer = res[randomIndex]
+                                const roomId = createRoom(userid, peer._id)
+        
+                                result = {
+                                    roomId: roomId
+                                }
+                                clearTimeout(timeout)
+                                clearInterval(checkDatabase)
+                                resolve(result)
+                            }
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err)
                 })
+
+
+                
+            }, 500)
+
+                // if system has found a match, but this occurs on the peer's end first
+                
 
                 // else continue searching
-                result = User.find({ 
-                    $and: [
-                        {"status": { $eq: "Active"}},
-                        {"questionDifficulty": { $eq: difficulty }},
-                        {"username": { $ne: username }}
-                    ]   
-                }).then(res => {
-                    result = res[Math.floor(Math.random()*res.length)]
-                    if(result !== undefined && result !== null){
-                        
-                        const roomId = createRoom(userid, result._id)
-
-                        result = {
-                            peerUserName: result.username,
-                            roomId: roomId
-                        }
-                        clearTimeout(timeout)
-                        resolve(result)
-                    }
-                })
-            }
             
         });
     }
@@ -92,13 +116,13 @@ const match = (req, res) => {
 
 const createRoom = (userid_own, userid_peer) => {
     const roomId = crypto.randomBytes(10).toString('hex')
-    User.findByIdAndUpdate(userid_peer, {"status": roomId}, function(err, doc){
+    User.findByIdAndUpdate(userid_peer, {"status": "Matched:" + roomId}, function(err, doc){
         if(err) console.log(err);
     });
-    User.findByIdAndUpdate(userid_own, {"status": roomId}, function(err, doc){
+    User.findByIdAndUpdate(userid_own, {"status": "Matched:" + roomId}, function(err, doc){
         if(err) console.log(err);
     });
-    console.log("create room")
+    console.log("created room")
 
     return roomId;
 }

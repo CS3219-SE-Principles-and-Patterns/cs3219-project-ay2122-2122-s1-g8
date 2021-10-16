@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
     "username": "oongjiexiang",
-    "difficulty": "Hard"
+    "difficulty": "Medium"
 }
 
 ### fails: no such username
