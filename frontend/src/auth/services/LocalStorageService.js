@@ -18,7 +18,7 @@
     }
 
     function _getUserID() {
-      localStorage.getItem('user_id')
+      return localStorage.getItem('user_id')
   }
 
     function _clearUserID() {
