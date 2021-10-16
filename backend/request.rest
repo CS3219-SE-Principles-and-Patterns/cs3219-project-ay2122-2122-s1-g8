@@ -1,4 +1,36 @@
-### currently if username does not exist, logic doesn't know
+###* Auth
+### Register
+POST http://localhost:3030/api/register
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "password": "cs3219",
+    "email": "ojx@yahoo.com"
+}
+
+### Login
+POST http://localhost:3030/api/login
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "password": "cs3219"
+}
+###* Auth End
+
+
+
+### Success. Currently indicating room id in User.status field
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "difficulty": "Hard"
+}
+
+### fails: no such username
 POST http://localhost:3030/api/match
 Content-Type: application/json
 
