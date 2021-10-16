@@ -8,38 +8,56 @@
   position: relative;
   /* border: 5px solid green; */
 }
-
+body,
+html,
+.container {
+  height: 100%;
+}
+.top {
+  position: relative;
+  height: 8vh;
+  margin-bottom: 2vh;
+  /* border: 5px solid green; */
+}
+.bottom {
+  height: 80vh;
+  /* border: 5px solid gold; */
+}
 .chat {
   max-width: 29vw;
+  height: 35%;
+  margin-left: 10px;
+  /* border: 5px solid red; */
 }
 
 .question {
-  height: 65%;
+  height: 60%;
   width: 29vw;
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
   border: 1px solid silver;
 }
 .split {
-  height: 100%;
+  height: 80%;
   width: 100%;
   position: fixed;
-  z-index: 1;
-  top: 0;
+  /* z-index: 1; */
+  /* top: 0; */
   overflow-x: hidden;
   padding: 5px;
+  /* border: 5px solid red; */
 }
 
 .left {
   left: 0;
   width: 30vw;
-  height: 95vh;
+  /* height: 95vh; */
   /* border: 5px solid red; */
 }
 
 .right {
   width: 65vw;
-  height: 95vh;
+  /* height: 95vh; */
   /* border: 5px solid blue; */
   right: 0;
 }
