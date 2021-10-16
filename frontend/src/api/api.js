@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://peerprep.herokuapp.com/api",
+  //baseURL: "https://peerprep.herokuapp.com/api",
+  baseURL: "http://localhost:3030/api",
 });
 const api2 = axios.create({
   baseURL: "http://localhost:3030/question",
@@ -15,12 +16,20 @@ export const updateQuestionType = (payload) => api.post(`/updateQuestionType`, p
 
 // Question
 export const fetchQuestion = (endpoint) => api.get("/question/" + endpoint);
+
+// Match
+export const matchUser = (payload) => api.post("/match", payload);
+export const getChat = () => api.get("/chat");
+
+
 const apis = {
   registerAccount,
   loginAccount,
   updateUserStatus,
   updateQuestionType,
   fetchQuestion,
+  matchUser,
+  getChat,
 };
 
 export default apis;

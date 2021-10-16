@@ -30,7 +30,7 @@ function App() {
       <Router>
         <Switch>
           <ProtectedRoutes exact path="/" component={HomePage} />
-          <ProtectedRoutes exact path="/editor-page" component={EditorPage} />
+          <ProtectedRoutes exact path="/room/:id" component={EditorPage} />
           <Route
             exact
             path="/register"
