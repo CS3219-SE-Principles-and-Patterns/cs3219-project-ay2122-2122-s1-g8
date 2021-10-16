@@ -1,0 +1,57 @@
+###* Auth
+### Register
+POST http://localhost:3030/api/register
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "password": "cs3219",
+    "email": "ojx@yahoo.com"
+}
+
+### Login
+POST http://localhost:3030/api/login
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "password": "cs3219"
+}
+###* Auth End
+
+
+
+### Success. Currently indicating room id in User.status field
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "difficulty": "Medium"
+}
+
+### fails: no such username
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "a",
+    "difficulty": "Hard"
+}
+
+### fails: difficulty not found
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "user",
+    "difficulty": "no_difficulty"
+}
+
+### fails: no difficulty
+POST http://localhost:3030/api/match
+Content-Type: application/json
+
+{
+    "username": "user"
+}

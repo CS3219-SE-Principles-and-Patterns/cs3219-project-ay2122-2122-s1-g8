@@ -7,7 +7,6 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 import LoadingDialog from "./LoadingDialog"
-import DifficultyImage from '../../images/rsz_test.png'
 import EasyImage from "../../images/easy.png";
 import MediumImage from "../../images/medium.png";
 import HardImage from "../../images/hard.png";
@@ -52,7 +51,7 @@ export default function DifficultyCard(props) {
   const desc = description[difficulty];
 
   return (
-    <Card className={classes.root} style={{textAlign: "center", maxWidth: 5}} raised = "true" >
+    <Card className={classes.root} style={{textAlign: "center", maxWidth: 5}} raised = {true} >
       <CardContent>
         <Typography
           className={classes.title}

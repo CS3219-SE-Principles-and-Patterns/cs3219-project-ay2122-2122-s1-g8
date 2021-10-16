@@ -35,17 +35,35 @@ export default function LoadingDialog(props) {
     setOpen(true);
     setIsDecreasing(true);
     setSeconds(timer);
-    const data = {
+
+    const questionData = {
       username: localStorage['user_id'],
       questionDifficulty: props.difficulty
     }
 
-    console.log(data)
-
-    await apis.updateQuestionType(data).then((res) => {
+    await apis.updateQuestionType(questionData).then((res) => {
       console.log(res)
       //history.push("editor-page")
     }).catch(err=> {
+      console.log(err);
+    })
+
+    const matchData = {
+      username: localStorage['user_id'],
+      difficulty: props.difficulty
+    }
+
+    await apis.matchUser(matchData).then((res) => {
+      console.log(res.data);
+      if (res.data.message) {
+        alert("error")
+      } else if (res.data.roomId) {
+        const roomId = res.data.roomId;
+        history.push("room/" + roomId);
+      } else {
+        alert("error");
+      }
+    }).catch(err => {
       console.log(err);
     })
   }
@@ -68,10 +86,9 @@ export default function LoadingDialog(props) {
       {!isTimeout && (
         <Dialog
           open={open}
-          onClose={handleClose}
+          onClose={(event, reason) => reason !== 'backdropClick'}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          onBackdropClick="false"
         >
           <DialogTitle id="alert-dialog-title">
             {"Give us a moment while we search for another online user!"}
@@ -87,10 +104,9 @@ export default function LoadingDialog(props) {
       {isTimeout && (
         <Dialog
           open={open}
-          onClose={handleClose}
+          onClose={(event, reason) => reason !== 'backdropClick'}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          onBackdropClick="false"
         >
           <DialogTitle id="alert-dialog-title">
             {"No online users"}

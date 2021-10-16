@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import SendIcon from "@material-ui/icons/Send";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     wrapForm: {
       display: "flex",
@@ -35,7 +35,7 @@ export const TextInput = (props) => {
     setText("");
   }
   return (
-    <>
+    <div>
       <form className={classes.wrapForm} noValidate autoComplete="off">
         <TextField
           id="standard-text"
@@ -55,6 +55,6 @@ export const TextInput = (props) => {
           <SendIcon />
         </Button>
       </form>
-    </>
+    </div>
   );
 };
