@@ -4,9 +4,9 @@ POST http://localhost:3030/api/register
 Content-Type: application/json
 
 {
-    "username": "oongjiexiang",
+    "username": "alan",
     "password": "cs3219",
-    "email": "ojx@yahoo.com"
+    "email": "alan@yahoo.com"
 }
 
 ### Login
@@ -14,7 +14,7 @@ POST http://localhost:3030/api/login
 Content-Type: application/json
 
 {
-    "username": "oongjiexiang",
+    "username": "alan",
     "password": "cs3219"
 }
 ###* Auth End
@@ -22,16 +22,70 @@ Content-Type: application/json
 
 
 ### Success. Currently indicating room id in User.status field
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {
     "username": "oongjiexiang",
-    "difficulty": "Hard"
+    "difficulty": "Medium"
+}
+
+###
+POST http://localhost:3030/api/match/status
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "difficulty": "Medium"
+}
+
+###
+POST http://localhost:3030/api/match/drop
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang",
+    "difficulty": "Easy"
+}
+
+### 
+POST http://localhost:3030/api/match/new
+Content-Type: application/json
+
+{
+    "username": "joshua",
+    "difficulty": "Easy"
+}
+
+### 
+POST http://localhost:3030/api/match/status
+Content-Type: application/json
+
+{
+    "username": "joshua",
+    "difficulty": "Easy"
+}
+
+### 
+POST http://localhost:3030/api/match/new
+Content-Type: application/json
+
+{
+    "username": "alan",
+    "difficulty": "Easy"
+}
+
+### 
+POST http://localhost:3030/api/match/status
+Content-Type: application/json
+
+{
+    "username": "alan",
+    "difficulty": "Easy"
 }
 
 ### fails: no such username
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {
@@ -40,7 +94,7 @@ Content-Type: application/json
 }
 
 ### fails: difficulty not found
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {
@@ -49,9 +103,26 @@ Content-Type: application/json
 }
 
 ### fails: no difficulty
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {
     "username": "user"
 }
+
+
+### Update Question Type
+POST http://peerprep.herokuapp.com/api/updateQuestionType
+Content-Type: application/json
+
+{
+    "username": "oongjiexiang"
+}
+
+# 1. New match request with correct username. 200
+# 2. New match request with non-existent username. 404
+# 3. Only one match request and call /status. 202
+# 4. Only one match request and call /drop. 200 dropped
+# 5. Two new match requests with different difficulties. Both /status 202
+# 6. Two new match requests with same difficulties. Both 200. Then call /status, which returns roomId (must be same)
+# 7. Two new match requests with same difficulties. Then third match request. Third's /status 202, whereas first and second have same roomId and 200

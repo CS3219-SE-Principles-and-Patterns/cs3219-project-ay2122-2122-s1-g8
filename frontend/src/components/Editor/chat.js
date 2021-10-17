@@ -4,7 +4,7 @@ import { TextInput } from "./TextInput.js";
 import { MessageLeft, MessageRight } from "./message";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import LocalStorageService from "../../auth/services/LocalStorageService";
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       // background: "#F9F3DF",
@@ -62,10 +62,6 @@ function Chat(props) {
     socket.on("chat message", (msg) => {
       var data = msg;
       addMessage(data);
-    });
-    socket.on("initialize chat", (msg) => {
-      console.log("User ID", msg);
-      setID(msg);
     });
   }, []);
   function addMessage(data) {

@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import LoadingBar from "./LoadingBar";
 import apis from '../../api/api'
+import LocalStorageService from "../../auth/services/LocalStorageService";
 
 export default function LoadingDialog(props) {
 
@@ -37,33 +38,31 @@ export default function LoadingDialog(props) {
     setSeconds(timer);
 
     const questionData = {
-      username: localStorage['user_id'],
+      username: LocalStorageService.getUserID(),
       questionDifficulty: props.difficulty
-    }
-
-    await apis.updateQuestionType(questionData).then((res) => {
-      console.log(res)
-      //history.push("editor-page")
-    }).catch(err=> {
-      console.log(err);
-    })
-
+    }    
+    
     const matchData = {
-      username: localStorage['user_id'],
+      username: LocalStorageService.getUserID(),
       difficulty: props.difficulty
     }
 
-    await apis.matchUser(matchData).then((res) => {
-      console.log(res.data);
-      if (res.data.message) {
-        alert("error")
-      } else if (res.data.roomId) {
-        const roomId = res.data.roomId;
-        history.push("room/" + roomId);
-      } else {
-        alert("error");
-      }
-    }).catch(err => {
+    await apis.updateQuestionType(questionData).then(async (res) => {
+      console.log(res.data)
+      await apis.matchUser(matchData).then((res) => {
+        console.log(res.data);
+        if (res.data.message || (res.data.roomId !== undefined && res.data.roomId === "")) {
+          console.log("no user")
+        } else if (res.data.roomId) {
+          const roomId = res.data.roomId;
+          history.push("room/" + roomId);
+        } else {
+          console.log("error")
+        }
+      }).catch(err => {
+        console.log(err);
+      })
+    }).catch(err=> {
       console.log(err);
     })
   }
