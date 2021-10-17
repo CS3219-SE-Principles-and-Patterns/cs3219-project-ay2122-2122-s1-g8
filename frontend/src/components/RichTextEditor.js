@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
 import {
   Editor,
   EditorState,
@@ -6,7 +7,6 @@ import {
   RichUtils,
   convertToRaw,
   convertFromRaw,
-  SelectionState,
 } from "draft-js";
 import "./RichText.css";
 class RichTextEditor extends React.Component {
@@ -14,13 +14,13 @@ class RichTextEditor extends React.Component {
     super(props);
 
     // var socket = io.connect("http://localhost:3001", { reconnect: true });
+    var socket = io.connect("http://192.168.0.103:3011", { reconnect: true });
     // var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
     this.state = {
       editorState: EditorState.createEmpty(),
-      // typingTimeout: 0,
-      socket,
+      allowUpdate: true,
+      cursor: 0,
     };
-    var socket = this.props.socket;
     socket.on("initialize", (msg) => {
       var input1 = JSON.parse(msg);
       var input2 = convertFromRaw(input1);
@@ -32,59 +32,67 @@ class RichTextEditor extends React.Component {
     // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
-      if (this.state.typingTimeout) {
-        clearTimeout(this.state.typingTimeout);
+      if (this.state.allowUpdate) {
+        this.setState({ allowUpdate: false });
+        this.setState(
+          function (prevState, props) {
+            return { editorState: editorState };
+          },
+          () => {
+            this.setState({ allowUpdate: true });
+          }
+        );
+        var data = convertToRaw(editorState.getCurrentContent());
+        var send = JSON.stringify(data);
+        socket.emit("newState", send);
+      } else {
+        console.log("race condition!");
       }
-      this.setState(function (prevState, props) {
-        return {
-          editorState: editorState,
-          // typingTimeout: setTimeout(function () {
-
-          // }, 1000),
-        };
-      });
-      var data = convertToRaw(editorState.getCurrentContent());
-      var send = JSON.stringify(data);
-      socket.emit("newState", send);
-      // var data = convertToRaw(editorState.getCurrentContent());
-      // var send = JSON.stringify(data);
-      // socket.emit("newState", send);
     };
 
     socket.on("newState", (msg) => {
-      this.setState(function (prevState, props) {
-        var input1 = JSON.parse(msg);
-        var input2 = convertFromRaw(input1);
-        // console.log(input2);
-        // const stateWithContent = EditorState.createWithContent(input2);
-        // const currentSelection = this.state.editorState.getSelection();
-        // // var stateWithContentAndSelection = null;
-        // console.log(currentSelection.getAnchorOffset());
-        // // var stateWithContentAndSelection = EditorState.push(
-        // //   this.state.editorState,
-        // //   input2,
-        // //   "change-block-data"
-        // // );
-        // var stateWithContentAndSelection = EditorState.forceSelection(
-        //   stateWithContent,
-        //   currentSelection
-        // );
-        // // console.log(stateWithContent.getCurrentContent());
-        // // console.log("they", currentSelection.getAnchorOffset());
-        // return {
-        //   editorState: stateWithContentAndSelection,
-        // };
-        const oldSelectionState = this.state.editorState.getSelection();
-        const newEditorState = EditorState.createWithContent(input2);
-        const newEditorStateWithSelection = EditorState.forceSelection(
-          newEditorState,
-          oldSelectionState
-        );
-        return {
-          editorState: newEditorStateWithSelection,
-        };
-      });
+      // console.log(msg);
+      // console.log(this.state.allowUpdate);
+      if (this.state.allowUpdate) {
+        this.setState(
+          function (prevState, props) {
+            this.state.allowUpdate = false;
+            console.log("123123", this.state.allowUpdate);
+            var input1 = JSON.parse(msg);
+            var input2 = convertFromRaw(input1);
+            // console.log(input2);
+            const stateWithContent = EditorState.createWithContent(input2);
+            const currentSelection = prevState.editorState.getSelection();
+            var stateWithContentAndSelection = null;
+            console.log(currentSelection.getAnchorOffset());
+            // if (currentSelection.getAnchorOffset() == 0) {
+            //   stateWithContentAndSelection =
+            //     EditorState.moveSelectionToEnd(stateWithContent);
+            //   console.log("I'm called");
+            // } else {
+            stateWithContentAndSelection = EditorState.forceSelection(
+              stateWithContent,
+              currentSelection
+            );
+            // }
+            // console.log(stateWithContent.getCurrentContent());
+            // console.log("they", currentSelection.getAnchorOffset());
 
+            return {
+              editorState: stateWithContentAndSelection,
+            };
+          },
+          () => {
+            this.state.allowUpdate = true;
+          }
+        );
+      } else {
+        console.log("race condition!");
+      }
+
+      // this.setState({
+      //   editorState: EditorState.moveFocusToEnd(stateWithContent),
+      // });
       // this.setState({ editorState: stateWithContentAndSelection });
     });
 

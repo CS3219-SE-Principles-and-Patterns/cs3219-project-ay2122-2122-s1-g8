@@ -13,15 +13,12 @@ class EditorPage extends React.Component {
     super(props);
     this.state = {
       //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
+      room_id: props.match.params.id,
       socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
     };
     console.log(this.state.socket);
     this.handlefinish = this.handlefinish.bind(this);
-    // var user_id = LocalStorageService.getUserID();
-    console.log("user_id : ", this.state.user_id);
-    const id = this.props.match.params.id;
-    console.log(id)
   }
   handlefinish() {
     this.props.history.push({
