@@ -1,4 +1,4 @@
-const Matchmaking = require('./RoomMatchmaker')
+// Inspiration and initial guidance from https://github.com/jduyon/matchmaking
 const User = require('../models/user')
 
 const STATUS_CODE_OK = 200;
@@ -28,7 +28,8 @@ const new_peer_request = (req, res, roomManager, properties) => {
         if(peerFound){  // check if already found match
             return res.status(STATUS_CODE_OK).json({
                 "message": "Already found a match",
-                peerFound
+                peerName: peerFound.peerName,
+                roomId: peerFound.roomId
             })
         }
         else if(inQueue){   // check if in queue, ie still matching
@@ -73,7 +74,8 @@ const match_status_query = (req, res, roomManager, properties) => {
 
     if(hasMatch){   // check if found a match
         return res.status(STATUS_CODE_OK).json({
-            hasMatch
+            peerName: hasMatch.peerName,
+            roomId: hasMatch.roomId
         })
     }
     else if(!wasQueued){    // check if user exists AND is in queue. Only checks 2nd condition because 2nd condition exists iff new_peer_request is made
