@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
     "username": "oongjiexiang",
-    "difficulty": "Easy"
+    "difficulty": "Medium"
 }
 
 ###
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 {
     "username": "oongjiexiang",
-    "difficulty": "Easy"
+    "difficulty": "Medium"
 }
 
 ###
@@ -85,7 +85,7 @@ Content-Type: application/json
 }
 
 ### fails: no such username
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {
@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 
 ### fails: difficulty not found
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {
@@ -103,7 +103,7 @@ Content-Type: application/json
 }
 
 ### fails: no difficulty
-POST http://localhost:3030/api/match
+POST http://localhost:3030/api/match/new
 Content-Type: application/json
 
 {

@@ -5,14 +5,14 @@ class QueueingManager{
     constructor(properties){
         this.properties = properties;
     }
-    setEnqueueUser(username){
-        this.properties.ENQUEUED_USER.add(username);
+    setEnqueueUser(username, difficulty){
+        this.properties.ENQUEUED_USER[difficulty].add(username);
     }
-    hasEnqueueUser(username){
-        return this.properties.ENQUEUED_USER.has(username);
+    hasEnqueueUser(username, difficulty){
+        return this.properties.ENQUEUED_USER[difficulty].has(username);
     }
-    removeQueueUser(username){
-        this.properties.ENQUEUED_USER.delete(username);
+    removeQueueUser(username, difficulty){
+        this.properties.ENQUEUED_USER[difficulty].delete(username);
     }
 }
 
@@ -41,8 +41,8 @@ class DataStoreManager{
         this.matchPairingManager = matchPairingManager;
     }
     createNewRequest(username, difficulty){
-        if(!this.queuingManager.hasEnqueueUser(username)){
-            this.queuingManager.setEnqueueUser(username);
+        if(!this.queuingManager.hasEnqueueUser(username, difficulty)){
+            this.queuingManager.setEnqueueUser(username, difficulty);
             var newNode = Node.prototype.newDifficultyNode(username);
             this.addToDifficultyQueue(difficulty, newNode);
             return true;
@@ -50,8 +50,8 @@ class DataStoreManager{
         else return false;
         
     }
-    deleteUserRequest(username){
-        this.queuingManager.removeQueueUser(username);
+    deleteUserRequest(username, difficulty){
+        this.queuingManager.removeQueueUser(username, difficulty);
         this.matchPairingManager.removeFromDequeue(username);
     }
     getQueueHead(difficulty){
@@ -68,15 +68,11 @@ class DataStoreManager{
         if(q && q.data.username === username) return true;
         return false;   
     }
-    forgetUser(username){
-        this.queuingManager.removeQueueUser(username);
-        this.matchPairingManager.removeFromDequeue(username);
-    }
     findPeer(username, difficulty){
         do{
             if(this.isHeadOfQueue(username, difficulty)) return;
             var peer = this.removeFromDifficultyQueue(difficulty);
-            if(peer && this.queuingManager.hasEnqueueUser(peer.data['username'])){
+            if(peer && this.queuingManager.hasEnqueueUser(peer.data['username'], difficulty) && !this.matchPairingManager.hasDequeue(peer.data['username'])){
                 const roomId = crypto.randomBytes(10).toString('hex');
                 // create room not done here yet
                 this.matchPairingManager.setDequeueUser(username, peer.data['username'], roomId);
