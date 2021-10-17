@@ -4,7 +4,7 @@ import { TextInput } from "./TextInput.js";
 import { MessageLeft, MessageRight } from "./message";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import LocalStorageService from "../../auth/services/LocalStorageService";
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
       // background: "#F9F3DF",
