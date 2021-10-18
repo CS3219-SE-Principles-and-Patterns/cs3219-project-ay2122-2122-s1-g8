@@ -19,8 +19,11 @@ export const updateQuestionType = (payload) =>
 export const fetchQuestion = (endpoint) => api.get("/question/" + endpoint);
 
 // Match
-export const matchUser = (payload) => api.post("/match", payload);
-export const getChat = () => api.get("/chat");
+export const newMatch = (payload) => api.post("/match/new", payload);
+export const matchStatus = (payload) => api.post("/match/status", payload);
+export const dropMatch = (payload) => api.post("/match/drop", payload);
+export const getRoom = (id) => api.get(`/room/${id}`)
+//export const getChat = () => api.get("/chat");
 
 const apis = {
   registerAccount,
@@ -28,8 +31,11 @@ const apis = {
   updateUserStatus,
   updateQuestionType,
   fetchQuestion,
-  matchUser,
-  getChat,
+  newMatch,
+  matchStatus,
+  dropMatch,
+  getRoom,
+  //getChat,
 };
 
 export default apis;
