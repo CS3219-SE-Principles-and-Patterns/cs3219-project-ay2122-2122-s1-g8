@@ -13,7 +13,7 @@ import LocalStorageService from "../../auth/services/LocalStorageService";
 
 export default function LoadingDialog(props) {
 
-  const timer = 5;
+  const timer = 30;
   const [open, setOpen] = useState(false);
   const [seconds, setSeconds] = useState(timer);
   const [isTimeout, setIsTimeout] = useState(false);
@@ -49,16 +49,8 @@ export default function LoadingDialog(props) {
 
     await apis.updateQuestionType(questionData).then(async (res) => {
       console.log(res.data)
-      await apis.matchUser(matchData).then((res) => {
+      await apis.newMatch(matchData).then((res) => {
         console.log(res.data);
-        if (res.data.message || (res.data.roomId !== undefined && res.data.roomId === "")) {
-          console.log("no user")
-        } else if (res.data.roomId) {
-          const roomId = res.data.roomId;
-          history.push("room/" + roomId);
-        } else {
-          console.log("error")
-        }
       }).catch(err => {
         console.log(err);
       })
@@ -67,14 +59,51 @@ export default function LoadingDialog(props) {
     })
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     if (seconds > 0 && isDecreasing) {
       setTimeout(() => setSeconds(seconds - 1), 1000);
     } else {
       setIsTimeout(true);
       setIsDecreasing(false);
+
+      const matchData = {
+        username: LocalStorageService.getUserID(),
+        difficulty: props.difficulty
+      }
+
+      if (isDecreasing) {
+        await apis.dropMatch(matchData).then((res) => {
+          console.log(res.data);
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+
     }
   }, [isDecreasing, seconds]);
+
+  useEffect(async () => {
+    if (seconds > 0 && seconds % 5 === 0) {
+
+      const matchData = {
+        username: LocalStorageService.getUserID(),
+        difficulty: props.difficulty
+      }
+
+      if (isDecreasing) {
+        await apis.matchStatus(matchData).then(async (res) => {
+          console.log(res.data);
+          if (res.data.roomId) {
+            const roomId = res.data.roomId;
+            history.push("room/" + roomId);
+          } 
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+
+    } 
+  }, [seconds]);
 
   return (
     <div>

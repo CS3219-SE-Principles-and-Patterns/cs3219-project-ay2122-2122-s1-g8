@@ -29,9 +29,7 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const history = useHistory();
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,14 +40,15 @@ export default function NavBar() {
   };
 
   const handleLogout = async () => {
-    setAnchorEl(null);
+    //setAnchorEl(null);
     var data = {
       username: localStorage['user_id'],
     }
     await apis.updateUserStatus(data).then((res) => {
-      LocalStorageService.clearToken();
-      LocalStorageService.clearUserID();
-      history.push("login")
+      //LocalStorageService.clearToken();
+      //LocalStorageService.clearUserID();
+      localStorage.clear()
+      window.location.reload();
     }).catch(err=> {
       alert("There has been an error. Please try again.")
 
@@ -64,7 +63,6 @@ export default function NavBar() {
           </IconButton>
           <Typography variant="h6" className={classes.title}>
           </Typography>
-          {auth && (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -95,7 +93,6 @@ export default function NavBar() {
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
-          )}
         </Toolbar>
       </AppBar>
     </div>
