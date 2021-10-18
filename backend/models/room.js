@@ -3,13 +3,15 @@ const User = require('./user')
 const Schema = mongoose.Schema;
 
 roomSchema = new Schema({
-    userIds: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    // userIds: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    roomId: String,
+    usernames: [String],
     startTime: Date,
-    endtime: Date,
+    endTime: Date,
     questionDifficulty: String,
     // list of questionId
     
 });
 
-Room = mongoose.Model('Room', roomSchema)
+Room = mongoose.model('Room', roomSchema)
 module.exports = Room;

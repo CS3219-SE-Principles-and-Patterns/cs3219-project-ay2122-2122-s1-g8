@@ -1,5 +1,6 @@
 // Inspiration and initial guidance from https://github.com/jduyon/matchmaking
 const User = require('../models/user')
+const Room = require('../models/room')
 
 const STATUS_CODE_OK = 200;
 const STATUS_CODE_NOT_FOUND = 404;
@@ -40,9 +41,25 @@ const new_peer_request = (req, res, roomManager, properties) => {
         else{
             var peer = roomManager.findPeer(username, difficulty);
             if(peer){   // try finding a match without enqueuing it
-                return res.status(STATUS_CODE_OK).json({
-                    "message": "Match found. Call again with /status endpoint"
+                var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
+                const newRoom = new Room({
+                    roomId: hasMatch.roomId,
+                    usernames: [username, peer.data['username']],
+                    startTime: new Date(),
+                    questionDifficulty: difficulty
                 })
+                newRoom.save()
+                    .then(result => {
+                        return res.status(STATUS_CODE_OK).json({
+                            "message": "Match found. Call again with /status endpoint"
+                        })
+                    })
+                    .catch(err => {
+                        return res.status(STATUS_CODE_SERVER_ERROR).json({
+                            "message": "Database is not available at the moment"
+                        })
+                    })
+                
             }
             else{      // no match found, so enqueue this user
                 roomManager.createNewRequest(username, difficulty);
