@@ -74,7 +74,6 @@ class DataStoreManager{
             var peer = this.removeFromDifficultyQueue(difficulty);
             if(peer && this.queuingManager.hasEnqueueUser(peer.data['username'], difficulty) && !this.matchPairingManager.hasDequeue(peer.data['username'])){
                 const roomId = crypto.randomBytes(10).toString('hex');
-                // create room not done here yet
                 this.matchPairingManager.setDequeueUser(username, peer.data['username'], roomId);
                 this.matchPairingManager.setDequeueUser(peer.data['username'], username, roomId);
                 return peer;
