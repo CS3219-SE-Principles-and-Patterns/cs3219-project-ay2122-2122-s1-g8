@@ -13,7 +13,8 @@ class EditorPage extends React.Component {
     super(props);
     this.state = {
       //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
-      socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
+      // socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
+      socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
     };
     console.log(this.state.socket);
