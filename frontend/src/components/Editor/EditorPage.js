@@ -18,11 +18,8 @@ class EditorPage extends React.Component {
       user_id: LocalStorageService.getUserID(),
     };
     console.log(this.state.socket);
+    console.log("Room id:", this.state.room_id);
     this.handlefinish = this.handlefinish.bind(this);
-    // var user_id = LocalStorageService.getUserID();
-    console.log("user_id : ", this.state.user_id);
-    const id = this.props.match.params.id;
-    console.log(id)
   }
   handlefinish() {
     this.props.history.push({
