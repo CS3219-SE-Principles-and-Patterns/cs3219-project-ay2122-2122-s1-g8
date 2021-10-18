@@ -8,19 +8,41 @@ import Button from "@material-ui/core/Button";
 import Chat from "./chat";
 import NavBar from "./../NavBar/NavBar";
 import LocalStorageService from "../../auth/services/LocalStorageService";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 class EditorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
       // socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
+      error: true,
+      room_id: props.match.params.id,
       socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
     };
     console.log(this.state.socket);
     console.log("Room id:", this.state.room_id);
     this.handlefinish = this.handlefinish.bind(this);
+    this.state.socket.emit(
+      "show credential",
+      (this.state.roomId, this.state.user_id)
+    );
+    this.state.socket.on("credential accepted", (msg) => {
+      this.setState({ error: false });
+      console.log("credential accepted");
+    });
+    this.state.socket.on("credential invalid", (msg) => {
+      this.setState({ error: true });
+      console.log("credential invalid");
+    });
   }
+  handleClose = () => {
+    this.setState({ error: false });
+  };
   handlefinish() {
     this.props.history.push({
       pathname: "/",
@@ -29,6 +51,21 @@ class EditorPage extends React.Component {
   render() {
     return (
       <div className="container">
+        <Dialog
+          open={this.state.error}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Something wrong. Unable to enter a room.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose}>Close</Button>
+          </DialogActions>
+        </Dialog>
         <div className="top">
           <NavBar />
         </div>
@@ -38,12 +75,19 @@ class EditorPage extends React.Component {
               <Question />
             </div>
             <div className="chat">
-              <Chat socket={this.state.socket} user_id={this.state.user_id} />
+              <Chat
+                socket={this.state.socket}
+                user_id={this.state.user_id}
+                roomId={this.state.room_id}
+              />
             </div>
           </div>
           <div className="split right">
             <div className="editor-component">
-              <RichTextEditor socket={this.state.socket} />
+              <RichTextEditor
+                socket={this.state.socket}
+                roomId={this.state.room_id}
+              />
             </div>
             <div className="finish">
               <Button

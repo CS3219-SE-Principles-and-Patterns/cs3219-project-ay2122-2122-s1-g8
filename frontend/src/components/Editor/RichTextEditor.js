@@ -17,7 +17,6 @@ class RichTextEditor extends React.Component {
     // var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
     this.state = {
       editorState: EditorState.createEmpty(),
-      parnetAnchorKey: "",
       // typingTimeout: 0,
       socket,
     };
@@ -33,31 +32,31 @@ class RichTextEditor extends React.Component {
     // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
-      console.log("me", editorState.getSelection().getAnchorKey());
-      console.log("partner", this.state.parnetAnchorKey);
+      // console.log("me", editorState.getSelection().getAnchorKey());
+      // console.log("partner", this.state.parnetAnchorKey);
       // if (
       //   this.state.parnetAnchorKey == editorState.getSelection().getAnchorKey()
       // ) {
       //   console.log("forbidded");
       //   return;
       // }
-      console.log(editorState.getSelection().getAnchorKey());
-      if (this.state.typingTimeout) {
-        clearTimeout(this.state.typingTimeout);
-      }
+      // console.log(editorState.getSelection().getAnchorKey());
       this.setState(function (prevState, props) {
         return {
           editorState: editorState,
-          // typingTimeout: setTimeout(function () {
-
-          // }, 1000),
         };
       });
       var data = convertToRaw(editorState.getCurrentContent());
       var send = JSON.stringify(data);
-      socket.emit("newState", {
+      var payload = [
+        props.roomId,
+        {
+          state: send,
+        },
+      ];
+      console.log(payload);
+      socket.emit("newState", props.roomId, {
         state: send,
-        anchorKey: editorState.getSelection().getAnchorKey(),
       });
       // var data = convertToRaw(editorState.getCurrentContent());
       // var send = JSON.stringify(data);
@@ -65,7 +64,7 @@ class RichTextEditor extends React.Component {
     };
 
     socket.on("newState", (msg) => {
-      console.log("start");
+      // console.log("start");
       this.setState(function (prevState, props) {
         var input1 = JSON.parse(msg["state"]);
         var input2 = convertFromRaw(input1);
@@ -95,10 +94,9 @@ class RichTextEditor extends React.Component {
           newEditorState,
           oldSelectionState
         );
-        console.log("end");
+        // console.log("end");
         return {
           editorState: newEditorStateWithSelection,
-          parnetAnchorKey: msg["anchorKey"],
         };
       });
 

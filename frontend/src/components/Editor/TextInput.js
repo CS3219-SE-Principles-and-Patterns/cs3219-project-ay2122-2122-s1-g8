@@ -29,9 +29,9 @@ export const TextInput = (props) => {
     setText(event.target.value);
   }
   function sendChatMessage(socket) {
-    var payload = { id: props.id, text: text };  
+    var payload = { id: props.id, text: text };
     console.log("user ", props.id, "sending message");
-    props.socket.emit("chat message", payload);
+    props.socket.emit("chat message", (props.roomId, payload));
     setText("");
 
     var payload = { id: props.id, text: text };

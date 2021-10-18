@@ -78,7 +78,7 @@ function Chat(props) {
         <Paper id="style-1" className={classes.messagesBody}>
           {listMessages}
         </Paper>
-        <TextInput socket={props.socket} id={ID} />
+        <TextInput socket={props.socket} id={ID} roomId={props.roomId} />
       </Paper>
     </div>
   );
