@@ -44,7 +44,7 @@ export default function NavBar() {
   const handleLogout = async () => {
     setAnchorEl(null);
     var data = {
-      username: localStorage['user_name'],
+      username: localStorage['user_id'],
     }
     await apis.updateUserStatus(data).then((res) => {
       LocalStorageService.clearToken();
@@ -52,6 +52,7 @@ export default function NavBar() {
       history.push("login")
     }).catch(err=> {
       alert("There has been an error. Please try again.")
+
     })
   };
 
