@@ -42,6 +42,9 @@ const new_peer_request = (req, res, roomManager, properties) => {
             var peer = roomManager.findPeer(username, difficulty);
             if(peer){   // try finding a match without enqueuing it
                 var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
+
+                console.log(hasMatch);
+
                 const newRoom = new Room({
                     roomId: hasMatch.roomId,
                     usernames: [username, peer.data['username']],

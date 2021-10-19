@@ -8,7 +8,7 @@ const JWTManager = () => {
         localStorage.setItem('token', token)
         return true
     }
-
+    
     const deleteToken = () => {
         JWTtoken = null
         return true
