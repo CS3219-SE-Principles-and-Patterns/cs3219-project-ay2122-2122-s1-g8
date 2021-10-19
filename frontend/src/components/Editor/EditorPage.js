@@ -19,7 +19,7 @@ class EditorPage extends React.Component {
     this.state = {
       //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
       // socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
-      error: true,
+      error: false,
       room_id: props.match.params.id,
       socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
@@ -29,7 +29,8 @@ class EditorPage extends React.Component {
     this.handlefinish = this.handlefinish.bind(this);
     this.state.socket.emit(
       "show credential",
-      (this.state.roomId, this.state.user_id)
+      this.state.room_id,
+      this.state.user_id
     );
     this.state.socket.on("credential accepted", (msg) => {
       this.setState({ error: false });
@@ -59,7 +60,7 @@ class EditorPage extends React.Component {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Something wrong. Unable to enter a room.
+              Room credentials error. Unable to enter a room.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

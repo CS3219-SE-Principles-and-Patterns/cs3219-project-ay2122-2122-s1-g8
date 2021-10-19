@@ -48,9 +48,21 @@ function Chat(props) {
   console.log("in chat user_id", ID);
   const listMessages = messages.map((message1) => {
     if (message1.id != ID) {
-      return <MessageLeft message={message1.text} displayName={message1.id} />;
+      return (
+        <MessageLeft
+          key={message1.msgId}
+          message={message1.text}
+          displayName={message1.id}
+        />
+      );
     } else {
-      return <MessageRight message={message1.text} displayName={message1.id} />;
+      return (
+        <MessageRight
+          key={message1.msgId}
+          message={message1.text}
+          displayName={message1.id}
+        />
+      );
     }
   });
   const messageRef = useRef(messages);
@@ -60,6 +72,7 @@ function Chat(props) {
   }, [messages]);
   useEffect(() => {
     socket.on("chat message", (msg) => {
+      console.log("Received a chat message");
       var data = msg;
       addMessage(data);
     });

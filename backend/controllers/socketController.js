@@ -1,6 +1,6 @@
 const Room = require("../models/room");
 const Automerge = require("automerge");
-
+const crypto = require("crypto");
 var roomSummary = {};
 
 function ioServer(server) {
@@ -31,6 +31,8 @@ function ioServer(server) {
 
     // socket.emit("initialize chat", roomId)   // Chris said no need
     socket.on("show credential", (roomId, username) => {
+      console.log(roomId);
+      console.log(username);
       Room.findOne({ roomId: roomId }).then((doc) => {
         if (doc && doc.usernames.includes(username)) {
           socket.join(roomId);
@@ -50,7 +52,10 @@ function ioServer(server) {
     // events
     socket.on("chat message", (roomId, msg) => {
       console.log("chat message sent", msg);
-      socket.to(roomId).emit("chat message", msg);
+      // socket.to(roomId).emit("chat message", msg);
+      const msgId = crypto.randomBytes(10).toString("hex");
+      msg.msgId = msgId;
+      io.sockets.in(roomId).emit("chat message", msg);
     });
     socket.on("disconnect", () => {
       console.log("user disconnected");
@@ -74,8 +79,6 @@ function ioServer(server) {
     });
     socket.on("newState", (roomId, msg) => {
       //   console.log("new state detected");
-      console.log(roomId);
-      console.log(typeof msg);
       socket.to(roomId).emit("newState", msg); // JX to Chris: need to broadcast to the whole room too?
       // dont broadcast to sender
     });

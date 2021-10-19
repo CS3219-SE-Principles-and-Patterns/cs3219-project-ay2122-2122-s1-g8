@@ -54,7 +54,7 @@ class RichTextEditor extends React.Component {
           state: send,
         },
       ];
-      console.log(payload);
+      // console.log(payload);
       socket.emit("newState", props.roomId, {
         state: send,
       });
