@@ -45,24 +45,63 @@ const new_peer_request = (req, res, roomManager, properties) => {
 
                 console.log(hasMatch);
 
-                const newRoom = new Room({
-                    roomId: hasMatch.roomId,
-                    usernames: [username, peer.data['username']],
-                    startTime: new Date(),
-                    questionDifficulty: difficulty
-                })
-                newRoom.save()
-                    .then(result => {
-                        return res.status(STATUS_CODE_OK).json({
-                            "message": "Match found. Call again with /status endpoint"
+                let user1 = username;
+                let user2 = peer.data['username'];
+        
+                Room.find().then(room_ => {
+                    let attempted_user_1 = new Set();
+                    let attempted_user_2 = new Set();
+                    for (let i=0; i<room_.length; i++){
+                        if(room_[i].usernames[0] == user1 || room_[i].usernames[1] == user1){
+                            if(room_[i].questionID){
+                                attempted_user_1.add(room_[i].questionID);
+                            }
+                        }
+                        if(room_[i].usernames[0] == user2 || room_[i].usernames[1] == user2){
+                            if(room_[i].questionID){
+                                attempted_user_2.add(room_[i].questionID);
+                            }
+                        }
+                    }
+                    
+                    console.log("Debug users");
+                    console.log(user1);
+                    console.log(user2);
+                    console.log("Debug users");
+                    
+                    Question.find().then(question => {
+                        let valid_questionID;
+                        for(let i = 0; i<question.length; i++){
+                            if(!attempted_user_1.has(question[i]._id.toString()) && !attempted_user_2.has(question[i]._id.toString()) && difficulty == question[i].difficulty){
+                                valid_questionID = question[i]._id.toString();
+                            }
+                        }
+                        if(!valid_questionID){
+                            console.log("User tried all available questions");
+                            return;
+                        }
+                        
+                        const newRoom = new Room({
+                            roomId: hasMatch.roomId,
+                            usernames: [username, peer.data['username']],
+                            startTime: new Date(),
+                            questionDifficulty: difficulty,
+                            questionID: valid_questionID,
                         })
-                    })
-                    .catch(err => {
-                        return res.status(STATUS_CODE_SERVER_ERROR).json({
-                            "message": "Database is not available at the moment"
+
+                        newRoom.save()
+                        .then(result => {
+                            return res.status(STATUS_CODE_OK).json({
+                                "message": "Match found. Call again with /status endpoint"
+                            })
                         })
-                    })
-                
+                        .catch(err => {
+                            return res.status(STATUS_CODE_SERVER_ERROR).json({
+                                "message": "Database is not available at the moment"
+                            })
+                        })
+                    });
+                });
             }
             else{      // no match found, so enqueue this user
                 roomManager.createNewRequest(username, difficulty);
