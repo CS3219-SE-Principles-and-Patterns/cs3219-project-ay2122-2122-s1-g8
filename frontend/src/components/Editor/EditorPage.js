@@ -17,8 +17,6 @@ class EditorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
-      // socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
       error: false,
       room_id: props.match.params.id,
       socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
@@ -74,6 +72,7 @@ class EditorPage extends React.Component {
           <div className="split left">
             <div className="question">
               <Question />
+              {/* <Question question_id={this.props.question_id} /> */}
             </div>
             <div className="chat">
               <Chat
@@ -89,6 +88,15 @@ class EditorPage extends React.Component {
                 socket={this.state.socket}
                 roomId={this.state.room_id}
               />
+            </div>
+            <div className="next">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.handlefinish}
+              >
+                Next
+              </Button>
             </div>
             <div className="finish">
               <Button

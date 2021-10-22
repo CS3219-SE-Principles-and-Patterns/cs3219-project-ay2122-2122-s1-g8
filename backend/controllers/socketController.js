@@ -78,7 +78,7 @@ function ioServer(server) {
       });
     });
     socket.on("newState", (roomId, msg) => {
-      //   console.log("new state detected");
+      console.log(msg);
       socket.to(roomId).emit("newState", msg); // JX to Chris: need to broadcast to the whole room too?
       // dont broadcast to sender
     });

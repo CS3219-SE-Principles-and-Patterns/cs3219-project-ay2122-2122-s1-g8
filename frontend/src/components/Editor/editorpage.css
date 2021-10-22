@@ -70,3 +70,12 @@ html,
   padding: 0%;
   /* border: 5px solid gold; */
 }
+
+.next {
+  position: absolute;
+  margin-right: 30px;
+  bottom: 0;
+  right: 20;
+  padding: 0%;
+  /* border: 5px solid gold; */
+}

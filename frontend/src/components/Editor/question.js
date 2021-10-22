@@ -38,12 +38,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Question() {
+export default function Question(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
   useEffect(() => {
     apis
+      //endpoint
+      // req: roomid
+      // res : question
       .fetchQuestion("/6158535f5e5ae6f89f89c430/")
       .then((res) => {
         console.log(res.data);
