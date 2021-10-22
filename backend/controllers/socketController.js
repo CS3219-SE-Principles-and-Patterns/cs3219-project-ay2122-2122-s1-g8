@@ -3,7 +3,7 @@ const Automerge = require("automerge");
 const crypto = require("crypto");
 var roomSummary = {};
 
-function ioServer(server) {
+function ioServer(server, roomManager) {
   const io = require("socket.io")(server, {
     cors: {
       origin: "*",
@@ -74,6 +74,15 @@ function ioServer(server) {
               if (err) console.log("err", err);
             }
           );
+          Room.findOne({roomId: roomId}).then(doc => {
+            if(doc){
+              let usernames = doc.usernames;
+              let difficulty = doc.questionDifficulty;
+              usernames.forEach(username => {
+                roomManager.deleteUserRequest(username, difficulty);
+              })
+            }
+          }).catch(err => console.log(err))
         }
       });
     });
