@@ -46,56 +46,26 @@ const question_put_update = (req, res) => {
 
 const question_get_details = (req, res) => {
     let zoom_id = req.params.id;
-    console.log(zoom_id);
-
     Room.findOne({roomId: zoom_id}).then(room => {
-        let user1 = room.usernames[0];
-        let user2 = room.usernames[1];
-        let difficulty = room.questionDifficulty;
+        console.log("Test QID")
+        let valid_questionID = room.questionID;
+        console.log(valid_questionID);
+        console.log("Test QID")
 
-        Room.find().then(room_ => {
-            let attempted_user_1 = new Set();
-            let attempted_user_2 = new Set();
-            for (let i=0; i<room_.length; i++){
-                if(room_[i].usernames[0] == user1 || room_[i].usernames[1] == user1){
-                    if(room_[i].questionID){
-                        attempted_user_1.add(room_[i].questionID);
-                    }
-                }
-                if(room_[i].usernames[0] == user2 || room_[i].usernames[1] == user2){
-                    if(room_[i].questionID){
-                        attempted_user_2.add(room_[i].questionID);
-                    }
-                }
-            }
-
-            Question.find().then(question => {
-                let valid_questionID;
-                for(let i = 0; i<question.length; i++){
-                    if(!attempted_user_1.has(question[i]._id.toString()) && !attempted_user_2.has(question[i]._id.toString()) && difficulty == question[i].difficulty){
-                        valid_questionID = question[i]._id.toString();
-                    }
-                }
-                if(!valid_questionID){
-                    console.log("User tried all available questions");
-                    return;
-                }
-
-                Question.findById(valid_questionID)
-                .then(result => {
-                    res.status(STATUS_CODE_OK).json({
-                        message: "Question found",
-                        question: result.toJSON()
-                    })
-                })
-                .catch(_ => {
-                    res.status(STATUS_CODE_NOT_FOUND).json({
-                        message: "Question not found",
-                        question: ""
-                    })
-                })
-            });
-        });
+        Question.findById(valid_questionID)
+        .then(result => {
+            console.log(result);
+            res.status(STATUS_CODE_OK).json({
+                message: "Question found",
+                question: result.toJSON()
+            })
+        })
+        .catch(_ => {
+            res.status(STATUS_CODE_NOT_FOUND).json({
+                message: "Question not found",
+                question: ""
+            })
+        })
     });
 }
 
