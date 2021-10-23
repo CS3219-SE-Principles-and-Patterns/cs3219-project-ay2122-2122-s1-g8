@@ -71,8 +71,7 @@ class EditorPage extends React.Component {
         <div className="bottom">
           <div className="split left">
             <div className="question">
-              <Question />
-              {/* <Question question_id={this.props.question_id} /> */}
+              <Question roomID={this.state.room_id} />
             </div>
             <div className="chat">
               <Chat

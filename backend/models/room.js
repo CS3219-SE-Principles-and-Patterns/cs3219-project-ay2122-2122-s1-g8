@@ -9,6 +9,7 @@ roomSchema = new Schema({
     startTime: Date,
     endTime: Date,
     questionDifficulty: String,
+    questionID: String,
     // list of questionId
     
 });

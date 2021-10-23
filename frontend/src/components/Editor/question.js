@@ -38,16 +38,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Question(props) {
+export default function Question(roomID) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  console.log(roomID.roomID);
   useEffect(() => {
     apis
-      //endpoint
-      // req: roomid
-      // res : question
-      .fetchQuestion("/6158535f5e5ae6f89f89c430/")
+      .fetchQuestion(roomID.roomID)
       .then((res) => {
         console.log(res.data);
         // var question = JSON.parse(res.data.question);

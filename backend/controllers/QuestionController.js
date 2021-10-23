@@ -1,4 +1,7 @@
 const Question = require('../models/question')
+const Room = require('../models/room')
+const User = require('../models/user')
+
 const STATUS_CODE_OK = 200;
 const STATUS_CODE_BAD_REQUEST = 400;
 const STATUS_CODE_PARTIAL_CONTENT = 206;
@@ -42,20 +45,28 @@ const question_put_update = (req, res) => {
 };
 
 const question_get_details = (req, res) => {
-    let id = req.params.id;
-    Question.findById(id)
+    let zoom_id = req.params.id;
+    Room.findOne({roomId: zoom_id}).then(room => {
+        console.log("Test QID")
+        let valid_questionID = room.questionID;
+        console.log(valid_questionID);
+        console.log("Test QID")
+
+        Question.findById(valid_questionID)
         .then(result => {
+            console.log(result);
             res.status(STATUS_CODE_OK).json({
                 message: "Question found",
                 question: result.toJSON()
             })
         })
-        .catch(err => {
+        .catch(_ => {
             res.status(STATUS_CODE_NOT_FOUND).json({
                 message: "Question not found",
                 question: ""
             })
         })
+    });
 }
 
 const question_delete = (req, res) => {
