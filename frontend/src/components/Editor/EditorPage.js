@@ -39,11 +39,18 @@ class EditorPage extends React.Component {
       this.setState({ error: true });
       console.log("credential invalid");
     });
+    this.state.socket.on("leave room", (msg) => {
+      this.setState({ error: true });
+      this.props.history.push({
+        pathname: "/",
+      });
+    });
   }
   handleClose = () => {
     this.setState({ error: false });
   };
   handlefinish() {
+    this.state.socket.emit("leave room", this.state.room_id);
     this.props.history.push({
       pathname: "/",
     });
@@ -90,11 +97,7 @@ class EditorPage extends React.Component {
               />
             </div>
             <div className="next">
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={this.handlefinish}
-              >
+              <Button variant="contained" color="secondary">
                 Next
               </Button>
             </div>
