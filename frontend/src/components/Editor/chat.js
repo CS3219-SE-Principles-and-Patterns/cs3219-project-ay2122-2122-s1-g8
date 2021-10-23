@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) =>
     paper: {
       // background: "#F9F3DF",
       width: "29vw",
-      height: "30vh",
+      height: "45vh",
       display: "flex",
       alignItems: "center",
       flexDirection: "column",

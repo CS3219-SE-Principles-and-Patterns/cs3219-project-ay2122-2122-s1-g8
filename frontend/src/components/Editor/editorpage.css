@@ -25,13 +25,13 @@ html,
 }
 .chat {
   max-width: 29vw;
-  height: 35%;
+  height: 55%;
   margin-left: 10px;
   /* border: 5px solid red; */
 }
 
 .question {
-  height: 60%;
+  height: 40%;
   width: 29vw;
   margin-left: 10px;
   margin-bottom: 2vh;

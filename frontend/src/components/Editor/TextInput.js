@@ -40,7 +40,7 @@ export const TextInput = (props) => {
     setText("");
   }
   return (
-    <div>
+    <div style={{width: "95%"}}>
       <form className={classes.wrapForm} noValidate autoComplete="off">
         <TextField
           id="standard-text"
