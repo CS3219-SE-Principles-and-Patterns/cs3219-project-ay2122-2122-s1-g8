@@ -17,8 +17,6 @@ class EditorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //socket: io.connect("http://10.27.153.189:3011", { reconnect: true }),
-      // socket: io.connect("http://192.168.0.103:3011", { reconnect: true }),
       error: false,
       room_id: props.match.params.id,
       //socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
@@ -41,11 +39,18 @@ class EditorPage extends React.Component {
       this.setState({ error: true });
       console.log("credential invalid");
     });
+    this.state.socket.on("leave room", (msg) => {
+      this.setState({ error: true });
+      this.props.history.push({
+        pathname: "/",
+      });
+    });
   }
   handleClose = () => {
     this.setState({ error: false });
   };
   handlefinish() {
+    this.state.socket.emit("leave room", this.state.room_id);
     this.props.history.push({
       pathname: "/",
     });
@@ -74,9 +79,7 @@ class EditorPage extends React.Component {
         <div className="bottom">
           <div className="split left">
             <div className="question">
-              <Question
-                roomID={this.state.room_id}
-              />
+              <Question roomID={this.state.room_id} />
             </div>
             <div className="chat">
               <Chat
@@ -92,6 +95,11 @@ class EditorPage extends React.Component {
                 socket={this.state.socket}
                 roomId={this.state.room_id}
               />
+            </div>
+            <div className="next">
+              <Button variant="contained" color="secondary">
+                Next
+              </Button>
             </div>
             <div className="finish">
               <Button
