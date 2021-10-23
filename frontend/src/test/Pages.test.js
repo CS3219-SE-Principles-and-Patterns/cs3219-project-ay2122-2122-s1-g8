@@ -14,6 +14,8 @@ import HomePage from "../components/HomePage";
 import LoginPage from "../components/UserManagement/LoginPage";
 import RegisterPage from "../components/UserManagement/RegisterPage";
 import EditorPage from "../components/Editor/EditorPage";
+import NavBar from "../components/NavBar/NavBar";
+import Question from "../components/Editor/question";
 
 let rootContainer;
 
@@ -94,14 +96,28 @@ describe("RegisterPage Component Testing", () => {
 
 });
 
-/*describe("EditorPage Component Testing", () => {
+describe("NavBar Component Testing", () => {
 
   it('renders without crashing', () => {
-   act(() => {
-     ReactDOM.render(<Router history={history}><EditorPage {...mockedParams} /></Router>, rootContainer);
-   });
-   expect(isElement(<EditorPage />)).to.equal(true);
-   expect(isElementOfType(<EditorPage />, EditorPage)).to.equal(true);
- });
+    act(() => {
+      ReactDOM.render(<NavBar />, rootContainer);
+    });
+    expect(isElement(<NavBar />)).to.equal(true);
+    expect(isElementOfType(<NavBar />, NavBar)).to.equal(true);
+  });
+
+});
+
+//EditorPage testing
+
+/*describe("Question Component Testing", () => {
+
+  it('renders without crashing', () => {
+    act(() => {
+      ReactDOM.render(<Question />, rootContainer);
+    });
+    expect(isElement(<Question />)).to.equal(true);
+    expect(isElementOfType(<Question />, Question)).to.equal(true);
+  });
 
 });*/
