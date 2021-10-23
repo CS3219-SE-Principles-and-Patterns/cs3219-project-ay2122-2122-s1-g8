@@ -25,6 +25,7 @@
   height: 95%;
   /* border: 1px solid #f4d19b; */
   border: 1px solid silver;
+  overflow-y: scroll;
 }
 
 .RichEditor-editor {

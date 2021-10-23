@@ -19,6 +19,7 @@ class RichTextEditor extends React.Component {
       editorState: EditorState.createEmpty(),
       // typingTimeout: 0,
       socket,
+      cursor: 0,
     };
     var socket = this.props.socket;
     socket.on("initialize", (msg) => {
@@ -27,6 +28,9 @@ class RichTextEditor extends React.Component {
       console.log(input2);
       const stateWithContent = EditorState.createWithContent(input2);
       this.setState({ editorState: stateWithContent });
+      this.cursor = this.setState({
+        cursor: this.state.editorState.getSelection(),
+      });
     });
     // this.state = { editorState: EditorState.createEmpty() };
     // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
@@ -41,19 +45,18 @@ class RichTextEditor extends React.Component {
       //   return;
       // }
       // console.log(editorState.getSelection().getAnchorKey());
-      this.setState(function (prevState, props) {
-        return {
-          editorState: editorState,
-        };
+      // this.setState(function (prevState, props) {
+      //   return {
+      //     editorState: editorState,
+      //   };
+      // });
+      // console.log(editorState.getSelection());
+      this.setState({
+        cursor: editorState.getSelection(),
       });
       var data = convertToRaw(editorState.getCurrentContent());
       var send = JSON.stringify(data);
-      var payload = [
-        props.roomId,
-        {
-          state: send,
-        },
-      ];
+
       // console.log(payload);
       socket.emit("newState", props.roomId, {
         state: send,
@@ -90,9 +93,9 @@ class RichTextEditor extends React.Component {
         const oldSelectionState = this.state.editorState.getSelection();
         // console.log(input2);
         const newEditorState = EditorState.createWithContent(input2);
-        const newEditorStateWithSelection = EditorState.forceSelection(
+        const newEditorStateWithSelection = EditorState.acceptSelection(
           newEditorState,
-          oldSelectionState
+          this.state.cursor
         );
         // console.log("end");
         return {
@@ -108,7 +111,9 @@ class RichTextEditor extends React.Component {
     // this.toggleBlockType = this._toggleBlockType.bind(this);
     // this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
   }
-
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.editorState != nextState.editorState;
+  }
   // _handleKeyCommand(command, editorState) {
   //   const newState = RichUtils.handleKeyCommand(editorState, command);
   //   if (newState) {
