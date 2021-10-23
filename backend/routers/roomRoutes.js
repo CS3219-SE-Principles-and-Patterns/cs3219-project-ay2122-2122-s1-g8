@@ -9,15 +9,15 @@ function getRoomController(properties){
     return ds_manager;
 }
 
-function roomRouter(properties){
-    var dsManager = getRoomController(properties)
-    router.post('/new', (req, res) => roomController.new_peer_request(req, res, dsManager, properties));
-    router.post('/status', (req, res) => roomController.match_status_query(req, res, dsManager, properties));
-    router.post('/drop', (req, res) => roomController.drop_request_query(req, res, dsManager, properties));
-    // router.get('/room/:id', roomController.chat);   // may need to relocate this because now url is /api/match/room/:id instead of /api/room/:id
+function roomRouter(dsManager){
+    router.post('/new', (req, res) => roomController.new_peer_request(req, res, dsManager));
+    router.post('/status', (req, res) => roomController.match_status_query(req, res, dsManager));
+    router.post('/drop', (req, res) => roomController.drop_request_query(req, res, dsManager));
     
     return router;
 }
 
 
-module.exports = roomRouter
+module.exports = {
+    getRoomController, RoomRouter: roomRouter
+}

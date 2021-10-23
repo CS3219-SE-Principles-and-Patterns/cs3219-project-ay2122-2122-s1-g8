@@ -65,7 +65,7 @@ export default function Question(roomID) {
       <CardContent>
         <Box className={classes.difficulty}>{difficulty}</Box>
         <Typography className={classes.title} variant="h1" color="textPrimary">
-          {title ? title : "Question not found"}
+          {title ? title : "Retrieving question..."}
         </Typography>
         <Typography variant="body2" component="p">
           {body}

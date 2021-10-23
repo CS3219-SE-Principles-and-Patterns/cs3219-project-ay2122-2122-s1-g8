@@ -7,7 +7,7 @@ const STATUS_CODE_NOT_FOUND = 404;
 const STATUS_CODE_SERVER_ERROR = 500;
 const DIFFICULTY_LIST = ['Easy', 'Medium', 'Hard']
 
-const new_peer_request = (req, res, roomManager, properties) => {
+const new_peer_request = (req, res, roomManager) => {
     const username = req.body.username;
     const difficulty = req.body.difficulty;
 
@@ -119,7 +119,7 @@ const new_peer_request = (req, res, roomManager, properties) => {
 
 }
 
-const match_status_query = (req, res, roomManager, properties) => {
+const match_status_query = (req, res, roomManager) => {
     const username = req.body.username;
     const difficulty = req.body.difficulty;
     var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
@@ -150,7 +150,7 @@ const match_status_query = (req, res, roomManager, properties) => {
 }
 
 // Call to remove user from matching service. Frontend calls it after it thinks matching time is too long
-const drop_request_query = (req, res, roomManager, properties) => {
+const drop_request_query = (req, res, roomManager) => {
     const username = req.body.username;
     const difficulty = req.body.difficulty;
     

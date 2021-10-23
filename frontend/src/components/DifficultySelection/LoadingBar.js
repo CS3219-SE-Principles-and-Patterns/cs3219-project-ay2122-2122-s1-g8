@@ -32,19 +32,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function LoadingBar() {
+export default function LoadingBar(props) {
 
   const classes = useStyles();
-  const [seconds, setSeconds] = useState(30);
+  const [seconds, setSeconds] = useState(props.timer);
   const [isTimeout, setIsTimeout] = useState(false);
 
-  /*useEffect(() => {
-    if (seconds > 0) {
-      setTimeout(() => setSeconds(seconds - 1), 1000);
-    } else {
-      setIsTimeout(true);
-    }
-  });*/ //no []
+  useEffect(() => {
+    setSeconds(props.timer)
+  });
 
   return (
     <div className={classes.root}>
@@ -53,6 +49,10 @@ export default function LoadingBar() {
 
       <TextTypography variant="caption" component="div" color="textSecondary">
         Searching for peers...
+      </TextTypography>
+
+      <TextTypography variant="caption" component="div" color="textSecondary">
+        Time to connect: {seconds} seconds
       </TextTypography>
       
   </div>

@@ -129,11 +129,10 @@ export default function LoadingDialog(props) {
         >
           <DialogTitle id="alert-dialog-title">
             {"Give us a moment while we search for another online user!"}
-            {seconds}
           </DialogTitle>
           <br />
           <DialogContent>
-            <LoadingBar />
+            <LoadingBar timer={seconds} />
           </DialogContent>
         </Dialog>
       )}

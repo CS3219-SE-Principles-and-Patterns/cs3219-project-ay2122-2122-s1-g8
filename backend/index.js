@@ -8,7 +8,7 @@ const db = require("./db");
 const AuthRouter = require("./routers/auth");
 const QuestionRouter = require("./routers/questionRoutes");
 const Usr = require("./routers/user");
-const RoomRouter = require("./routers/roomRoutes")
+const {getRoomController, RoomRouter} = require("./routers/roomRoutes")
 const roomProperties = require("./controllers/roomProperties")
 
 // create app
@@ -16,7 +16,8 @@ const app = express()
 const apiPort = process.env.PORT || 3030
 const server = http.createServer(app)
 const ioServer = require('./controllers/socketController');
-ioServer(server)
+var roomDSManager = getRoomController(roomProperties)
+ioServer(server, roomDSManager)
 
 // add middleware
 app.use(express.urlencoded({ extended: true }))
@@ -26,7 +27,7 @@ app.use(express.json())
 // add endpoints
 app.use('/api', AuthRouter)
 app.use('/api', Usr)
-app.use('/api/match', RoomRouter(roomProperties));
+app.use('/api/match', RoomRouter(roomDSManager));
 app.use('/api/question', QuestionRouter);
 
 app.get('/', (req, res) => {
