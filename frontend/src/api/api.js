@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://peerprep.herokuapp.com/api",
-  //baseURL: "http://localhost:3030/api",
+  //baseURL: "https://peerprep.herokuapp.com/api",
+  baseURL: "http://localhost:3030/api",
 });
 const api2 = axios.create({
   baseURL: "http://localhost:3030/question",

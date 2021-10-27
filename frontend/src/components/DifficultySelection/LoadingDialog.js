@@ -44,6 +44,7 @@ export default function LoadingDialog(props) {
     const matchData = {
       username: LocalStorageService.getUserID(),
       difficulty: props.difficulty,
+      authorization: 'Bearer ' + localStorage.getItem("access_token"),
     };
 
     await apis
@@ -74,6 +75,7 @@ export default function LoadingDialog(props) {
       const matchData = {
         username: LocalStorageService.getUserID(),
         difficulty: props.difficulty,
+        authorization: 'Bearer ' + localStorage.getItem("access_token"),
       };
 
       if (isDecreasing) {
@@ -94,6 +96,7 @@ export default function LoadingDialog(props) {
       const matchData = {
         username: LocalStorageService.getUserID(),
         difficulty: props.difficulty,
+        authorization: 'Bearer ' + localStorage.getItem("access_token"),
       };
 
       if (isDecreasing) {
