@@ -62,7 +62,7 @@ const login = (req, res, next) => {
                     })
                 }
                 if(result){
-                    let token = jwt.sign({username: user.username}, 'verySecreteValue', {expiresIn: '3h'})
+                    let token = jwt.sign({username: user.username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3h'})
                     var myquery = {$or: [{email: username}, {username: username}]};
                     var newvalues = { $set: {status: "Active"} };
                     var userID =  user.username;
