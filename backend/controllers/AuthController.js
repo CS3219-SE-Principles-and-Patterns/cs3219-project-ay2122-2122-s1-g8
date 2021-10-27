@@ -63,7 +63,6 @@ const login = (req, res, next) => {
                     })
                 }
                 if(result){
-                    console.log(process.env.ACCESS_TOKEN_SECRET)
                     let token = jwt.sign({username: user.username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3h'})
                     var myquery = {$or: [{email: username}, {username: username}]};
                     var newvalues = { $set: {status: "Active"} };
