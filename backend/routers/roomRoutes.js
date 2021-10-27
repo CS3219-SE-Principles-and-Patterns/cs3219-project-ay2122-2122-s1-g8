@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const authenticateToken = require('../middleware/auth')
 const roomMatchMaker = require('../controllers/RoomMatchmaker')
 const roomController = require('../controllers/RoomController')
 
@@ -10,9 +11,9 @@ function getRoomController(properties){
 }
 
 function roomRouter(dsManager){
-    router.post('/new', (req, res) => roomController.new_peer_request(req, res, dsManager));
-    router.post('/status', (req, res) => roomController.match_status_query(req, res, dsManager));
-    router.post('/drop', (req, res) => roomController.drop_request_query(req, res, dsManager));
+    router.post('/new', authenticateToken, (req, res) => roomController.new_peer_request(req, res, dsManager));
+    router.post('/status', authenticateToken, (req, res) => roomController.match_status_query(req, res, dsManager));
+    router.post('/drop', authenticateToken, (req, res) => roomController.drop_request_query(req, res, dsManager));
     
     return router;
 }
