@@ -83,6 +83,7 @@ const new_peer_request = (req, res, roomManager) => {
                         else{
                             Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
                                 if(!err){
+                                    console.log("found")
                                     return res.status(STATUS_CODE_OK).json({
                                         "message": "Match found. Call again with /status endpoint"
                                     })
