@@ -101,6 +101,10 @@ const login = (req, res, next) => {
         }
     })
 }
+const refresh = (req, res) => {
+    const refreshToken = req.body.token;
+    if(refreshtoken == null) return res.status(401).json({"message": "No refresh token"})
+};
 
 function generateAccessToken(user){
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15s'})
