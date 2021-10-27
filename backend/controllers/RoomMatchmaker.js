@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const Room = require('../models/room')
 const {Node} = require('./structure/queue')
 
 class QueueingManager{
@@ -68,15 +69,28 @@ class DataStoreManager{
         if(q && q.data.username === username) return true;
         return false;   
     }
-    findPeer(username, difficulty){
+    async findPeer(username, difficulty){
         do{
             if(this.isHeadOfQueue(username, difficulty)) return;
-            var peer = this.removeFromDifficultyQueue(difficulty);
+            const peer = this.removeFromDifficultyQueue(difficulty);
             if(peer && this.queuingManager.hasEnqueueUser(peer.data['username'], difficulty) && !this.matchPairingManager.hasDequeue(peer.data['username'])){
-                const roomId = crypto.randomBytes(10).toString('hex');
-                this.matchPairingManager.setDequeueUser(username, peer.data['username'], roomId);
-                this.matchPairingManager.setDequeueUser(peer.data['username'], username, roomId);
-                return peer;
+                const newRoom = new Room({
+                    usernames: [username, peer.data['username']],
+                    startTime: new Date(),
+                    questionDifficulty: difficulty,
+                })
+                var peerResult = await newRoom.save()
+                    .then((result) => {
+                        let roomId = result._id;
+                        this.matchPairingManager.setDequeueUser(username, peer.data['username'], roomId);
+                        this.matchPairingManager.setDequeueUser(peer.data['username'], username, roomId);
+                        return peer;
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        return;
+                    })
+                return peerResult;
             }
             else return
         }while(1);

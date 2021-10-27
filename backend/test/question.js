@@ -19,17 +19,57 @@ chai.should()
 chai.use(chaiHttp)
 
 describe("Question API", () => {
-    // Test POST Request
+    // set up scope variables
+    var user1 = {
+        username: "oongjiexiang", password: "cs3219", email: "ojx@yahoo.com"
+    };
+    var user2 = {
+        username: "alan", password: "cs3219", email: "alan@yahoo.com"
+    }
+    var token1 = null;
+    var token2 = null;
+
+    // perform login and necessary initialisations
+    before('register a new user oongjiexiang', (done) => {
+        request(server).post('/api/register')
+            .send(user1)
+            .then(response => done())
+    })
+    before('log in oongjiexiang', (done) => {
+        request(server).post('/api/login')
+            .send({username: "oongjiexiang", password: "cs3219"})
+            .then(response => {
+                token1 = response.body.token;
+                done();
+            });
+    })
+    before('register a new user alan', (done) => {
+        request(server).post('/api/register')
+            .send(user2)
+            .then(response => done())
+    })
+    before('log in alan', (done) => {
+        request(server).post('/api/login')
+            .send({username: "alan", password: "cs3219"})
+            .then(response => {
+                token2 = response.body.token;
+                done();
+            });
+    })
+    
+    // for each test case
     beforeEach((done) => {
         Question.deleteMany({}, err => {
             Room.deleteMany({}, err => {
-                User.deleteMany({}, err => {
-                    done();
-                }) 
+                done();
             })    
         })
         
     })
+    
+    /*
+     * POST Question
+    */
     describe("POST /api/question", () => {
         it("It should POST a question", (done) => {
             let question = new Question({
@@ -39,6 +79,7 @@ describe("Question API", () => {
             });
             chai.request(server)
                 .post('/api/question/create')
+                .set('Authorization', 'Bearer ' + token1)
                 .send(question)
                 .end((err, res) => {
                     res.should.have.status(STATUS_CODE_OK);
@@ -56,6 +97,7 @@ describe("Question API", () => {
             });
             chai.request(server)
                 .post('/api/question/create')
+                .set('Authorization', 'Bearer ' + token1)
                 .send(question)
                 .end((err, res) => {
                     res.should.have.status(STATUS_CODE_PARTIAL_CONTENT);
@@ -113,6 +155,8 @@ describe("Question API", () => {
         })
     })
     */
+
+    // GET Question
     describe("GET /api/question", () => {
         it("It should GET a question by the given id when there is a room", (done) => {
             let question = new Question({
@@ -123,22 +167,19 @@ describe("Question API", () => {
             question.save((err, question) => {
                 var roomId = null;
                 async.series([
-                    cb => { request(server).post('/api/register').send({username: "alan", password: "cs3219", email: "alan@yahoo.com"}).expect(201, cb)},
-                    cb => { request(server).post('/api/register').send({username: "oongjiexiang", password: "cs3219", email: "oong@yahoo.com"}).expect(201, cb)},
-                    cb => { request(server).post('/api/login').send({username: "oongjiexiang", password: "cs3219"}).expect(201, cb)},
-                    cb => { request(server).post('/api/login').send({username: "alan", password: "cs3219"}).expect(201, cb)},
-                    cb => { request(server).post('/api/match/new').send({username: "oongjiexiang", difficulty: "Easy"}).expect(200, cb)},
-                    cb => { request(server).post('/api/match/new').send({username: "alan", difficulty: "Easy"}).expect(200, cb)},
+                    cb => { request(server).post('/api/match/new').set('Authorization', 'Bearer ' + token1).send({username: "oongjiexiang", difficulty: "Easy"}).expect(200, cb)},
+                    cb => { request(server).post('/api/match/new').set('Authorization', 'Bearer ' + token2).send({username: "alan", difficulty: "Easy"}).expect(200, cb)},
                     cb => { 
-                        request(server).post('/api/match/status').send({username: "alan", difficulty: "Easy"}).expect(200)
+                        request(server).post('/api/match/status').set('Authorization', 'Bearer ' + token2).send({username: "alan", difficulty: "Easy"}).expect(200)
                             .then(response => {
                                 roomId = response.body.roomId;
-                                console.log(roomId); 
                                 cb();
                             })
                     },
                     cb => { 
-                        request(server).get('/api/question/' + roomId).expect(200)
+                        request(server).get('/api/question/' + roomId)
+                            .set('Authorization', 'Bearer ' + token1)
+                            .expect(200)
                             .end((err, res) => {
                                 expect(res.body).to.have.property("message");
                                 expect(res.body.message).to.be.equal("Question found");
@@ -171,6 +212,7 @@ describe("Question API", () => {
                 };
                 chai.request(server)
                     .put('/api/question/' + question.id)
+                    .set('Authorization', 'Bearer ' + token1)
                     .send(question2_json)
                     .end((err, res) => {
                         res.should.have.status(STATUS_CODE_OK);
@@ -201,6 +243,7 @@ describe("Question API", () => {
                 };
                 chai.request(server)
                     .put('/api/question/' + "123")
+                    .set('Authorization', 'Bearer ' + token1)
                     .send(question2_json)
                     .end((err, res) => {
                         res.should.have.status(STATUS_CODE_NOT_FOUND);
@@ -226,6 +269,7 @@ describe("Question API", () => {
             question.save((err, question) => {
                 chai.request(server)
                     .delete('/api/question/' + question.id)
+                    .set('Authorization', 'Bearer ' + token1)
                     .end((err, res) => {
                         res.should.have.status(STATUS_CODE_OK);
                         res.body.should.have.property("message");
@@ -245,6 +289,7 @@ describe("Question API", () => {
             question.save((err, question) => {
                 chai.request(server)
                     .delete('/api/question/' + "123")
+                    .set('Authorization', 'Bearer ' + token1)
                     .end((err, res) => {
                         res.should.have.status(STATUS_CODE_NOT_FOUND);
                         res.body.should.have.property("message");
@@ -254,6 +299,11 @@ describe("Question API", () => {
                     });
 
             })
+        })
+    })
+    after('clean User database', (done) => {
+        User.deleteMany({}, (err, doc) => {
+            done();
         })
     })
 })
