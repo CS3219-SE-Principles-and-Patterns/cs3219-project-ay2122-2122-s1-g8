@@ -16,7 +16,7 @@ export const updateQuestionType = (payload) =>
   api.post(`/updateQuestionType`, payload);
 
 // Question
-export const fetchQuestion = (endpoint) => api.get("/question/" + endpoint);
+export const fetchQuestion = (endpoint) => api.get("/question/" + endpoint.id, endpoint);
 
 // Match
 export const newMatch = (payload) => api.post("/match/new", payload);
