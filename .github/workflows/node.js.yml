@@ -18,6 +18,7 @@ jobs:
       matrix:
         node-version: [12.x, 14.x, 16.x]
         mongodb-version: ['4.0', '4.2', '4.4']
+        redis-version: [4, 5]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -31,6 +32,11 @@ jobs:
       uses: supercharge/mongodb-github-action@1.6.0
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
+
+    - name: Start Redis v${{ matrix.redis-version }}
+      uses: superchargejs/redis-github-action@1.1.0
+      with:
+        redis-version: ${{ matrix.redis-version }}
 
     - name: Installing Dependencies
       working-directory: backend

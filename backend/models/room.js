@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 roomSchema = new Schema({
     // userIds: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    roomId: String,
     usernames: [String],
     startTime: Date,
     endTime: Date,

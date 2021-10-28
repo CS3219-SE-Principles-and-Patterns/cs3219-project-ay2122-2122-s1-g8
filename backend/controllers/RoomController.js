@@ -18,7 +18,7 @@ const new_peer_request = (req, res, roomManager) => {
     }
 
     // check if user exists
-    User.findOne({username: username}).then(doc => {
+    User.findOne({username: username}).then(async doc => {
         if(!doc){
             return res.status(STATUS_CODE_NOT_FOUND).json({
                 "message": "No such user"
@@ -39,11 +39,11 @@ const new_peer_request = (req, res, roomManager) => {
             })
         }
         else{
-            var peer = roomManager.findPeer(username, difficulty);
+            var peer = await roomManager.findPeer(username, difficulty);
             if(peer){   // try finding a match without enqueuing it
                 var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
 
-                console.log(hasMatch);
+                // console.log(hasMatch);
 
                 let user1 = username;
                 let user2 = peer.data['username'];
@@ -64,10 +64,10 @@ const new_peer_request = (req, res, roomManager) => {
                         }
                     }
                     
-                    console.log("Debug users");
-                    console.log(user1);
-                    console.log(user2);
-                    console.log("Debug users");
+                    // console.log("Debug users");
+                    // console.log(user1);
+                    // console.log(user2);
+                    // console.log("Debug users");
                     
                     Question.find().then(question => {
                         let valid_questionID;
@@ -80,26 +80,21 @@ const new_peer_request = (req, res, roomManager) => {
                             console.log("User tried all available questions");
                             return;
                         }
-                        
-                        const newRoom = new Room({
-                            roomId: hasMatch.roomId,
-                            usernames: [username, peer.data['username']],
-                            startTime: new Date(),
-                            questionDifficulty: difficulty,
-                            questionID: valid_questionID,
-                        })
-
-                        newRoom.save()
-                        .then(result => {
-                            return res.status(STATUS_CODE_OK).json({
-                                "message": "Match found. Call again with /status endpoint"
+                        else{
+                            Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
+                                if(!err){
+                                    console.log("found")
+                                    return res.status(STATUS_CODE_OK).json({
+                                        "message": "Match found. Call again with /status endpoint"
+                                    })
+                                }
+                                else{
+                                    return res.status(STATUS_CODE_SERVER_ERROR).json({
+                                        "message": "Database is not available at the moment"
+                                    })
+                                }
                             })
-                        })
-                        .catch(err => {
-                            return res.status(STATUS_CODE_SERVER_ERROR).json({
-                                "message": "Database is not available at the moment"
-                            })
-                        })
+                        }
                     });
                 });
             }

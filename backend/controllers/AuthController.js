@@ -1,6 +1,10 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const redis = require('redis')
+require('dotenv').config()
+
+const redisClient = redis.createClient()
 
 const register = (req, res, next) => {
     console.log("Register server running!");
@@ -62,16 +66,26 @@ const login = (req, res, next) => {
                     })
                 }
                 if(result){
-                    let token = jwt.sign({username: user.username}, 'verySecreteValue', {expiresIn: '3h'})
+                    // let token = jwt.sign({username: user.username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3h'})
+                    // generate token
+                    let userJson = {username: user.username}
+                    let token = generateAccessToken(userJson)
+                    let refreshToken = jwt.sign(userJson, process.env.REFRESH_TOKEN_SECRET);
+                    redisClient.sadd("refreshTokens", refreshToken);
+
+                    // update database
                     var myquery = {$or: [{email: username}, {username: username}]};
                     var newvalues = { $set: {status: "Active"} };
                     var userID =  user.username;
                     User.updateOne(myquery, newvalues, function(err, _) {
                         if (err) throw err;
                     })
+
+                    // send response
                     res.status(201).json({
                         message: 'Login successfully!',
                         token: token, 
+                        refreshToken: refreshToken,
                         username: userID
                     })
                 }else{
@@ -87,7 +101,27 @@ const login = (req, res, next) => {
         }
     })
 }
+const refresh = (req, res) => {
+    const refreshToken = req.body.token;
+    if(refreshToken == null) return res.status(401).json({"message": "No refresh token"})
+    redisClient.sismember("refreshTokens", refreshToken, function(err, res){
+        if(res === 1){
+            jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+                if(err) res.sendStatus(403);
+                let accessToken = generateToken({username: user.username})
+                res.status(200).json({accessToken: accessToken});
+            })
+        }
+        else{
+            res.status(401).json({"messsage": "no such refresh token"})
+        }
+    })
+};
+
+function generateAccessToken(user){
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3h'})
+}
 
 module.exports = {
-    register, login
+    register, login, refresh
 };
