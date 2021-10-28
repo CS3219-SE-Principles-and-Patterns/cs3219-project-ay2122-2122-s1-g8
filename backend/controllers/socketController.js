@@ -33,7 +33,7 @@ function ioServer(server, roomManager) {
     socket.on("show credential", (roomId, username) => {
       console.log(roomId);
       console.log(username);
-      Room.findById({ roomId: roomId }).then((doc) => {
+      Room.findById(roomId).then((doc) => {
         if (doc && doc.usernames.includes(username)) {
           socket.join(roomId);
           console.log("credential accepted code sent");

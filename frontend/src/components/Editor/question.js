@@ -43,9 +43,13 @@ export default function Question(props) {
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
   console.log(props.roomID);
+  const data = { 
+    id: props.roomID,
+    authorization: 'Bearer ' + localStorage.getItem("access_token"),
+  }
   useEffect(() => {
     apis
-      .fetchQuestion(props.roomID)
+      .fetchQuestion(data)
       .then((res) => {
         console.log(res.data);
         // var question = JSON.parse(res.data.question);
