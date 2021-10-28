@@ -36,6 +36,12 @@ class RichTextEditor extends React.Component {
     // console.log(JSON.stringify(this.state.editorState.getCurrentContent()));
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
+      if (
+        this.state.editorState.getCurrentContent() ===
+        editorState.getCurrentContent()
+      ) {
+        return;
+      }
       // console.log("me", editorState.getSelection().getAnchorKey());
       // console.log("partner", this.state.parnetAnchorKey);
       // if (
@@ -61,6 +67,7 @@ class RichTextEditor extends React.Component {
       socket.emit("newState", props.roomId, {
         state: send,
       });
+      console.log("onchange!");
       // var data = convertToRaw(editorState.getCurrentContent());
       // var send = JSON.stringify(data);
       // socket.emit("newState", send);
@@ -157,7 +164,6 @@ class RichTextEditor extends React.Component {
     //   if (contentState.getBlockMap().first().getType() !== "unstyled") {
     //     className += " RichEditor-hidePlaceholder";
     //   }
-    // }
 
     return (
       <div className="RichEditor-root">
@@ -174,6 +180,8 @@ class RichTextEditor extends React.Component {
             // blockStyleFn={getBlockStyle}
             // customStyleMap={styleMap}
             editorState={this.state.editorState}
+            // keyBindingFn={keyBindingFn}
+            // handleKeyCommand={handleKeyCommand}
             // handleKeyCommand={this.handleKeyCommand}
             // keyBindingFn={this.mapKeyToEditorCommand}
             onChange={this.onChange}
