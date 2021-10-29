@@ -17,7 +17,7 @@ class RichTextEditor extends React.Component {
     // var socket = io.connect("http://10.27.153.189:3001", { reconnect: true });
     this.state = {
       editorState: EditorState.createEmpty(),
-      // typingTimeout: 0,
+      typingTimeout: 0,
       socket,
       cursor: 0,
     };
@@ -42,32 +42,34 @@ class RichTextEditor extends React.Component {
       ) {
         return;
       }
-      // console.log("me", editorState.getSelection().getAnchorKey());
-      // console.log("partner", this.state.parnetAnchorKey);
-      // if (
-      //   this.state.parnetAnchorKey == editorState.getSelection().getAnchorKey()
-      // ) {
-      //   console.log("forbidded");
-      //   return;
-      // }
-      // console.log(editorState.getSelection().getAnchorKey());
-      // this.setState(function (prevState, props) {
-      //   return {
-      //     editorState: editorState,
-      //   };
+      if (this.state.typingTimeout) {
+        clearTimeout(this.state.typingTimeout);
+      }
+      this.setState(function (prevState, props) {
+        return {
+          editorState: editorState,
+          cursor: editorState.getSelection(),
+          typingTimeout: setTimeout(function () {
+            var data = convertToRaw(editorState.getCurrentContent());
+            var send = JSON.stringify(data);
+            socket.emit("newState", props.roomId, {
+              state: send,
+            });
+            console.log("sent!");
+          }, 1000),
+        };
+      });
+      // this.setState({
+      //   cursor: editorState.getSelection(),
       // });
-      // console.log(editorState.getSelection());
-      this.setState({
-        cursor: editorState.getSelection(),
-      });
-      var data = convertToRaw(editorState.getCurrentContent());
-      var send = JSON.stringify(data);
+      // var data = convertToRaw(editorState.getCurrentContent());
+      // var send = JSON.stringify(data);
 
-      // console.log(payload);
-      socket.emit("newState", props.roomId, {
-        state: send,
-      });
-      console.log("onchange!");
+      // // console.log(payload);
+      // socket.emit("newState", props.roomId, {
+      //   state: send,
+      // });
+      // console.log("onchange!");
       // var data = convertToRaw(editorState.getCurrentContent());
       // var send = JSON.stringify(data);
       // socket.emit("newState", send);
