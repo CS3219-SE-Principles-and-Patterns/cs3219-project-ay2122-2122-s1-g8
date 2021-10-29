@@ -62,6 +62,11 @@ function ioServer(server, roomManager) {
       console.log("Number of connected users: ", io.engine.clientsCount);
     });
 
+    // leave room
+    socket.on("leave room", (roomId) => {
+      io.sockets.in(roomId).emit("leave room");
+    });
+
     socket.on("disconnecting", () => {
       console.log("disconnecting");
       socketId = socket.rooms;
