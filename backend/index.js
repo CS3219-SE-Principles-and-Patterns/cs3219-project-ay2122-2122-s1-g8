@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const config = require('config')
 const http = require('http')
 
-const db = require("./db");
+const {db} = require("./db");
 const AuthRouter = require("./routers/auth");
 const QuestionRouter = require("./routers/questionRoutes");
 const Usr = require("./routers/user");

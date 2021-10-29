@@ -1,3 +1,4 @@
 {
-    "DBHost": "mongodb+srv://dbLong:cs3219@cluster0.o794u.mongodb.net/peer-help?retryWrites=true&w=majority"
+    "DBHost": "mongodb+srv://dbLong:cs3219@cluster0.o794u.mongodb.net/peer-help?retryWrites=true&w=majority",
+    "REDIS_HOST": "redis-11809.c292.ap-southeast-1-1.ec2.cloud.redislabs.com"
 }

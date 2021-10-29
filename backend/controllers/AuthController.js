@@ -1,10 +1,8 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const redis = require('redis')
+const {redisClient} = require('../db/index')
 require('dotenv').config()
-
-const redisClient = redis.createClient()
 
 const register = (req, res, next) => {
     console.log("Register server running!");
