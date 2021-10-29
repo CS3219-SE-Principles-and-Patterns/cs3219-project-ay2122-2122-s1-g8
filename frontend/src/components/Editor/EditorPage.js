@@ -13,6 +13,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import TextEditor from "./TextEditor";
+import "./styles.css";
+
 class EditorPage extends React.Component {
   constructor(props) {
     super(props);
@@ -91,7 +94,7 @@ class EditorPage extends React.Component {
           </div>
           <div className="split right">
             <div className="editor-component">
-              <RichTextEditor
+              <TextEditor
                 socket={this.state.socket}
                 roomId={this.state.room_id}
               />
