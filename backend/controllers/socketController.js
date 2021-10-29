@@ -74,21 +74,24 @@ function ioServer(server, roomManager) {
               if (err) console.log("err", err);
             }
           );
-          Room.findOne({roomId: roomId}).then(doc => {
-            if(doc){
-              let usernames = doc.usernames;
-              let difficulty = doc.questionDifficulty;
-              usernames.forEach(username => {
-                roomManager.deleteUserRequest(username, difficulty);
-              })
-            }
-          }).catch(err => console.log(err))
+          Room.findOne({ roomId: roomId })
+            .then((doc) => {
+              if (doc) {
+                let usernames = doc.usernames;
+                let difficulty = doc.questionDifficulty;
+                usernames.forEach((username) => {
+                  roomManager.deleteUserRequest(username, difficulty);
+                });
+              }
+            })
+            .catch((err) => console.log(err));
         }
       });
     });
     socket.on("newState", (roomId, msg) => {
       console.log(msg);
-      socket.to(roomId).emit("newState", msg); // JX to Chris: need to broadcast to the whole room too?
+      io.sockets.in(roomId).emit("newState", msg);
+      // socket.to(roomId).emit("newState", msg); // JX to Chris: need to broadcast to the whole room too?
       // dont broadcast to sender
     });
   });
