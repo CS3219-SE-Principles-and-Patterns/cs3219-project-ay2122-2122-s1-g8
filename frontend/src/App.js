@@ -18,6 +18,7 @@ function App() {
   const [isAuth, setisAuth] = useState(false);
 
   useEffect(() => {
+    document.title = "PeerPrep"
     if (LocalStorageService.isAuth()) {
       setisAuth(true);
     } else {
