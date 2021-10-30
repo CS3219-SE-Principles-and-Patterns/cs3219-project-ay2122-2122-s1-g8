@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: "https://peerprep.herokuapp.com/api",
+  baseURL: "https://peerprep.herokuapp.com/api",
   // baseURL: "http://192.168.0.103:3030/api",
-  baseURL: "http://127.0.0.1:3030/api",
+  //baseURL: "http://127.0.0.1:3030/api",
 });
 // Account registration and login
 export const registerAccount = (payload) => api.post(`/register`, payload);
