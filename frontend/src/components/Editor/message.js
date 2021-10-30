@@ -87,6 +87,8 @@ const useStyles = makeStyles((theme) =>
     messageContent: {
       padding: 0,
       margin: 0,
+      whiteSpace: "pre-wrap",
+      overflowWrap: "break-word",
     },
     messageTimeStampRight: {
       position: "absolute",
@@ -126,7 +128,7 @@ export const MessageLeft = (props) => {
         <div className={classes.messageBlue}>
           <div>
             <p
-              style={{ whiteSpace: "pre-line" }}
+              style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
               className={classes.messageContent}
             >
               {message}
