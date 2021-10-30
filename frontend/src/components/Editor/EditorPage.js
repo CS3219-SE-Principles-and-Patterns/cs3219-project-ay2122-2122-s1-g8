@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import RichTextEditor from "./RichTextEditor";
 import io from "socket.io-client";
 import "./editorpage.css";
 import Question from "./question";
@@ -13,14 +12,18 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import TextEditor from "./TextEditor";
+import "./styles.css";
+
 class EditorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: false,
       room_id: props.match.params.id,
-      socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
-      //socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
+      // socket: io.connect("http://192.168.0.103:3030", { reconnect: true }),
+      // socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
+      socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
     };
     console.log(this.state.socket);
@@ -91,7 +94,7 @@ class EditorPage extends React.Component {
           </div>
           <div className="split right">
             <div className="editor-component">
-              <RichTextEditor
+              <TextEditor
                 socket={this.state.socket}
                 roomId={this.state.room_id}
               />

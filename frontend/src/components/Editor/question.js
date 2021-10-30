@@ -23,12 +23,13 @@ const useStyles = makeStyles({
   },
   difficulty: {
     fontSize: 15,
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    // background-color: #485461;
+    // background-image: linear-gradient(315deg, #485461 0%, #28313b 74%);
+    background: "linear-gradient(315deg, #485461 0%, #28313b 74%)",
     border: 0,
     borderRadius: 3,
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    width: 30,
+    width: "30%",
     height: 20,
     padding: "0 30px",
     marginBottom: 12,
@@ -43,10 +44,10 @@ export default function Question(props) {
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
   console.log(props.roomID);
-  const data = { 
+  const data = {
     id: props.roomID,
-    authorization: 'Bearer ' + localStorage.getItem("access_token"),
-  }
+    authorization: "Bearer " + localStorage.getItem("access_token"),
+  };
   useEffect(() => {
     apis
       .fetchQuestion(data)

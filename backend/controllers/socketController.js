@@ -99,6 +99,17 @@ function ioServer(server, roomManager) {
       // socket.to(roomId).emit("newState", msg); // JX to Chris: need to broadcast to the whole room too?
       // dont broadcast to sender
     });
+    socket.on("get-document", (roomId) => {
+      console.log("getting document for roomId ", roomId);
+      if (roomId == null) return;
+      socket.join(roomId);
+      socket.emit("load-document", "");
+
+      socket.on("send-changes", (delta) => {
+        // console.log("sending changes")
+        socket.broadcast.to(roomId).emit("receive-changes", delta);
+      });
+    });
   });
 }
 
