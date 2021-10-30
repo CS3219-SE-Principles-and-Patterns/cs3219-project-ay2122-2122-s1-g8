@@ -12,24 +12,7 @@ function ioServer(server, roomManager) {
 
   io.on("connection", (socket) => {
     console.log("connected!");
-    var preset = {
-      blocks: [
-        {
-          key: "34dpc",
-          text: "",
-          type: "unstyled",
-          depth: 0,
-          inlineStyleRanges: [],
-          entityRanges: [],
-          data: {},
-        },
-      ],
-      entityMap: {},
-    };
-    console.log("sending preset");
-    socket.emit("initialize", JSON.stringify(preset));
 
-    // socket.emit("initialize chat", roomId)   // Chris said no need
     socket.on("show credential", (roomId, username) => {
       console.log(roomId);
       console.log(username);
@@ -93,22 +76,14 @@ function ioServer(server, roomManager) {
         }
       });
     });
-    socket.on("newState", (roomId, msg) => {
-      console.log(msg);
-      io.sockets.in(roomId).emit("newState", msg);
-      // socket.to(roomId).emit("newState", msg); // JX to Chris: need to broadcast to the whole room too?
-      // dont broadcast to sender
-    });
     socket.on("get-document", (roomId) => {
       console.log("getting document for roomId ", roomId);
       if (roomId == null) return;
       socket.join(roomId);
       socket.emit("load-document", "");
-
-      socket.on("send-changes", (delta) => {
-        // console.log("sending changes")
-        socket.broadcast.to(roomId).emit("receive-changes", delta);
-      });
+    });
+    socket.on("send-changes", (delta) => {
+      socket.broadcast.to(roomId).emit("receive-changes", delta);
     });
   });
 }
