@@ -81,9 +81,9 @@ function ioServer(server, roomManager) {
       if (roomId == null) return;
       socket.join(roomId);
       socket.emit("load-document", "");
-    });
-    socket.on("send-changes", (delta) => {
-      socket.broadcast.to(roomId).emit("receive-changes", delta);
+      socket.on("send-changes", (delta) => {
+        socket.broadcast.to(roomId).emit("receive-changes", delta);
+      });
     });
   });
 }
