@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import RichTextEditor from "./RichTextEditor";
 import io from "socket.io-client";
 import "./editorpage.css";
 import Question from "./question";
