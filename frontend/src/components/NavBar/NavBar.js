@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    marginRight: 10,
+    fontSize: 15
   },
 }));
 
@@ -73,20 +75,28 @@ export default function NavBar() {
                 align="center"
 
               >
+                <Typography variant="h6" className={classes.title}>
+                  average?{LocalStorageService.getUserID()}
+                </Typography>
                 <AccountCircle />
               </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
-                anchorOrigin={{
+                /*anchorOrigin={{
                   vertical: 'top',
                   horizontal: 'right',
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
+                  vertical: 'bottom',
                   horizontal: 'right',
-                }}
+                }}*/
+
+                getContentAnchorEl={null}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+
                 open={open}
                 onClose={handleClose}
               >
