@@ -76,7 +76,7 @@ export default function NavBar() {
 
               >
                 <Typography variant="h6" className={classes.title}>
-                  average?{LocalStorageService.getUserID()}
+                  {LocalStorageService.getUserID()}
                 </Typography>
                 <AccountCircle />
               </IconButton>
