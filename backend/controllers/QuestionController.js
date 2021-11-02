@@ -54,7 +54,7 @@ const question_get_details = (req, res) => {
 
         Question.findById(valid_questionID)
         .then(result => {
-            console.log(result);
+            // console.log(result);
             res.status(STATUS_CODE_OK).json({
                 message: "Question found",
                 question: result.toJSON()

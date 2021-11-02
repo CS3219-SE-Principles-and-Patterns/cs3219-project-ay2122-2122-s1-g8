@@ -12,15 +12,12 @@ function ioServer(server, roomManager) {
     console.log("connected!");
 
     socket.on("show credential", (roomId, username) => {
-      console.log(roomId);
-      console.log(username);
       Room.findById(roomId).then((doc) => {
         if (doc && doc.usernames.includes(username)) {
           socket.join(roomId);
           console.log("credential accepted code sent");
           socket.emit("credential accepted", `${roomId} has ${username}`);
         } else {
-          console.log("credential invalid code sent");
           socket.emit(
             "credential invalid",
             `Either room ${roomId} does not exist or does not have this user ${username}`
@@ -70,7 +67,6 @@ function ioServer(server, roomManager) {
 }
 
 function disposeRoom(roomId, roomManager){
-  console.log("disposing room with id = " + roomId); // debug
   Room.updateOne(
     { roomId: roomId },
     { $set: { endTime: new Date() } },
@@ -86,11 +82,10 @@ function disposeRoom(roomId, roomManager){
         usernames.forEach((username) => {
           roomManager.deleteUserRequest(username, difficulty);
         });
-        console.log("disposed rooms and fixed"); // debug
       }
     })
     .catch((err) => console.log(err));
-  Room.deleteMany().then((doc) => console.log(doc)).catch(err => console.log(err)) // uncomment if the remote mongodb has too many rooms
+  // Room.deleteMany().then((doc) => console.log(doc)).catch(err => console.log(err)) // uncomment if the remote mongodb has too many rooms
 }
 
 module.exports = ioServer;
