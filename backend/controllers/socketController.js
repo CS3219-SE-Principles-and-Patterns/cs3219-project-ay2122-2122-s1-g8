@@ -45,6 +45,7 @@ function ioServer(server, roomManager) {
     // leave room
     socket.on("leave room", (roomId) => {
       io.sockets.in(roomId).emit("leave room");
+      disposeRoom(roomId, roomManager);
     });
 
     socket.on("disconnecting", () => {
@@ -52,37 +53,44 @@ function ioServer(server, roomManager) {
       socketId = socket.rooms;
       socketId.forEach((roomId) => {
         if (io.sockets.adapter.rooms.get(roomId).size === 1) {
-          Room.updateOne(
-            { roomId: roomId },
-            { $set: { endTime: new Date() } },
-            function (err, _) {
-              if (err) console.log("err", err);
-            }
-          );
-          Room.findOne({ roomId: roomId })
-            .then((doc) => {
-              if (doc) {
-                let usernames = doc.usernames;
-                let difficulty = doc.questionDifficulty;
-                usernames.forEach((username) => {
-                  roomManager.deleteUserRequest(username, difficulty);
-                });
-              }
-            })
-            .catch((err) => console.log(err));
+          disposeRoom(roomId, roomManager);
         }
       });
     });
     socket.on("get-document", (roomId) => {
-      console.log("getting document for roomId ", roomId);
-      if (roomId == null) return;
-      socket.join(roomId);
+      // console.log("getting document for roomId ", roomId);
+      // if (roomId == null) return;
+      // socket.join(roomId);
       socket.emit("load-document", "");
       socket.on("send-changes", (delta) => {
         socket.broadcast.to(roomId).emit("receive-changes", delta);
       });
     });
   });
+}
+
+function disposeRoom(roomId, roomManager){
+  console.log("disposing room with id = " + roomId); // debug
+  Room.updateOne(
+    { roomId: roomId },
+    { $set: { endTime: new Date() } },
+    function (err, _) {
+      if (err) console.log("err", err);
+    }
+  );
+  Room.findOne({ roomId: roomId })
+    .then((doc) => {
+      if (doc) {
+        let usernames = doc.usernames;
+        let difficulty = doc.questionDifficulty;
+        usernames.forEach((username) => {
+          roomManager.deleteUserRequest(username, difficulty);
+        });
+        console.log("disposed rooms and fixed"); // debug
+      }
+    })
+    .catch((err) => console.log(err));
+  Room.deleteMany().then((doc) => console.log(doc)).catch(err => console.log(err)) // uncomment if the remote mongodb has too many rooms
 }
 
 module.exports = ioServer;

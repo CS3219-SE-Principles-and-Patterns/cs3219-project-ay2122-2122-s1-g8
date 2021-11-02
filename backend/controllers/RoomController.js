@@ -43,7 +43,7 @@ const new_peer_request = (req, res, roomManager) => {
             if(peer){   // try finding a match without enqueuing it
                 var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
 
-                // console.log(hasMatch);
+                console.log("found a match with hasMatch = ", hasMatch);    // debug
 
                 let user1 = username;
                 let user2 = peer.data['username'];
@@ -70,6 +70,7 @@ const new_peer_request = (req, res, roomManager) => {
                     // console.log("Debug users");
                     
                     Question.find().then(question => {
+                        console.log(difficulty); // debug
                         let valid_questionID;
                         for(let i = 0; i<question.length; i++){
                             if(!attempted_user_1.has(question[i]._id.toString()) && !attempted_user_2.has(question[i]._id.toString()) && difficulty == question[i].difficulty){
@@ -81,6 +82,7 @@ const new_peer_request = (req, res, roomManager) => {
                             return;
                         }
                         else{
+                            console.log(valid_questionID + " is the question ID sent") // debug
                             Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
                                 if(!err){
                                     console.log("found")
