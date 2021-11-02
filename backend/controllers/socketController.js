@@ -1,7 +1,5 @@
 const Room = require("../models/room");
-const Automerge = require("automerge");
 const crypto = require("crypto");
-var roomSummary = {};
 
 function ioServer(server, roomManager) {
   const io = require("socket.io")(server, {
@@ -21,7 +19,6 @@ function ioServer(server, roomManager) {
           socket.join(roomId);
           console.log("credential accepted code sent");
           socket.emit("credential accepted", `${roomId} has ${username}`);
-          const doc1 = Automerge.from({ state: [preset] });
         } else {
           console.log("credential invalid code sent");
           socket.emit(
