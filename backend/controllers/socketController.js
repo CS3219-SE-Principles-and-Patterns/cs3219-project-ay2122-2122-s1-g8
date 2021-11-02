@@ -26,7 +26,7 @@ function ioServer(server, roomManager) {
           console.log("credential invalid code sent");
           socket.emit(
             "credential invalid",
-            `${roomId} does not have ${username}`
+            `Either room ${roomId} does not exist or does not have this user ${username}`
           );
         }
       });

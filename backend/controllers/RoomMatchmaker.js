@@ -1,4 +1,3 @@
-const crypto = require('crypto')
 const Room = require('../models/room')
 const {Node} = require('./structure/queue')
 
@@ -42,16 +41,19 @@ class DataStoreManager{
         this.matchPairingManager = matchPairingManager;
     }
     createNewRequest(username, difficulty){
-        if(!this.queuingManager.hasEnqueueUser(username, difficulty)){
+        // to create new request, this req must be his first req AND he has not found a match but quickly requests for a new request /
+        // (since then he would be in DEQUEUED_USER instead of ENQUEUE)
+        if(!this.queuingManager.hasEnqueueUser(username, difficulty) && !this.properties.DEQUEUED_USER[username]){
             this.queuingManager.setEnqueueUser(username, difficulty);
             var newNode = Node.prototype.newDifficultyNode(username);
             this.addToDifficultyQueue(difficulty, newNode);
             return true;
         }
         else return false;
-        
     }
     deleteUserRequest(username, difficulty){
+        // not removing him in each DIFFICULTY_QUEUE, but this will not affect the correctness because in peerMatch(), will check // /
+        // whether user has already dropped request. Such mechanism improves efficiency
         this.queuingManager.removeQueueUser(username, difficulty);
         this.matchPairingManager.removeFromDequeue(username);
     }
@@ -92,8 +94,11 @@ class DataStoreManager{
                     })
                 return peerResult;
             }
-            else return
-        }while(1);
+            console.log(username, difficulty)
+            console.log(this.properties.DIFFICULTY_QUEUES[difficulty])
+            // console.log(this.getQueueHead(username, difficulty))
+            // else return  // why should I return here? The queue is not empty yet
+        }while(this.getQueueHead(difficulty) !== null);
     }
 }
 

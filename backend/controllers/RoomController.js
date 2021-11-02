@@ -154,8 +154,33 @@ const drop_request_query = (req, res, roomManager) => {
             "message": "No such difficulty"
         })
     }
+    // User cancels request: when match has just occurred
+    let alreadyMatch = roomManager.matchPairingManager.hasDequeue(username);
+    if(alreadyMatch){
+        const roomId = alreadyMatch.roomId;
+        console.log("alreadyMatch var shows " + roomId);    // debug
+        Room.findByIdAndDelete(roomId)
+            .then(doc => {
+                console.log("doc is ", doc);    // debug
+                roomManager.deleteUserRequest(username, difficulty);
+                roomManager.matchPairingManager.removeFromDequeue(alreadyMatch.peerName);
+                
+                // while user A drops, try find another match for user B, since matching only occurs when /new is invoked
+                roomManager.findPeer(alreadyMatch.peerName, difficulty);
 
-    if(roomManager.queuingManager.hasEnqueueUser(username, difficulty)){
+                return res.status(STATUS_CODE_OK).json({
+                    "message": "Match found, but successfully deleted"
+                })
+            })
+            .catch(err => {
+                console.log("error is ", err);
+                return res.state(STATUS_CODE_SERVER_ERROR).json({
+                    "message": "Error occurred on server"
+                })
+            })
+    }
+    // Timeout flow: frontend calls this endpoint when match timeout happens -- no successful matches
+    else if(roomManager.queuingManager.hasEnqueueUser(username, difficulty)){
         roomManager.deleteUserRequest(username, difficulty);
         return res.status(STATUS_CODE_OK).json({
             "message": "Removed user from matching service"
