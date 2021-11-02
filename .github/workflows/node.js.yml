@@ -31,7 +31,7 @@ jobs:
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.6.0
       with:
-        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-version: ${{ matrix.mongodb-version }} 
 
     - name: Start Redis v${{ matrix.redis-version }}
       uses: superchargejs/redis-github-action@1.1.0
