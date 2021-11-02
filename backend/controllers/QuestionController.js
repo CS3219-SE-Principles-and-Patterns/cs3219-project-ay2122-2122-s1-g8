@@ -45,8 +45,8 @@ const question_put_update = (req, res) => {
 };
 
 const question_get_details = (req, res) => {
-    let zoom_id = req.params.id;
-    Room.findOne({roomId: zoom_id}).then(room => {
+    let room_id = req.params.id;
+    Room.findById(room_id).then(room => {
         // console.log("Test QID")
         let valid_questionID = room.questionID;
         // console.log(valid_questionID);
@@ -54,7 +54,7 @@ const question_get_details = (req, res) => {
 
         Question.findById(valid_questionID)
         .then(result => {
-            console.log(result);
+            // console.log(result);
             res.status(STATUS_CODE_OK).json({
                 message: "Question found",
                 question: result.toJSON()

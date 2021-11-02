@@ -94,10 +94,6 @@ class DataStoreManager{
                     })
                 return peerResult;
             }
-            console.log(username, difficulty)
-            console.log(this.properties.DIFFICULTY_QUEUES[difficulty])
-            // console.log(this.getQueueHead(username, difficulty))
-            // else return  // why should I return here? The queue is not empty yet
         }while(this.getQueueHead(difficulty) !== null);
     }
 }

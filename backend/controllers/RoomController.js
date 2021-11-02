@@ -43,8 +43,6 @@ const new_peer_request = (req, res, roomManager) => {
             if(peer){   // try finding a match without enqueuing it
                 var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
 
-                // console.log(hasMatch);
-
                 let user1 = username;
                 let user2 = peer.data['username'];
         
@@ -158,10 +156,8 @@ const drop_request_query = (req, res, roomManager) => {
     let alreadyMatch = roomManager.matchPairingManager.hasDequeue(username);
     if(alreadyMatch){
         const roomId = alreadyMatch.roomId;
-        console.log("alreadyMatch var shows " + roomId);    // debug
         Room.findByIdAndDelete(roomId)
             .then(doc => {
-                console.log("doc is ", doc);    // debug
                 roomManager.deleteUserRequest(username, difficulty);
                 roomManager.matchPairingManager.removeFromDequeue(alreadyMatch.peerName);
                 
