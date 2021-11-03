@@ -46,6 +46,33 @@ class EditorPage extends React.Component {
       this.setState({ error: true });
       console.log("credential invalid");
     });
+    this.state.socket.on("change question", (msg) => {
+      console.log("Received quesiton", msg);
+      const data = {
+        id: msg,
+        authorization: "Bearer " + localStorage.getItem("access_token"),
+      };
+      console.log(data);
+      apis
+        .fetchQuestion(data)
+        .then((res) => {
+          console.log("DEBUG REST");
+          console.log(res.data);
+          console.log("DEBUG REST");
+          const { _id, questionStatement, difficulty } = res.data.question;
+          this.setState({
+            ...this.state,
+            question_id: _id,
+            title: "questionStatement",
+            difficulty,
+          });
+          console.log(questionStatement);
+        })
+        .catch((err) => {
+          console.log("something wrong");
+          console.log(err);
+        });
+    });
     this.state.socket.on("leave room", (msg) => {
       this.setState({ error: true });
       this.props.history.push({
@@ -57,18 +84,23 @@ class EditorPage extends React.Component {
       authorization: "Bearer " + localStorage.getItem("access_token"),
     };
     apis
-    .fetchQuestion(data)
-    .then((res) => {
-      console.log(res.data);
-      const {_id, questionStatement, difficulty} = res.data.question;
-      this.setState({...this.state, question_id:_id, title:questionStatement, difficulty});
-      console.log(this.state.question_id);
-      console.log("HEHE");
-    })
-    .catch((err) => {
-      console.log("something wrong");
-      console.log(err);
-    });
+      .fetchQuestion(data)
+      .then((res) => {
+        console.log(res.data);
+        const { _id, questionStatement, difficulty } = res.data.question;
+        this.setState({
+          ...this.state,
+          question_id: _id,
+          title: questionStatement,
+          difficulty,
+        });
+        console.log(this.state.question_id);
+        console.log("HEHE");
+      })
+      .catch((err) => {
+        console.log("something wrong");
+        console.log(err);
+      });
   }
   handleClose = () => {
     this.setState({ error: false });
@@ -79,7 +111,7 @@ class EditorPage extends React.Component {
       pathname: "/",
     });
   }
-  handlenextquestion(){
+  handlenextquestion() {
     console.log("Trigger Next");
     const data = {
       question_id: this.state.question_id,
@@ -91,18 +123,28 @@ class EditorPage extends React.Component {
     console.log("QID frontend debug");
 
     apis
-    .getNextQuestion(data)
-    .then((res) => {
-      console.log("DEBUG REST");
-      console.log(res.data);
-      console.log("DEBUG REST");
-      const {_id, questionStatement, difficulty} = res.data.question;
-      this.setState({...this.state, question_id:_id, title:questionStatement, difficulty});
-    })
-    .catch((err) => {
-      console.log("something wrong");
-      console.log(err);
-    });
+      .getNextQuestion(data)
+      .then((res) => {
+        console.log("DEBUG REST");
+        console.log(res.data);
+        console.log("DEBUG REST");
+        const { _id, questionStatement, difficulty } = res.data.question;
+        this.setState({
+          ...this.state,
+          question_id: _id,
+          title: questionStatement,
+          difficulty,
+        });
+        this.state.socket.emit(
+          "change question",
+          this.state.room_id,
+          this.state.question_id
+        );
+      })
+      .catch((err) => {
+        console.log("something wrong");
+        console.log(err);
+      });
   }
 
   render() {
@@ -129,7 +171,12 @@ class EditorPage extends React.Component {
         <div className="bottom">
           <div className="split left">
             <div className="question">
-              <Question roomID={this.state.room_id} questionID={this.state.question_id} title={this.state.title} difficulty={this.state.difficulty}/>
+              <Question
+                roomID={this.state.room_id}
+                questionID={this.state.question_id}
+                title={this.state.title}
+                difficulty={this.state.difficulty}
+              />
             </div>
             <div className="chat">
               <Chat
@@ -147,9 +194,13 @@ class EditorPage extends React.Component {
               />
             </div>
             <div className="next">
-              <Button variant="contained" color="secondary" onClick={()=>{
-                this.handlenextquestion();
-              }}> 
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  this.handlenextquestion();
+                }}
+              >
                 Next
               </Button>
             </div>
