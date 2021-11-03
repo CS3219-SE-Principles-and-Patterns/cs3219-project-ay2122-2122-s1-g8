@@ -69,6 +69,47 @@ const question_get_details = (req, res) => {
     });
 }
 
+const question_get_new = (req, res) => {
+    let question_id = req.params.id;
+
+    console.log("Test param");
+    console.log(req.params);
+    console.log("Test param");
+
+    Question.findById(question_id)
+    .then(result => {
+        Question.find().then(q_ => {
+            const questions = [];
+            let idx = -1;
+            let len_push = 0;
+            for (let i=0; i<q_.length; i++){
+                if(q_[i].difficulty == result.difficulty){
+                    questions.push(q_[i]);
+                    len_push += 1;
+                }
+                if(q_[i]._id == question_id){
+                    idx = len_push-1;
+                }
+            }
+            if(idx == questions.length-1){
+                idx = 0;
+            }else{
+                idx = idx + 1;
+            }
+            res.status(STATUS_CODE_OK).json({
+                message: "Next question found",
+                question: questions[idx].toJSON()
+            })
+        })
+    })
+    .catch(_ => {
+        res.status(STATUS_CODE_NOT_FOUND).json({
+            message: "Question not found",
+            question: ""
+        })
+    })
+}
+
 const question_delete = (req, res) => {
     const id = req.params.id;
     Question.findByIdAndDelete(id)
@@ -90,4 +131,5 @@ module.exports = {
     question_put_update,
     question_get_details,
     question_delete,
+    question_get_new,
 }

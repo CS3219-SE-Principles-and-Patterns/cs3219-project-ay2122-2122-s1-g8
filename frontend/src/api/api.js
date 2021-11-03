@@ -15,7 +15,8 @@ export const updateQuestionType = (payload) =>
 // Question
 export const fetchQuestion = (payload) =>
   api.get("/question/" + payload.id, { headers: payload });
-
+export const getNextQuestion = (payload) => 
+  api.get('/question/new/' + payload.question_id, { headers: payload });
 // Match
 export const newMatch = (payload) => api.post("/match/new", payload);
 export const matchStatus = (payload) => api.post("/match/status", payload);
@@ -29,6 +30,7 @@ const apis = {
   updateUserStatus,
   updateQuestionType,
   fetchQuestion,
+  getNextQuestion,
   newMatch,
   matchStatus,
   dropMatch,

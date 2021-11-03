@@ -40,30 +40,17 @@ const useStyles = makeStyles({
 });
 
 export default function Question(props) {
+
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
   console.log(props.roomID);
-  const data = {
-    id: props.roomID,
-    authorization: "Bearer " + localStorage.getItem("access_token"),
-  };
-  useEffect(() => {
-    apis
-      .fetchQuestion(data)
-      .then((res) => {
-        console.log(res.data);
-        // var question = JSON.parse(res.data.question);
-        // console.log(res.data);
-        setTitle(res.data.question.questionStatement);
-        setDifficulty(res.data.question.difficulty);
-      })
-      .catch((err) => {
-        console.log("something wrong");
-        console.log(err);
-      });
-  }, []);
-
+  useEffect(()=>{
+    console.log("rerender question");
+    setTitle(props.title);
+    setDifficulty(props.difficulty);
+  },[props])
+  
   const classes = useStyles();
   return (
     <Card className={classes.root}>
