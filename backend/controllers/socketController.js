@@ -36,7 +36,7 @@ function ioServer(server, roomManager) {
     });
     socket.on("change question", (roomId, msg) => {
       console.log("question forwarded", msg);
-      io.sockets.in(roomId).emit("change question", msg);
+      socket.broadcast.to(roomId).emit("change question", msg);
     });
     socket.on("disconnect", () => {
       console.log("user disconnected");

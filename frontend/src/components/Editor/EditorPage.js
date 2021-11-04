@@ -21,8 +21,8 @@ class EditorPage extends React.Component {
     this.state = {
       error: false,
       room_id: props.match.params.id,
-      // socket: io.connect("http://192.168.0.103:3030", { reconnect: true }),
-      socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
+      socket: io.connect("http://192.168.0.103:3030", { reconnect: true }),
+      // socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
       // socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
       question_id: "HELLO QID",
@@ -54,7 +54,7 @@ class EditorPage extends React.Component {
       };
       console.log(data);
       apis
-        .fetchQuestion(data)
+        .getQuestion(data)
         .then((res) => {
           console.log("DEBUG REST");
           console.log(res.data);
@@ -63,7 +63,7 @@ class EditorPage extends React.Component {
           this.setState({
             ...this.state,
             question_id: _id,
-            title: "questionStatement",
+            title: questionStatement,
             difficulty,
           });
           console.log(questionStatement);
