@@ -23,8 +23,8 @@ class EditorPage extends React.Component {
       error: false,
       room_id: props.match.params.id,
       // socket: io.connect("http://192.168.0.103:3030", { reconnect: true }),
-      socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
-      // socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
+      // socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
+      socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
       connectionExists: true,
     };

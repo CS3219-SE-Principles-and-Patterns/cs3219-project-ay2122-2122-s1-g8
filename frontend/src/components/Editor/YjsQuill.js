@@ -13,7 +13,8 @@ require('y-websockets-client')(Y)
 var io = Y['websockets-client'].io //need to get this.....
 
 
-var link = 'http://127.0.0.1:3030' //when running textedit-app-yjs-websockets-server locally
+// var link = 'http://127.0.0.1:3030' //when running textedit-app-yjs-websockets-server locally
+var link = 'https://peerprep.herokuapp.com'
 // var link = 'http://localhost:5000' //when running `heroku local web`
 // var link = process.env.REACT_APP_YJS_HEROKU_URL //this link is set in my .env file, which is hidden from github
 
