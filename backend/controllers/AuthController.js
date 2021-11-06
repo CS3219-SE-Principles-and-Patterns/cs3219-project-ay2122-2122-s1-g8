@@ -102,11 +102,11 @@ const login = (req, res, next) => {
 const refresh = (req, res) => {
     const refreshToken = req.body.token;
     if(refreshToken == null) return res.status(401).json({"message": "No refresh token"})
-    redisClient.sismember("refreshTokens", refreshToken, function(err, res){
-        if(res === 1){
+    redisClient.sismember("refreshTokens", refreshToken, function(err, result){
+        if(result === 1){
             jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
                 if(err) res.sendStatus(403);
-                let accessToken = generateToken({username: user.username})
+                let accessToken = generateAccessToken({username: user.username})
                 res.status(200).json({accessToken: accessToken});
             })
         }
@@ -117,7 +117,7 @@ const refresh = (req, res) => {
 };
 
 function generateAccessToken(user){
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3h'})
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'})
 }
 
 module.exports = {

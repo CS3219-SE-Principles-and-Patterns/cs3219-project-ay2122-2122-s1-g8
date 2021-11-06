@@ -43,8 +43,6 @@ const new_peer_request = (req, res, roomManager) => {
             if(peer){   // try finding a match without enqueuing it
                 var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
 
-                // console.log(hasMatch);
-
                 let user1 = username;
                 let user2 = peer.data['username'];
         
@@ -64,10 +62,10 @@ const new_peer_request = (req, res, roomManager) => {
                         }
                     }
                     
-                    // console.log("Debug users");
-                    // console.log(user1);
-                    // console.log(user2);
-                    // console.log("Debug users");
+                    console.log("Debug users");
+                    console.log(user1);
+                    console.log(user2);
+                    console.log("Debug users");
                     
                     Question.find().then(question => {
                         let valid_questionID;
@@ -81,6 +79,9 @@ const new_peer_request = (req, res, roomManager) => {
                             return;
                         }
                         else{
+                            console.log("Debug question ID");
+                            console.log(valid_questionID);
+                            console.log("Debug question ID");
                             Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
                                 if(!err){
                                     console.log("found")
@@ -154,8 +155,31 @@ const drop_request_query = (req, res, roomManager) => {
             "message": "No such difficulty"
         })
     }
+    // User cancels request: when match has just occurred
+    let alreadyMatch = roomManager.matchPairingManager.hasDequeue(username);
+    if(alreadyMatch){
+        const roomId = alreadyMatch.roomId;
+        Room.findByIdAndDelete(roomId)
+            .then(doc => {
+                roomManager.deleteUserRequest(username, difficulty);
+                roomManager.matchPairingManager.removeFromDequeue(alreadyMatch.peerName);
+                
+                // while user A drops, try find another match for user B, since matching only occurs when /new is invoked
+                roomManager.findPeer(alreadyMatch.peerName, difficulty);
 
-    if(roomManager.queuingManager.hasEnqueueUser(username, difficulty)){
+                return res.status(STATUS_CODE_OK).json({
+                    "message": "Match found, but successfully deleted"
+                })
+            })
+            .catch(err => {
+                console.log("error is ", err);
+                return res.state(STATUS_CODE_SERVER_ERROR).json({
+                    "message": "Error occurred on server"
+                })
+            })
+    }
+    // Timeout flow: frontend calls this endpoint when match timeout happens -- no successful matches
+    else if(roomManager.queuingManager.hasEnqueueUser(username, difficulty)){
         roomManager.deleteUserRequest(username, difficulty);
         return res.status(STATUS_CODE_OK).json({
             "message": "Removed user from matching service"

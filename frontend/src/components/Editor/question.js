@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import apis from "../../api/api";
+import LocalStorageService from "../../auth/services/LocalStorageService";
 
 const useStyles = makeStyles({
   root: {
@@ -40,10 +41,18 @@ const useStyles = makeStyles({
 });
 
 export default function Question(props) {
+
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
   console.log(props.roomID);
+
+  useEffect(()=>{
+    console.log("rerender question");
+    setTitle(props.title);
+    setDifficulty(props.difficulty);
+  },[props])
+ 
   const data = {
     id: props.roomID,
     authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -58,12 +67,36 @@ export default function Question(props) {
         setTitle(res.data.question.questionStatement);
         setDifficulty(res.data.question.difficulty);
       })
-      .catch((err) => {
-        console.log("something wrong");
-        console.log(err);
+      .catch(async (err) => {
+        if (err.response.status === 403) {
+          const refreshToken = localStorage.getItem("refresh_token");
+          const payload = {
+            token: refreshToken,
+          }
+          await apis.refreshToken(payload).then(async (res) => {
+            const accessToken = (res.data.accessToken);
+            LocalStorageService.setToken({token: accessToken});
+            const data = {
+              id: props.roomID,
+              authorization: "Bearer " + localStorage.getItem("access_token"),
+            };
+            await apis
+            .fetchQuestion(data)
+            .then((res) => {
+              console.log(res.data);
+              // var question = JSON.parse(res.data.question);
+              // console.log(res.data);
+              setTitle(res.data.question.questionStatement);
+              setDifficulty(res.data.question.difficulty);
+            }).catch((err) => {
+              console.log(err);
+            });
+          })
+        } else {
+          console.log(err)
+        }
       });
   }, []);
-
   const classes = useStyles();
   return (
     <Card className={classes.root}>
