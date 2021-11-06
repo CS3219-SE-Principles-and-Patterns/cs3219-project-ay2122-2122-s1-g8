@@ -21,13 +21,13 @@ class EditorPage extends React.Component {
     this.state = {
       error: false,
       room_id: props.match.params.id,
-      socket: io.connect("http://192.168.0.103:3030", { reconnect: true }),
+      // socket: io.connect("http://192.168.0.103:3030", { reconnect: true }),
       // socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
-      // socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
+      socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
       question_id: "HELLO QID",
-      title: "TITLE",
-      difficulty: "DIFFICULTY",
+      title: "Retrieving Question...",
+      difficulty: "",
     };
     this.handlenextquestion = this.handlenextquestion.bind(this);
     console.log(this.state.socket);
