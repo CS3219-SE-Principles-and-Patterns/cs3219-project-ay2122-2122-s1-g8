@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) =>
       backgroundColor: "#AEE6E6 ",
       width: "60%",
       color: "#7d6c4f",
-      //height: "50px",
       textAlign: "left",
       font: "400 .9em 'Open Sans', sans-serif",
       border: "1px solid #AEE6E6 ",
@@ -87,6 +86,8 @@ const useStyles = makeStyles((theme) =>
     messageContent: {
       padding: 0,
       margin: 0,
+      whiteSpace: "pre-wrap",
+      overflowWrap: "break-word",
     },
     messageTimeStampRight: {
       position: "absolute",
@@ -126,7 +127,7 @@ export const MessageLeft = (props) => {
         <div className={classes.messageBlue}>
           <div>
             <p
-              style={{ whiteSpace: "pre-line" }}
+              style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
               className={classes.messageContent}
             >
               {message}
@@ -137,7 +138,7 @@ export const MessageLeft = (props) => {
     </div>
   );
 };
-//avatarが右にあるメッセージ（自分）
+
 export const MessageRight = (props) => {
   const classes = useStyles();
   const message = props.message ? props.message : "no message";

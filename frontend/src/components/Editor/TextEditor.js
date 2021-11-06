@@ -1,3 +1,4 @@
+// Inspiration and initial guidance from https://github.com/WebDevSimplified/google-docs-clone
 import { useCallback, useEffect, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -22,14 +23,6 @@ export default function TextEditor(props) {
   const [socket, setSocket] = useState(props.socket);
   const [quill, setQuill] = useState();
 
-  //   useEffect(() => {
-  //     const s = io("http://localhost:3001");
-  //     setSocket(s);
-
-  //     return () => {
-  //       s.disconnect();
-  //     };
-  //   }, []);
   console.log("document id", documentId);
   useEffect(() => {
     if (socket == null || quill == null) return;
@@ -41,18 +34,6 @@ export default function TextEditor(props) {
 
     socket.emit("get-document", documentId);
   }, [socket, quill, documentId]);
-
-  useEffect(() => {
-    if (socket == null || quill == null) return;
-
-    const interval = setInterval(() => {
-      socket.emit("save-document", quill.getContents());
-    }, SAVE_INTERVAL_MS);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [socket, quill]);
 
   useEffect(() => {
     if (socket == null || quill == null) return;
