@@ -116,6 +116,25 @@ function ioServer(server, roomManager) {
     });
 
   });
+
+  function getInstanceOfY (room) {
+    if (global.yInstances[room] == null) {
+      global.yInstances[room] = Y({
+        db: {
+          name: 'memory',
+          dir: 'y-leveldb-databases',
+          namespace: room
+        },
+        connector: {
+          name: 'websockets-server',
+          room: room,
+          io: io
+        },
+        share: {}
+      })
+    }
+    return global.yInstances[room]
+  }
 }
 
 function disposeRoom(roomId, roomManager){
@@ -138,26 +157,6 @@ function disposeRoom(roomId, roomManager){
     })
     .catch((err) => console.log(err));
   // Room.deleteMany().then((doc) => console.log(doc)).catch(err => console.log(err)) // uncomment if the remote mongodb has too many rooms
-}
-
-function getInstanceOfY (room) {
-  if (global.yInstances[room] == null) {
-    global.yInstances[room] = Y({
-      db: {
-        name: options.db,
-        dir: 'y-leveldb-databases',
-        namespace: room
-      },
-      connector: {
-        name: 'websockets-server',
-        room: room,
-        io: io,
-        debug: !!options.debug
-      },
-      share: {}
-    })
-  }
-  return global.yInstances[room]
 }
 
 module.exports = ioServer;

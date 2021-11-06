@@ -14,6 +14,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextEditor from "./TextEditor";
 import "./styles.css";
+import QuillEditor from "./QuillEditor";
 
 class EditorPage extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class EditorPage extends React.Component {
       socket: io.connect("http://127.0.0.1:3030", { reconnect: true }),
       // socket: io.connect("https://peerprep.herokuapp.com", { reconnect: true }),
       user_id: LocalStorageService.getUserID(),
+      connectionExists: true,
     };
     console.log(this.state.socket);
     console.log("Room id:", this.state.room_id);
@@ -94,9 +96,10 @@ class EditorPage extends React.Component {
           </div>
           <div className="split right">
             <div className="editor-component">
-              <TextEditor
+              <QuillEditor
+                showRoom={this.state.room_id} //this is only prop that TextEdit needs!!!
+                connectionExists={this.state.connectionExists}
                 socket={this.state.socket}
-                roomId={this.state.room_id}
               />
             </div>
             <div className="next">

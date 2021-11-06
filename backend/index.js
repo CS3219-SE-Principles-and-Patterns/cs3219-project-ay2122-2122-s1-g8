@@ -19,11 +19,6 @@ const ioServer = require('./controllers/socketController');
 var roomDSManager = getRoomController(roomProperties)
 ioServer(server, roomDSManager)
 
-var options = {
-    port: apiPort,
-    db: 'memory'
-};
-
 // add middleware
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
