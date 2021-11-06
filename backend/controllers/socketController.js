@@ -93,17 +93,17 @@ function ioServer(server, roomManager) {
     socket.on("leave room", (roomId) => {
       console.log(`${roomId} leave room`)
       io.sockets.in(roomId).emit("leave room");
-      disposeRoom(roomId, roomManager);
-    });
-    socket.on('leaveRoom', function (room) {
-      console.log(`${room} leaveRoom`)
-      getInstanceOfY(room).then(function (y) {
-        var i = rooms.indexOf(room)
+      getInstanceOfY(roomId).then(function (y) {
+        var i = rooms.indexOf(roomId)
         if (i >= 0) {
           y.connector.userLeft(socket.id)
           rooms.splice(i, 1)
         }
       })
+      disposeRoom(roomId, roomManager);
+    });
+    socket.on('leaveRoom', function (room) {
+      console.log(`${room} leaveRoom`) 
     })
     socket.on("disconnecting", () => {
       console.log("disconnecting");
