@@ -102,9 +102,6 @@ function ioServer(server, roomManager) {
       })
       disposeRoom(roomId, roomManager);
     });
-    socket.on('leaveRoom', function (room) {
-      console.log(`${room} leaveRoom`) 
-    })
     socket.on("disconnecting", () => {
       console.log("disconnecting");
       socketId = socket.rooms;
@@ -147,6 +144,7 @@ function disposeRoom(roomId, roomManager){
   );
   Room.findOne({ roomId: roomId })
     .then((doc) => {
+      console.log('in Room.findOne(roomId), ', doc)
       if (doc) {
         let usernames = doc.usernames;
         let difficulty = doc.questionDifficulty;
@@ -160,23 +158,3 @@ function disposeRoom(roomId, roomManager){
 }
 
 module.exports = ioServer;
-
-
-
-
-
-
-
-
-// var port = Number.parseInt(options.port, 10)
-// var io = require('socket.io')(port)
-// console.log('Running y-websockets-server on port ' + port)
-
-
-
-
-
-
-  
-  
-  

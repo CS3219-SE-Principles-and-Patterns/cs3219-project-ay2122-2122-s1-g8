@@ -88,22 +88,19 @@ class YjsQuill extends React.Component {
           toolbar: toolbarOptions,
         },
         theme: 'snow',
-        placeholder: "Write something awesome..."
+        placeholder: "Splash your ideas!"
         });
 
         console.log('window.yquill is ', window.quill) // debug
-        y.share.richtext.bindQuill(window.quill)
+        try{  // caitlin, chris
+          y.share.richtext.bindQuill(window.quill)
+        }catch(err){}
       })
     }
 
 
     return (
       <div className="Yjs-style">
-        <p>
-          <span>
-            YjsQuill: {this.props.showRoom}
-          </span>
-        </p>
       </div>
     );
   }
