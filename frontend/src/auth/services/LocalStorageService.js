@@ -13,6 +13,10 @@ const LocalStorageService = () => {
     localStorage.setItem("access_token", tokenObj.token);
   }
 
+  function _setRefreshToken(tokenObj) {
+    localStorage.setItem("refresh_token", tokenObj.refreshToken);
+  }
+
   function _setUserID(tokenObj) {
     localStorage.setItem("user_id", tokenObj.username);
   }
@@ -33,6 +37,10 @@ const LocalStorageService = () => {
     return localStorage.getItem("access_token");
   }
 
+  function _getRefreshToken() {
+    localStorage.getItem("refresh_token");
+  }
+
   function _clearToken() {
     try {
       localStorage.removeItem("access_token");
@@ -50,7 +58,9 @@ const LocalStorageService = () => {
   return {
     getService: _getService,
     setToken: _setToken,
+    setRefreshToken: _setRefreshToken,
     getAccessToken: _getAccessToken,
+    getRefreshToken: _getRefreshToken,
     clearToken: _clearToken,
     isAuth: _isAuth,
     setUserID: _setUserID,

@@ -56,8 +56,31 @@ export default function LoadingDialog(props) {
           .then((res) => {
             console.log(res.data);
           })
-          .catch((err) => {
-            console.log(err);
+          .catch(async (err) => {
+            if (err.response.status === 403) {
+              const refreshToken = localStorage.getItem("refresh_token");
+              const payload = {
+                token: refreshToken,
+              }
+              await apis.refreshToken(payload).then(async (res) => {
+                const accessToken = (res.data.accessToken);
+                LocalStorageService.setToken({token: accessToken});
+                const matchData = {
+                  username: LocalStorageService.getUserID(),
+                  difficulty: props.difficulty,
+                  authorization: 'Bearer ' + localStorage.getItem("access_token"),
+                };
+                await apis
+                .newMatch(matchData)
+                .then((res) => {
+                  console.log(res.data);
+                }).catch((err) => {
+                  console.log(err);
+                });
+              })
+            } else {
+              console.log(err)
+            }
           });
       })
       .catch((err) => {
@@ -84,8 +107,31 @@ export default function LoadingDialog(props) {
           .then((res) => {
             console.log(res.data);
           })
-          .catch((err) => {
-            console.log(err);
+          .catch(async (err) => {
+            if (err.response.status === 403) {
+              const refreshToken = localStorage.getItem("refresh_token");
+              const payload = {
+                token: refreshToken,
+              }
+              await apis.refreshToken(payload).then(async (res) => {
+                const accessToken = (res.data.accessToken);
+                LocalStorageService.setToken({token: accessToken});
+                const matchData = {
+                  username: LocalStorageService.getUserID(),
+                  difficulty: props.difficulty,
+                  authorization: 'Bearer ' + localStorage.getItem("access_token"),
+                };
+                await apis
+                .dropMatch(matchData)
+                .then((res) => {
+                  console.log(res.data);
+                }).catch((err) => {
+                  console.log(err);
+                });
+              })
+            } else {
+              console.log(err)
+            }
           });
       }
     }
@@ -110,8 +156,36 @@ export default function LoadingDialog(props) {
               history.push("room/" + roomId);
             }
           })
-          .catch((err) => {
-            console.log(err);
+          .catch(async (err) => {
+            if (err.response.status === 403) {
+              const refreshToken = localStorage.getItem("refresh_token");
+              const payload = {
+                token: refreshToken,
+              }
+              await apis.refreshToken(payload).then(async (res) => {
+                const accessToken = (res.data.accessToken);
+                LocalStorageService.setToken({token: accessToken});
+                const matchData = {
+                  username: LocalStorageService.getUserID(),
+                  difficulty: props.difficulty,
+                  authorization: 'Bearer ' + localStorage.getItem("access_token"),
+                };
+                await apis
+                .matchStatus(matchData)
+                .then(async (res) => {
+                  console.log("I'm called");
+                  console.log(res.data);
+                  if (res.data.roomId) {
+                    const roomId = res.data.roomId;
+                    history.push("room/" + roomId);
+                  }
+                }).catch((err) => {
+                  console.log(err);
+                });
+              })
+            } else {
+              console.log(err)
+            }
           });
       }
     }
