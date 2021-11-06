@@ -45,7 +45,7 @@ class EditorPage extends React.Component {
       console.log("credential invalid");
     });
     this.state.socket.on("leave room", (msg) => {
-      this.setState({ error: true });
+      this.setState({ error: true, connectionExists: false });
       this.props.history.push({
         pathname: "/",
       });

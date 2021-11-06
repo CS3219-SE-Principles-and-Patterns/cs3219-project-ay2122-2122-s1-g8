@@ -42,7 +42,7 @@ function ioServer(server, roomManager) {
     socket.on("show credential", (roomId, username) => {
       Room.findById(roomId).then((doc) => {
         if (doc && doc.usernames.includes(username)) {
-          socket.join(roomId);
+          // socket.join(roomId);
           console.log("credential accepted code sent");
           socket.emit("credential accepted", `${roomId} has ${username}`);
         } else {
@@ -65,11 +65,10 @@ function ioServer(server, roomManager) {
 
     // Editor Page
     socket.on('yjsEvent', function (msg) {
-      console.log('received yjsEvent with msg = ', msg) // debug
       if (msg.room != null) {
         getInstanceOfY(msg.room).then(function (y) {
-          y.connector.receiveMessage(socket.id, msg)
-        })
+            y.connector.receiveMessage(socket.id, msg)
+        }).catch(e => {})
       }
     })
 

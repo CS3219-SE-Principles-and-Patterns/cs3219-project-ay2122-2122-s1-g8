@@ -48,6 +48,7 @@ const question_get_details = (req, res) => {
     let room_id = req.params.id;
     Room.findById(room_id).then(room => {
         // console.log("Test QID")
+        console.log("in question_get_details, ", room)
         let valid_questionID = room.questionID;
         // console.log(valid_questionID);
         // console.log("Test QID")
