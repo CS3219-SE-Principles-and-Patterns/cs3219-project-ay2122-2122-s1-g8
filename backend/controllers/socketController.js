@@ -20,10 +20,24 @@ function ioServer(server, roomManager) {
       origin: "*",
     },
   });
-  console.log('Running y-websockets-server')
-
+  console.log('Running y-websockets-server')//
+  
   io.on("connection", (socket) => {
     console.log("connected!");
+    var rooms = []
+
+    // event 1: joinRoom
+    socket.on('joinRoom', function (room) {
+      console.log('joinRoom: User "%s" joins room "%s"', socket.id, room)
+      socket.join(room)
+      getInstanceOfY(room).then(function (y) {
+        global.y = y // TODO: remove !!!
+        if (rooms.indexOf(room) === -1) {
+          y.connector.userJoined(socket.id, 'slave')
+          rooms.push(room)
+        }
+      })
+    })
 
     socket.on("show credential", (roomId, username) => {
       Room.findById(roomId).then((doc) => {
@@ -59,17 +73,38 @@ function ioServer(server, roomManager) {
       }
     })
 
+    // Event : User closes browser or network loss
     socket.on("disconnect", () => {
       console.log("user disconnected");
-      console.log("Number of connected users: ", io.engine.clientsCount);
+      // console.log("Number of connected users: ", io.engine.clientsCount);
+      for (var i = 0; i < rooms.length; i++) {
+        let room = rooms[i]
+        getInstanceOfY(room).then(function (y) {
+          var i = rooms.indexOf(room)
+          if (i >= 0) {
+            y.connector.userLeft(socket.id)
+            rooms.splice(i, 1)
+          }
+        })
+      }
     });
     
     // leave room
     socket.on("leave room", (roomId) => {
+      console.log(`${roomId} leave room`)
       io.sockets.in(roomId).emit("leave room");
       disposeRoom(roomId, roomManager);
     });
-
+    socket.on('leaveRoom', function (room) {
+      console.log(`${room} leaveRoom`)
+      getInstanceOfY(room).then(function (y) {
+        var i = rooms.indexOf(room)
+        if (i >= 0) {
+          y.connector.userLeft(socket.id)
+          rooms.splice(i, 1)
+        }
+      })
+    })
     socket.on("disconnecting", () => {
       console.log("disconnecting");
       socketId = socket.rooms;
@@ -142,39 +177,7 @@ module.exports = ioServer;
 
 
 
-// io.on('connection', function (socket) {
-//   var rooms = []
-//   socket.on('joinRoom', function (room) {
-//     console.log('User "%s" joins room "%s"', socket.id, room)
-//     socket.join(room)
-//     getInstanceOfY(room).then(function (y) {
-//       global.y = y // TODO: remove !!!
-//       if (rooms.indexOf(room) === -1) {
-//         y.connector.userJoined(socket.id, 'slave')
-//         rooms.push(room)
-//       }
-//     })
-//   })
+
   
-//   socket.on('disconnect', function () {
-//     for (var i = 0; i < rooms.length; i++) {
-//       let room = rooms[i]
-//       getInstanceOfY(room).then(function (y) {
-//         var i = rooms.indexOf(room)
-//         if (i >= 0) {
-//           y.connector.userLeft(socket.id)
-//           rooms.splice(i, 1)
-//         }
-//       })
-//     }
-//   })
-//   socket.on('leaveRoom', function (room) {
-//     getInstanceOfY(room).then(function (y) {
-//       var i = rooms.indexOf(room)
-//       if (i >= 0) {
-//         y.connector.userLeft(socket.id)
-//         rooms.splice(i, 1)
-//       }
-//     })
-//   })
-// })
+  
+  
