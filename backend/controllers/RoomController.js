@@ -62,10 +62,10 @@ const new_peer_request = (req, res, roomManager) => {
                         }
                     }
                     
-                    // console.log("Debug users");
-                    // console.log(user1);
-                    // console.log(user2);
-                    // console.log("Debug users");
+                    console.log("Debug users");
+                    console.log(user1);
+                    console.log(user2);
+                    console.log("Debug users");
                     
                     Question.find().then(question => {
                         let valid_questionID;
@@ -79,6 +79,9 @@ const new_peer_request = (req, res, roomManager) => {
                             return;
                         }
                         else{
+                            console.log("Debug question ID");
+                            console.log(valid_questionID);
+                            console.log("Debug question ID");
                             Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
                                 if(!err){
                                     console.log("found")

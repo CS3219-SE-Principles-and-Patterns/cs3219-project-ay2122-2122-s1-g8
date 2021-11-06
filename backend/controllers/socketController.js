@@ -34,6 +34,10 @@ function ioServer(server, roomManager) {
       msg.msgId = msgId;
       io.sockets.in(roomId).emit("chat message", msg);
     });
+    socket.on("change question", (roomId, msg) => {
+      console.log("question forwarded", msg);
+      socket.broadcast.to(roomId).emit("change question", msg);
+    });
     socket.on("disconnect", () => {
       console.log("user disconnected");
       console.log("Number of connected users: ", io.engine.clientsCount);
@@ -44,7 +48,6 @@ function ioServer(server, roomManager) {
       io.sockets.in(roomId).emit("leave room");
       disposeRoom(roomId, roomManager);
     });
-
     socket.on("disconnecting", () => {
       console.log("disconnecting");
       socketId = socket.rooms;
@@ -66,7 +69,7 @@ function ioServer(server, roomManager) {
   });
 }
 
-function disposeRoom(roomId, roomManager){
+function disposeRoom(roomId, roomManager) {
   Room.updateOne(
     { roomId: roomId },
     { $set: { endTime: new Date() } },

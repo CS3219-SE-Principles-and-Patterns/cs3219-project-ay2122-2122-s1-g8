@@ -41,10 +41,18 @@ const useStyles = makeStyles({
 });
 
 export default function Question(props) {
+
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
   console.log(props.roomID);
+
+  useEffect(()=>{
+    console.log("rerender question");
+    setTitle(props.title);
+    setDifficulty(props.difficulty);
+  },[props])
+ 
   const data = {
     id: props.roomID,
     authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -89,7 +97,6 @@ export default function Question(props) {
         }
       });
   }, []);
-
   const classes = useStyles();
   return (
     <Card className={classes.root}>
