@@ -56,8 +56,6 @@ function ioServer(server, roomManager) {
 
     // events
     socket.on("chat message", (roomId, msg) => {
-      console.log("chat message sent", msg);
-      // socket.to(roomId).emit("chat message", msg);
       const msgId = crypto.randomBytes(10).toString("hex");
       msg.msgId = msgId;
       io.sockets.in(roomId).emit("chat message", msg);
@@ -143,7 +141,6 @@ function disposeRoom(roomId, roomManager){
   );
   Room.findOne({ roomId: roomId })
     .then((doc) => {
-      console.log('in Room.findOne(roomId), ', doc)
       if (doc) {
         let usernames = doc.usernames;
         let difficulty = doc.questionDifficulty;
