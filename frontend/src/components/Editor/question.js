@@ -45,10 +45,10 @@ export default function Question(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  console.log(props.roomID);
+  //console.log(props.roomID);
 
   useEffect(()=>{
-    console.log("rerender question");
+    //console.log("rerender question");
     setTitle(props.title);
     setDifficulty(props.difficulty);
   },[props])
@@ -61,7 +61,7 @@ export default function Question(props) {
     apis
       .fetchQuestion(data)
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         // var question = JSON.parse(res.data.question);
         // console.log(res.data);
         setTitle(res.data.question.questionStatement);
@@ -83,7 +83,7 @@ export default function Question(props) {
             await apis
             .fetchQuestion(data)
             .then((res) => {
-              console.log(res.data);
+              //console.log(res.data);
               // var question = JSON.parse(res.data.question);
               // console.log(res.data);
               setTitle(res.data.question.questionStatement);

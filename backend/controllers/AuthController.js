@@ -15,7 +15,7 @@ const register = (req, res, next) => {
         User.findOne({$or: [{email: req.body.email}, {username: req.body.username}]})
         .then(user => {
             if(user){
-                console.log(user);
+                //console.log(user);
                 if (user.email == req.body.email){
                     res.status(200).json({
                         message: "Email exists!"
@@ -51,8 +51,8 @@ const login = (req, res, next) => {
     console.log("Login server running!");
     var username = req.body.username
     var password = req.body.password
-    console.log(username);
-    console.log(password);
+    //console.log(username);
+    //console.log(password);
 
     User.findOne({$or: [{email: username}, {username: username}]})
     .then(user => {

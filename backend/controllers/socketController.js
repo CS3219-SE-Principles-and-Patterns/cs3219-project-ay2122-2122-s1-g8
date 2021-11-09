@@ -28,14 +28,14 @@ function ioServer(server, roomManager) {
 
     // events
     socket.on("chat message", (roomId, msg) => {
-      console.log("chat message sent", msg);
+      //console.log("chat message sent", msg);
       // socket.to(roomId).emit("chat message", msg);
       const msgId = crypto.randomBytes(10).toString("hex");
       msg.msgId = msgId;
       io.sockets.in(roomId).emit("chat message", msg);
     });
     socket.on("change question", (roomId, msg) => {
-      console.log("question forwarded", msg);
+      //console.log("question forwarded", msg);
       socket.broadcast.to(roomId).emit("change question", msg);
     });
     socket.on("disconnect", () => {

@@ -23,7 +23,7 @@ export default function TextEditor(props) {
   const [socket, setSocket] = useState(props.socket);
   const [quill, setQuill] = useState();
 
-  console.log("document id", documentId);
+  //console.log("document id", documentId);
   useEffect(() => {
     if (socket == null || quill == null) return;
 
@@ -53,7 +53,7 @@ export default function TextEditor(props) {
 
     const handler = (delta, oldDelta, source) => {
       if (source !== "user") return;
-      console.log(delta);
+      //console.log(delta);
       socket.emit("send-changes", delta);
     };
     quill.on("text-change", handler);

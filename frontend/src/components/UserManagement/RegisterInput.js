@@ -43,7 +43,7 @@ function RegisterInput() {
       password: password
     }
     await apis.registerAccount(data).then((res) => {
-      console.log(res);
+      //console.log(res);
       if (res.data.message == "Successful registration!"){
         history.push('login')
       }else if(res.data.message == "Email exists!"){

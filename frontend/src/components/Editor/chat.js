@@ -45,7 +45,7 @@ function Chat(props) {
   var socket = props.socket;
   const [messages, setMessages] = useState([]);
   const [ID, setID] = useState(props.user_id);
-  console.log("in chat user_id", ID);
+  //console.log("in chat user_id", ID);
   const listMessages = messages.map((message1) => {
     if (message1.id != ID) {
       return (
@@ -72,7 +72,7 @@ function Chat(props) {
   }, [messages]);
   useEffect(() => {
     socket.on("chat message", (msg) => {
-      console.log("Received a chat message");
+      //console.log("Received a chat message");
       var data = msg;
       addMessage(data);
     });
