@@ -13,16 +13,25 @@ mongoose.connect(config.DBHost,
 
 // instantiate redis client
 var redisClient = null;
-if(process.env.NODE_ENV === 'test'){
-    redisClient = redis.createClient().on('connect', () => console.info("Redis database connected locally"))
+try{
+    if(process.env.NODE_ENV === 'test'){
+        redisClient = redis.createClient().on('connect', () => console.info("Redis database connected locally"))
+    }
+    else{
+        redisClient = redis.createClient({
+            host: config.REDIS_HOST,
+            port: config.REDIS_PORT,
+            password: config.REDIS_PASSWORD
+        }).on('connect', () => console.info("Redis database connected"))
+    }
 }
-else{
-    redisClient = redis.createClient({
-        host: config.REDIS_HOST,
-        port: config.REDIS_PORT,
-        password: config.REDIS_PASSWORD
-    }).on('connect', () => console.info("Redis database connected"))
+catch(e){
+    console.log(e)
+    redisClient = redis.createClient().on('connect', () => console.info("Redis database connected on localhost"))
 }
+
+redisClient.on('error', err => {}) 
+
 
 
 const db = mongoose.connection
