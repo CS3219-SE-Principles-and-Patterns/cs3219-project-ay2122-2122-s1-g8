@@ -43,6 +43,6 @@ if(config.util.getEnv('NODE_ENV') !== 'test'){
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // check port
-server.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
+server.listen(apiPort, () => console.info(`Server running on port ${apiPort}`))
 
 module.exports = app

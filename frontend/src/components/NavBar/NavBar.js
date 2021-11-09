@@ -45,6 +45,7 @@ export default function NavBar() {
     //setAnchorEl(null);
     var data = {
       username: localStorage['user_id'],
+      refreshToken: localStorage['refresh_token']
     }
     await apis.updateUserStatus(data).then((res) => {
       //LocalStorageService.clearToken();
