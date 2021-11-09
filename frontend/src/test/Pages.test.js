@@ -13,9 +13,7 @@ global.document = jsdom({
 import HomePage from "../components/HomePage";
 import LoginPage from "../components/UserManagement/LoginPage";
 import RegisterPage from "../components/UserManagement/RegisterPage";
-import EditorPage from "../components/Editor/EditorPage";
 import NavBar from "../components/NavBar/NavBar";
-import Question from "../components/Editor/question";
 
 let rootContainer;
 
@@ -107,17 +105,3 @@ describe("NavBar Component Testing", () => {
   });
 
 });
-
-//EditorPage testing
-
-/*describe("Question Component Testing", () => {
-
-  it('renders without crashing', () => {
-    act(() => {
-      ReactDOM.render(<Question />, rootContainer);
-    });
-    expect(isElement(<Question />)).to.equal(true);
-    expect(isElementOfType(<Question />, Question)).to.equal(true);
-  });
-
-});*/
