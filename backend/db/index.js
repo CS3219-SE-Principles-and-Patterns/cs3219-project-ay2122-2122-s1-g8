@@ -5,23 +5,23 @@ const config = require('config')
 mongoose.connect(config.DBHost, 
 (error)=>{
     if(!error){
-        console.log("DB has been started successfully");
+        console.info("DB has been started successfully");
     }else{
-        console.log("DB fails to start");
+        console.info("DB fails to start");
     }
 });
 
 // instantiate redis client
 var redisClient = null;
 if(process.env.NODE_ENV === 'test'){
-    redisClient = redis.createClient().on('connect', () => console.log("Redis database connected locally"))
+    redisClient = redis.createClient().on('connect', () => console.info("Redis database connected locally"))
 }
 else{
     redisClient = redis.createClient({
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-        password: process.env.REDIS_PASSWORD
-    }).on('connect', () => console.log("Redis database connected"))
+        host: config.REDIS_HOST,
+        port: config.REDIS_PORT,
+        password: config.REDIS_PASSWORD
+    }).on('connect', () => console.info("Redis database connected"))
 }
 
 
