@@ -30,8 +30,8 @@ class EditorPage extends React.Component {
       difficulty: "",
     };
     this.handlenextquestion = this.handlenextquestion.bind(this);
-    console.log(this.state.socket);
-    console.log("Room id:", this.state.room_id);
+    //console.log(this.state.socket);
+    //console.log("Room id:", this.state.room_id);
     this.handlefinish = this.handlefinish.bind(this);
     this.state.socket.emit(
       "show credential",
@@ -40,25 +40,25 @@ class EditorPage extends React.Component {
     );
     this.state.socket.on("credential accepted", (msg) => {
       this.setState({ error: false });
-      console.log("credential accepted");
+      //console.log("credential accepted");
     });
     this.state.socket.on("credential invalid", (msg) => {
       this.setState({ error: true });
-      console.log("credential invalid");
+      //console.log("credential invalid");
     });
     this.state.socket.on("change question", (msg) => {
-      console.log("Received quesiton", msg);
+      //console.log("Received quesiton", msg);
       const data = {
         id: msg,
         authorization: "Bearer " + localStorage.getItem("access_token"),
       };
-      console.log(data);
+      //console.log(data);
       apis
         .getQuestion(data)
         .then((res) => {
-          console.log("DEBUG REST");
-          console.log(res.data);
-          console.log("DEBUG REST");
+          //console.log("DEBUG REST");
+          //console.log(res.data);
+          //console.log("DEBUG REST");
           const { _id, questionStatement, difficulty } = res.data.question;
           this.setState({
             ...this.state,
@@ -66,7 +66,7 @@ class EditorPage extends React.Component {
             title: questionStatement,
             difficulty,
           });
-          console.log(questionStatement);
+          //console.log(questionStatement);
         })
         .catch((err) => {
           console.log("something wrong");
@@ -86,7 +86,7 @@ class EditorPage extends React.Component {
     apis
       .fetchQuestion(data)
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         const { _id, questionStatement, difficulty } = res.data.question;
         this.setState({
           ...this.state,
@@ -94,11 +94,11 @@ class EditorPage extends React.Component {
           title: questionStatement,
           difficulty,
         });
-        console.log(this.state.question_id);
-        console.log("HEHE");
+        //console.log(this.state.question_id);
+        //console.log("HEHE");
       })
       .catch((err) => {
-        console.log("something wrong");
+        //console.log("something wrong");
         console.log(err);
       });
   }
@@ -112,22 +112,22 @@ class EditorPage extends React.Component {
     });
   }
   handlenextquestion() {
-    console.log("Trigger Next");
+    //console.log("Trigger Next");
     const data = {
       question_id: this.state.question_id,
       room_id: this.state.room_id,
       authorization: "Bearer " + localStorage.getItem("access_token"),
     };
-    console.log("QID frontend debug");
-    console.log(this.state.question_id);
-    console.log("QID frontend debug");
+    //console.log("QID frontend debug");
+    //console.log(this.state.question_id);
+    //console.log("QID frontend debug");
 
     apis
       .getNextQuestion(data)
       .then((res) => {
-        console.log("DEBUG REST");
-        console.log(res.data);
-        console.log("DEBUG REST");
+        //console.log("DEBUG REST");
+        //console.log(res.data);
+        //console.log("DEBUG REST");
         const { _id, questionStatement, difficulty } = res.data.question;
         this.setState({
           ...this.state,
@@ -142,7 +142,7 @@ class EditorPage extends React.Component {
         );
       })
       .catch((err) => {
-        console.log("something wrong");
+        //console.log("something wrong");
         console.log(err);
       });
   }

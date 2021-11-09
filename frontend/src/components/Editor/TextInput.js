@@ -30,12 +30,12 @@ export const TextInput = (props) => {
   }
   function sendChatMessage(socket) {
     var payload = { id: props.id, text: text };
-    console.log("user ", props.id, "sending message");
+    //console.log("user ", props.id, "sending message");
     props.socket.emit("chat message", props.roomId, payload);
     setText("");
 
     var payload = { id: props.id, text: text };
-    console.log("user ", props.id, "sending message");
+    //console.log("user ", props.id, "sending message");
     // props.socket.emit("show credential", "47e1fc44e2b74de50d19", "oongjiexiang");  // JX to Chris: uncomment the code above and only leave this line to test 'show credential' event
     setText("");
   }

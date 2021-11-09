@@ -80,7 +80,7 @@ const new_peer_request = (req, res, roomManager) => {
                         }
                         else{
                             console.log("Debug question ID");
-                            console.log(valid_questionID);
+                            //console.log(valid_questionID);
                             console.log("Debug question ID");
                             Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
                                 if(!err){
