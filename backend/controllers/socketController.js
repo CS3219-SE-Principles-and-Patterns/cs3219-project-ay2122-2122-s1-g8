@@ -96,8 +96,8 @@ function disposeRoom(roomId, roomManager) {
         });
       }
     })
-    .catch((err) => console.log(err));
-  Room.deleteMany().then((doc) => console.log(doc)).catch(err => console.log(err)) // uncomment if the remote mongodb has too many rooms
+    .catch((err) => {});
+  // Room.deleteMany().then((doc) => console.log(doc)).catch(err => console.log(err)) // uncomment if the remote mongodb has too many rooms
 }
 
 module.exports = ioServer;
