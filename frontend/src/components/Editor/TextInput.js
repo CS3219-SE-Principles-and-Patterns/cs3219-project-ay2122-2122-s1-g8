@@ -39,7 +39,7 @@ export const TextInput = (props) => {
       <form className={classes.wrapForm} noValidate autoComplete="off">
         <TextField
           id="standard-text"
-          label="Type a messsage..."
+          label="Type a message..."
           className={classes.wrapText}
           value={text}
           multiline
