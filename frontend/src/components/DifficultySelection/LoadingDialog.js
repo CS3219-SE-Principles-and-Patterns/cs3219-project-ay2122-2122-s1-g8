@@ -25,7 +25,6 @@ export default function LoadingDialog(props) {
 
   const handleAgree = () => {
     setOpen(false);
-    //setSeconds(timer);
     setIsTimeout(false);
     setIsDecreasing(false);
   };
@@ -50,11 +49,9 @@ export default function LoadingDialog(props) {
     await apis
       .updateQuestionType(questionData)
       .then(async (res) => {
-        //console.log(res.data);
         await apis
           .newMatch(matchData)
           .then((res) => {
-            //console.log(res.data);
           })
           .catch(async (err) => {
             if (err.response.status === 403) {
@@ -73,7 +70,6 @@ export default function LoadingDialog(props) {
                 await apis
                 .newMatch(matchData)
                 .then((res) => {
-                  //console.log(res.data);
                 }).catch((err) => {
                   console.log(err);
                 });
@@ -105,7 +101,6 @@ export default function LoadingDialog(props) {
         await apis
           .dropMatch(matchData)
           .then((res) => {
-            //console.log(res.data);
           })
           .catch(async (err) => {
             if (err.response.status === 403) {
@@ -124,7 +119,6 @@ export default function LoadingDialog(props) {
                 await apis
                 .dropMatch(matchData)
                 .then((res) => {
-                  //console.log(res.data);
                 }).catch((err) => {
                   console.log(err);
                 });
@@ -149,8 +143,6 @@ export default function LoadingDialog(props) {
         await apis
           .matchStatus(matchData)
           .then(async (res) => {
-            console.log("I'm called");
-            //console.log(res.data);
             if (res.data.roomId) {
               const roomId = res.data.roomId;
               history.push("room/" + roomId);
@@ -173,8 +165,6 @@ export default function LoadingDialog(props) {
                 await apis
                 .matchStatus(matchData)
                 .then(async (res) => {
-                  console.log("I'm called");
-                  //console.log(res.data);
                   if (res.data.roomId) {
                     const roomId = res.data.roomId;
                     history.push("room/" + roomId);

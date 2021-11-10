@@ -24,8 +24,6 @@ const useStyles = makeStyles({
   },
   difficulty: {
     fontSize: 15,
-    // background-color: #485461;
-    // background-image: linear-gradient(315deg, #485461 0%, #28313b 74%);
     background: "linear-gradient(315deg, #485461 0%, #28313b 74%)",
     border: 0,
     borderRadius: 3,
@@ -45,10 +43,8 @@ export default function Question(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  //console.log(props.roomID);
 
   useEffect(()=>{
-    //console.log("rerender question");
     setTitle(props.title);
     setDifficulty(props.difficulty);
   },[props])
@@ -61,9 +57,6 @@ export default function Question(props) {
     apis
       .fetchQuestion(data)
       .then((res) => {
-        //console.log(res.data);
-        // var question = JSON.parse(res.data.question);
-        // console.log(res.data);
         setTitle(res.data.question.questionStatement);
         setDifficulty(res.data.question.difficulty);
       })
@@ -83,9 +76,6 @@ export default function Question(props) {
             await apis
             .fetchQuestion(data)
             .then((res) => {
-              //console.log(res.data);
-              // var question = JSON.parse(res.data.question);
-              // console.log(res.data);
               setTitle(res.data.question.questionStatement);
               setDifficulty(res.data.question.difficulty);
             }).catch((err) => {

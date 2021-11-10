@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) =>
       width: "100%",
     },
     button: {
-      //margin: theme.spacing(1),
     },
   })
 );
@@ -25,18 +24,14 @@ export const TextInput = (props) => {
   const classes = useStyles();
   const [text, setText] = useState("");
   function handleInputChange(event) {
-    // console.log(event.target.value);
     setText(event.target.value);
   }
   function sendChatMessage(socket) {
     var payload = { id: props.id, text: text };
-    //console.log("user ", props.id, "sending message");
     props.socket.emit("chat message", props.roomId, payload);
     setText("");
 
     var payload = { id: props.id, text: text };
-    //console.log("user ", props.id, "sending message");
-    // props.socket.emit("show credential", "47e1fc44e2b74de50d19", "oongjiexiang");  // JX to Chris: uncomment the code above and only leave this line to test 'show credential' event
     setText("");
   }
   return (
@@ -49,7 +44,6 @@ export const TextInput = (props) => {
           value={text}
           multiline
           onChange={handleInputChange}
-          //margin="normal"
         />
         <Button
           variant="contained"

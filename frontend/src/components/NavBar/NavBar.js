@@ -42,14 +42,11 @@ export default function NavBar() {
   };
 
   const handleLogout = async () => {
-    //setAnchorEl(null);
     var data = {
       username: localStorage['user_id'],
       refreshToken: localStorage['refresh_token']
     }
     await apis.updateUserStatus(data).then((res) => {
-      //LocalStorageService.clearToken();
-      //LocalStorageService.clearUserID();
       localStorage.clear()
       window.location.reload();
     }).catch(err=> {
