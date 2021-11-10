@@ -29,6 +29,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+Note: Running the frontend locally will send requests to the deployed backend.
+
 ## 4. To access the deployed application
 
 Backend is available on [https://peerprep.herokuapp.com/](https://peerprep.herokuapp.com/), while frontend is available on [https://peerprep-client.herokuapp.com/](https://peerprep-client.herokuapp.com/)
