@@ -45,6 +45,13 @@ jobs:
         npm ci
         npm run build --if-present
         npm test
+      env:
+        DBHOST: ${{ secrets.DBHOST }}
+        REDIS_HOST: ${{ secrets.REDIS_HOST }}
+        REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+        REDIS_PORT: ${{ secrets.REDIS_PORT }}
+        ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
 
     - name: Test frontend
       working-directory: frontend
