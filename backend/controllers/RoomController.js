@@ -16,7 +16,11 @@ const new_peer_request = (req, res, roomManager) => {
             "message": "No such difficulty"
         })
     }
-
+    console.log('-------------new_peer_request-------------') // debug start
+    console.log(roomManager.properties.DEQUEUED_USER)
+    console.log(roomManager.properties.ENQUEUED_USER)
+    console.table(roomManager.properties.DIFFICULTY_QUEUES)
+    console.log('=============new_peer_request=============\n')   // debug end
     // check if user exists
     User.findOne({username: username}).then(async doc => {
         if(!doc){
@@ -120,7 +124,11 @@ const match_status_query = (req, res, roomManager) => {
     const difficulty = req.body.difficulty;
     var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
     var wasQueued = roomManager.queuingManager.hasEnqueueUser(username, difficulty);
-
+    console.log('-------------match_status_query-------------') // debug start
+    console.log(roomManager.properties.DEQUEUED_USER)
+    console.log(roomManager.properties.ENQUEUED_USER)
+    console.table(roomManager.properties.DIFFICULTY_QUEUES)
+    console.log('=============match_status_query=============\n')   // debug end
     if(!DIFFICULTY_LIST.includes(difficulty)){
         return res.status(STATUS_CODE_NOT_FOUND).json({
             "message": "No such difficulty"
@@ -149,7 +157,11 @@ const match_status_query = (req, res, roomManager) => {
 const drop_request_query = (req, res, roomManager) => {
     const username = req.body.username;
     const difficulty = req.body.difficulty;
-    
+    console.log('-------------drop_request_query-------------') // debug start
+    console.log(roomManager.properties.DEQUEUED_USER)
+    console.log(roomManager.properties.ENQUEUED_USER)
+    console.table(roomManager.properties.DIFFICULTY_QUEUES)
+    console.log('=============drop_request_query=============\n')   // debug end
     if(!DIFFICULTY_LIST.includes(difficulty)){
         return res.status(STATUS_CODE_NOT_FOUND).json({
             "message": "No such difficulty"
