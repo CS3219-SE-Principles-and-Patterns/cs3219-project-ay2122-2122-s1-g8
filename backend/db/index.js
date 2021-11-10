@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const redis = require('redis')
 const config = require('config')
+require('dotenv').config()
 
 mongoose.connect(config.DBHost, 
 (error)=>{
     if(!error){
-        console.info("DB has been started successfully");
+        console.log("DB has been started successfully");
     }else{
-        console.info("DB fails to start");
+        console.log("DB fails to start");
     }
 });
 
@@ -19,14 +20,13 @@ try{
     }
     else{
         redisClient = redis.createClient({
-            host: config.REDIS_HOST,
-            port: config.REDIS_PORT,
-            password: config.REDIS_PASSWORD
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT,
+            password: process.env.REDIS_PASSWORD
         }).on('connect', () => console.info("Redis database connected"))
     }
 }
 catch(e){
-    console.log(e)
     redisClient = redis.createClient().on('connect', () => console.info("Redis database connected on localhost"))
 }
 

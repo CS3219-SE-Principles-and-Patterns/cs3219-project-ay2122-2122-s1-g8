@@ -47,19 +47,12 @@ const question_put_update = (req, res) => {
 };
 
 const question_get_details = (req, res) => {
-  console.log("Test param");
-  console.log(req.params);
-  console.log("Test param");
   let room_id = req.params.id;
   Room.findById(room_id).then((room) => {
-    // console.log("Test QID")
     let valid_questionID = room.questionID;
-    // console.log(valid_questionID);
-    // console.log("Test QID")
 
     Question.findById(valid_questionID)
       .then((result) => {
-        // console.log(result);
         res.status(STATUS_CODE_OK).json({
           message: "Question found",
           question: result.toJSON(),
@@ -75,12 +68,8 @@ const question_get_details = (req, res) => {
 };
 
 const question_get = (req, res) => {
-  console.log("Test param");
-  console.log(req.params);
-  console.log("Test param");
   Question.findById(req.params.id)
     .then((result) => {
-      // console.log(result);
       res.status(STATUS_CODE_OK).json({
         message: "Question found",
         question: result.toJSON(),
@@ -96,10 +85,6 @@ const question_get = (req, res) => {
 
 const question_get_new = (req, res) => {
   let question_id = req.params.id;
-
-  console.log("Test param");
-  console.log(req.params);
-  console.log("Test param");
 
   Question.findById(question_id)
     .then((result) => {
