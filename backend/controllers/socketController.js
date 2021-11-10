@@ -77,13 +77,22 @@ function disposeRoom(roomId, roomManager) {
       if (err) console.log("err", err);
     }
   );
-  Room.findOne({ roomId: roomId })
+  Room.findById(roomId)
     .then((doc) => {
       if (doc) {
         let usernames = doc.usernames;
         let difficulty = doc.questionDifficulty;
+        console.log("!! Deleting users from ENQUEUED_USER and DEQUEUED_USER")
+        console.log(roomId)
+        console.log(doc)
         usernames.forEach((username) => {
           roomManager.deleteUserRequest(username, difficulty);
+          console.log('-------------roomManager.deleteUserRequest-------------') // debug start
+          console.log(username, difficulty)
+          console.log(roomManager.properties.DEQUEUED_USER)
+          console.log(roomManager.properties.ENQUEUED_USER)
+          console.table(roomManager.properties.DIFFICULTY_QUEUES)
+          console.log('=============roomManager.deleteUserRequest=============\n')   // debug end
         });
       }
     })
