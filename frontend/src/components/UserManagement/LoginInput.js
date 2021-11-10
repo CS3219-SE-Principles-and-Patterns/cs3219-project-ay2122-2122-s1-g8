@@ -51,11 +51,7 @@ function LoginInput() {
         setisPasswordError(true)
         setPasswordHelperText("Invalid email or password.")
         setEmailHelperText("Invalid email or password.")
-        //setPasswordHelperText(res.data.message);
-        //setisPasswordError(true)
       }else{
-        //setEmailHelperText(res.data.message);
-        //setisEmailError(true)
         setisEmailError(true)
         setisPasswordError(true)
         setPasswordHelperText("Invalid email or password.")

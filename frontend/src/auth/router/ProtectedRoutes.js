@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-// import auth from "../Auth"
 
 import LocalStorageService from '../services/LocalStorageService';
 

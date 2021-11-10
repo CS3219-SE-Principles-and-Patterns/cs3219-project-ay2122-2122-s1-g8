@@ -16,11 +16,6 @@ const new_peer_request = (req, res, roomManager) => {
             "message": "No such difficulty"
         })
     }
-    console.log('-------------new_peer_request-------------') // debug start
-    console.log(roomManager.properties.DEQUEUED_USER)
-    console.log(roomManager.properties.ENQUEUED_USER)
-    console.table(roomManager.properties.DIFFICULTY_QUEUES)
-    console.log('=============new_peer_request=============\n')   // debug end
     // check if user exists
     User.findOne({username: username}).then(async doc => {
         if(!doc){
@@ -66,11 +61,6 @@ const new_peer_request = (req, res, roomManager) => {
                         }
                     }
                     
-                    console.log("Debug users");
-                    console.log(user1);
-                    console.log(user2);
-                    console.log("Debug users");
-                    
                     Question.find().then(question => {
                         let valid_questionID;
                         for(let i = 0; i<question.length; i++){
@@ -83,12 +73,8 @@ const new_peer_request = (req, res, roomManager) => {
                             return;
                         }
                         else{
-                            console.log("Debug question ID");
-                            //console.log(valid_questionID);
-                            console.log("Debug question ID");
                             Room.findByIdAndUpdate(hasMatch.roomId, {$set: {questionID: valid_questionID}}, function(err, doc){
                                 if(!err){
-                                    console.log("found")
                                     return res.status(STATUS_CODE_OK).json({
                                         "message": "Match found. Call again with /status endpoint"
                                     })
@@ -113,7 +99,7 @@ const new_peer_request = (req, res, roomManager) => {
     }).catch(err => {
         console.log(err)
         return res.status(STATUS_CODE_SERVER_ERROR).json({
-            "message": err
+            "message": "An error occurred in the server. Try again later"
         })
     })
 
@@ -124,11 +110,6 @@ const match_status_query = (req, res, roomManager) => {
     const difficulty = req.body.difficulty;
     var hasMatch = roomManager.matchPairingManager.hasDequeue(username);
     var wasQueued = roomManager.queuingManager.hasEnqueueUser(username, difficulty);
-    console.log('-------------match_status_query-------------') // debug start
-    console.log(roomManager.properties.DEQUEUED_USER)
-    console.log(roomManager.properties.ENQUEUED_USER)
-    console.table(roomManager.properties.DIFFICULTY_QUEUES)
-    console.log('=============match_status_query=============\n')   // debug end
     if(!DIFFICULTY_LIST.includes(difficulty)){
         return res.status(STATUS_CODE_NOT_FOUND).json({
             "message": "No such difficulty"
@@ -157,11 +138,6 @@ const match_status_query = (req, res, roomManager) => {
 const drop_request_query = (req, res, roomManager) => {
     const username = req.body.username;
     const difficulty = req.body.difficulty;
-    console.log('-------------drop_request_query-------------') // debug start
-    console.log(roomManager.properties.DEQUEUED_USER)
-    console.log(roomManager.properties.ENQUEUED_USER)
-    console.table(roomManager.properties.DIFFICULTY_QUEUES)
-    console.log('=============drop_request_query=============\n')   // debug end
     if(!DIFFICULTY_LIST.includes(difficulty)){
         return res.status(STATUS_CODE_NOT_FOUND).json({
             "message": "No such difficulty"

@@ -7,7 +7,6 @@ import LocalStorageService from "../../auth/services/LocalStorageService";
 const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
-      // background: "#F9F3DF",
       width: "29vw",
       height: "45vh",
       display: "flex",
@@ -17,17 +16,14 @@ const useStyles = makeStyles((theme) =>
       border: "1px solid silver",
     },
     paper2: {
-      // background: "#F9F3DF",
       width: "29vw",
       display: "flex",
       alignItems: "center",
       flexDirection: "column",
       position: "relative",
-      //   border: "3px solid red",
     },
     container: {
       position: "absolute",
-      //   border: "3px solid red",
       width: "29vw",
     },
     messagesBody: {
@@ -35,7 +31,6 @@ const useStyles = makeStyles((theme) =>
       margin: 10,
       overflowY: "scroll",
       height: "calc( 100% - 80px )",
-      // background: "#FDF6F0",
     },
   })
 );
@@ -45,7 +40,6 @@ function Chat(props) {
   var socket = props.socket;
   const [messages, setMessages] = useState([]);
   const [ID, setID] = useState(props.user_id);
-  //console.log("in chat user_id", ID);
   const listMessages = messages.map((message1) => {
     if (message1.id != ID) {
       return (
@@ -72,7 +66,6 @@ function Chat(props) {
   }, [messages]);
   useEffect(() => {
     socket.on("chat message", (msg) => {
-      //console.log("Received a chat message");
       var data = msg;
       addMessage(data);
     });

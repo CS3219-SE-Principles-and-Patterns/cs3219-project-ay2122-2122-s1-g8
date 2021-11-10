@@ -2,7 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://peerprep.herokuapp.com/api",
-  // baseURL: "http://192.168.0.103:3030/api",
   // baseURL: "http://127.0.0.1:3030/api",
 });
 // Account registration and login
@@ -24,7 +23,6 @@ export const newMatch = (payload) => api.post("/match/new", payload);
 export const matchStatus = (payload) => api.post("/match/status", payload);
 export const dropMatch = (payload) => api.post("/match/drop", payload);
 export const getRoom = (id) => api.get(`/room/${id}`);
-//export const getChat = () => api.get("/chat");
 
 // Token
 export const refreshToken = (payload) => api.post("/token", payload);
