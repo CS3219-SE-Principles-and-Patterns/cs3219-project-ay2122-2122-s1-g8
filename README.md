@@ -17,6 +17,7 @@ In the project root directory, you can run:
 - `npm install` to installs needed dependancies. 
 - `redis-server` to starts up the redis server.
 - `node index.js` to run the Express server.
+Open [http://localhost:3030](http://localhost:3030) to view it in the browser.
 
 ## 3. To start the frontend locally
 In the project root directory, you can run:
