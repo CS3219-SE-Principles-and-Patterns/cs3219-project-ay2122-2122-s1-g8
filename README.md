@@ -19,6 +19,8 @@ In the project root directory, you can run:
 - `node index.js` to run the Express server. \
 Open [http://localhost:3030](http://localhost:3030) to view it in the browser.
 
+Note: `redis-server` command can only be run in Linux. If you are using Windows, please use Windows subsystem Linux.
+
 ## 3. To start the frontend locally
 In the project root directory, you can run:
 - `cd frontend` into the 'frontend' folder
